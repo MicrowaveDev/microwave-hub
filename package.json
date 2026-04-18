@@ -1,0 +1,16 @@
+{
+  "name": "microwave-hub",
+  "private": true,
+  "scripts": {
+    "pull": "git pull --rebase && git submodule update --init --recursive",
+    "setup": "git submodule update --init --recursive",
+    "status:all": "bash bash/status-all.sh",
+    "repo:context": "bash bash/repo-context.sh",
+    "task:context": "bash bash/task-context.sh",
+    "worktree:safety": "bash bash/check-worktree-safety.sh",
+    "find:repos": "bash bash/find-in-repos.sh",
+    "pending:prs": "bash bash/pending-prs.sh",
+    "prepare:pointers": "bash bash/prepare-pointer-updates.sh",
+    "verify:helpers": "bash bash/verify-helpers.sh"
+  }
+}

@@ -2,6 +2,8 @@
 
 Use this file for hub-level Git and submodule operations that are too specific or verbose for startup instructions.
 
+For helper design guidance and future expansion ideas, see [hub-helpers-reference.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helpers-reference.md).
+
 ## Hub Architecture
 
 A hub repo is a parent repository that tracks child repositories as Git submodules. The hub commit records which submodule commits are meant to work together.
@@ -46,8 +48,19 @@ Hub helpers should live in `bash/`.
 
 Current helpers:
 
+- [bash/lib.sh](/Users/microwavedev/workspace/microwave-hub/bash/lib.sh): shared repo resolution, manifest lookup, and worktree helpers
 - [bash/status-all.sh](/Users/microwavedev/workspace/microwave-hub/bash/status-all.sh): print hub and submodule branch, SHA, and dirty state
-- [bash/worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/worktree-safety.sh): fail fast on detached HEADs or dirty working trees
+- [bash/check-worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/check-worktree-safety.sh): fail fast on detached HEADs or dirty working trees
+- [bash/repo-context.sh](/Users/microwavedev/workspace/microwave-hub/bash/repo-context.sh): print the quick operational context for one repo
+- [bash/task-context.sh](/Users/microwavedev/workspace/microwave-hub/bash/task-context.sh): optional sync plus safety scan and repo context
+- [bash/find-in-repos.sh](/Users/microwavedev/workspace/microwave-hub/bash/find-in-repos.sh): search content or filenames across the hub and submodules
+- [bash/pending-prs.sh](/Users/microwavedev/workspace/microwave-hub/bash/pending-prs.sh): report repos currently on non-base branches
+- [bash/prepare-pointer-updates.sh](/Users/microwavedev/workspace/microwave-hub/bash/prepare-pointer-updates.sh): read-only pointer readiness report
+- [bash/verify-helpers.sh](/Users/microwavedev/workspace/microwave-hub/bash/verify-helpers.sh): smoke-check helper behavior
+
+Compatibility helper:
+
+- [bash/worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/worktree-safety.sh): wrapper kept for older references; use `check-worktree-safety.sh` going forward
 
 Recommended future helpers:
 
@@ -62,3 +75,5 @@ Recommended future helpers:
 - Print compare links after pushes when a human merge is expected.
 - Never force push.
 - Never hide the current branch or target repo from the output.
+- Prefer shared functions in `bash/lib.sh` over duplicating repo resolution or manifest parsing logic across scripts.
+- Keep read-only reporting helpers separate from mutating helpers. Default mode should report, not switch branches or clean worktrees.

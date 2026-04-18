@@ -14,6 +14,8 @@ Supplemental docs:
   - read the nearest local instruction file in scope
   - check whether the repo already has helper scripts or documented commands for the workflow you need
 - In the hub, use [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md) for routing and [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) for machine-readable branch, install, and verification metadata.
+- Prefer hub helper aliases from [package.json](/Users/microwavedev/workspace/microwave-hub/package.json) for recurring hub workflows instead of reconstructing them manually.
+- Before deciding that a pointer update is safe, use the read-only hub helpers first: `npm run pending:prs` and `npm run prepare:pointers -- <repo>`.
 - Parent or hub instructions set defaults. Once inside a repo, the nearest repo-local instructions override the hub for that scope.
 - Before broad edits, multi-repo work, or sync-heavy work, check whether the workspace is already dirty.
 

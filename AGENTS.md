@@ -16,6 +16,8 @@ This repository is a coordination repo. Most implementation work happens inside 
   - otherwise `CLAUDE.md` or other repo-local workflow docs
 - Hub rules set defaults. Repo-local instructions override them inside that repo's scope.
 - Before broad edits, sync-heavy work, or multi-repo work, run [bash/status-all.sh](/Users/microwavedev/workspace/microwave-hub/bash/status-all.sh) or [bash/worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/worktree-safety.sh).
+- Prefer the helper aliases in [package.json](/Users/microwavedev/workspace/microwave-hub/package.json) when they fit the task, for example `npm run status:all`, `npm run repo:context -- geesome-node`, or `npm run find:repos -- OAuth`.
+- For Git coordination, prefer `npm run pending:prs` and `npm run prepare:pointers -- <repo>` before deciding whether a hub pointer update is actually safe.
 
 ## Hub Operating Rules
 
@@ -40,9 +42,18 @@ Use this routing order:
 
 ## Hub Helpers
 
+- [bash/lib.sh](/Users/microwavedev/workspace/microwave-hub/bash/lib.sh): shared helper functions used by hub scripts.
 - [bash/status-all.sh](/Users/microwavedev/workspace/microwave-hub/bash/status-all.sh): show branch, SHA, and dirty state for the hub and every submodule.
-- [bash/worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/worktree-safety.sh): fail fast when a repo is dirty or on detached HEAD before risky workflow steps.
+- [bash/check-worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/check-worktree-safety.sh): fail fast when a repo is dirty or on detached HEAD before risky workflow steps.
+- [bash/repo-context.sh](/Users/microwavedev/workspace/microwave-hub/bash/repo-context.sh): print branch, worktree, instructions, and manifest-defined commands for a repo.
+- [bash/task-context.sh](/Users/microwavedev/workspace/microwave-hub/bash/task-context.sh): optional start-of-task sync plus safety scan and repo context.
+- [bash/find-in-repos.sh](/Users/microwavedev/workspace/microwave-hub/bash/find-in-repos.sh): cross-repo content or filename search using `rg`.
+- [bash/pending-prs.sh](/Users/microwavedev/workspace/microwave-hub/bash/pending-prs.sh): report submodules currently on non-base branches.
+- [bash/prepare-pointer-updates.sh](/Users/microwavedev/workspace/microwave-hub/bash/prepare-pointer-updates.sh): read-only check for whether a repo is clean, on base, and synced to the currently known local `origin/<base>` ref for pointer updates.
+- [bash/verify-helpers.sh](/Users/microwavedev/workspace/microwave-hub/bash/verify-helpers.sh): smoke-check the hub helper layer.
 - [docs/agent-playbook/hub-git-workflow.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-git-workflow.md): detailed hub and submodule Git rules that do not belong in startup context.
+- [docs/agent-playbook/hub-helper-usage.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helper-usage.md): quick examples for the hub helper commands.
+- [docs/agent-playbook/hub-helpers-reference.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helpers-reference.md): blueprint/reference for future helper expansion. Treat it as design guidance, not as executable source of truth.
 
 ## Current Submodules
 
