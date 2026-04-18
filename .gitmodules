@@ -1,0 +1,24 @@
+[submodule "psycho-game"]
+	path = psycho-game
+	url = git@github.com:IDMermaid/psycho-game.git
+[submodule "geesome-locals"]
+	path = geesome-locals
+	url = git@github.com:galtproject/geesome-locals.git
+[submodule "geesome-libs"]
+	path = geesome-libs
+	url = git@github.com:galtproject/geesome-libs.git
+[submodule "geesome-node"]
+	path = geesome-node
+	url = git@github.com:galtproject/geesome-node.git
+[submodule "geesome-ui"]
+	path = geesome-ui
+	url = git@github.com:galtproject/geesome-ui.git
+[submodule "geesome-artist"]
+	path = geesome-artist
+	url = git@github.com:galtproject/geesome-artist.git
+[submodule "blog-master"]
+	path = blog-master
+	url = git@github.com:MicrowaveDev/blog-master.git
+[submodule "mushroom-master"]
+	path = mushroom-master
+	url = git@github.com:MicrowaveDev/mushroom-master.git
