@@ -4,41 +4,74 @@
 
 These instructions apply at the hub level in `/Users/microwavedev/workspace/microwave-hub`.
 
-This repository is a coordination repo. Most implementation work happens inside the submodules.
+This repository is a coordination repo. Most implementation work belongs in submodules, not in the hub root.
 
-## Startup Workflow
+Keep this file hub-specific and reasonably short. Put general agent behavior in [portable-agent-instructions.md](/Users/microwavedev/workspace/microwave-hub/portable-agent-instructions.md), and put product-specific workflow details in the nearest submodule-local `AGENTS.md` or `CLAUDE.md`.
 
-- Start each non-trivial task by reading [portable-agent-instructions.md](/Users/microwavedev/workspace/microwave-hub/portable-agent-instructions.md).
-- Use [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) for machine-readable repo metadata such as base branch, package manager, install command, and quick verification command.
-- Then read [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md) to map the user's request to the right repo.
-- Once you enter a submodule, treat the nearest repo-local instruction file as the source of truth for that repo:
-  - `AGENTS.md` if present
-  - otherwise `CLAUDE.md` or other repo-local workflow docs
-- Hub rules set defaults. Repo-local instructions override them inside that repo's scope.
-- Before broad edits, sync-heavy work, or multi-repo work, run [bash/status-all.sh](/Users/microwavedev/workspace/microwave-hub/bash/status-all.sh) or [bash/worktree-safety.sh](/Users/microwavedev/workspace/microwave-hub/bash/worktree-safety.sh).
-- Prefer the helper aliases in [package.json](/Users/microwavedev/workspace/microwave-hub/package.json) when they fit the task, for example `npm run status:all`, `npm run repo:context -- geesome-node`, or `npm run find:repos -- OAuth`.
-- For Git coordination, prefer `npm run pending:prs` and `npm run prepare:pointers -- <repo>` before deciding whether a hub pointer update is actually safe.
+## Instruction Order
 
-## Hub Operating Rules
+Use this precedence when working from the hub:
+
+1. Follow the active user request first.
+2. Read [portable-agent-instructions.md](/Users/microwavedev/workspace/microwave-hub/portable-agent-instructions.md) for cross-repo defaults.
+3. Use this file for hub routing, safety, and pointer-update rules.
+4. After entering a submodule, the nearest repo-local instructions become the source of truth for that repo:
+   - `AGENTS.md` if present
+   - otherwise `CLAUDE.md` or other repo-local workflow docs
+
+If instructions conflict, prefer the nearest in-scope repo-local file rather than trying to blend incompatible workflows.
+
+## Fast Start
+
+For non-trivial work, use this sequence:
+
+1. Route the request with [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md).
+2. Read the matching entry in [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) for base branch, install command, and verification commands.
+3. Open the target repo's local instructions before editing.
+4. Prefer hub helper aliases from [package.json](/Users/microwavedev/workspace/microwave-hub/package.json) instead of rebuilding workflows manually.
+
+Preferred commands:
+
+- `npm run task:context -- <repo>` for a start-of-task sync, safety scan, and repo context
+- `npm run repo:context -- <repo>` for read-only repo context
+- `npm run status:all` before broad edits, multi-repo work, or sync-heavy work
+- `npm run worktree:safety` before risky Git operations
+- `npm run pending:prs` and `npm run prepare:pointers -- <repo>` before deciding whether a hub pointer update is safe
+
+Do not read every submodule doc up front. Route first, then load only the repo instructions that are actually in scope.
+
+## Hub Boundaries
 
 - Do not make product changes in the hub root when the real implementation belongs in a submodule.
 - Keep hub changes focused on:
   - submodule pointers
   - hub-level documentation
-  - coordination scripts or metadata that truly belong to the parent repo
-- When a user names a product vaguely, use [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md) to disambiguate before editing.
-- Prefer [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) over ad hoc discovery when you need branch policy, install commands, or quick verification commands.
-- Before committing or pushing, verify you are in the intended repo. In this workspace that often means confirming whether the target is the hub or a submodule.
+  - coordination scripts
+  - shared metadata that truly belongs to the parent repo
+- Before committing or pushing, verify whether the intended Git target is the hub or a submodule.
 - When submodule work is required, commit inside the submodule first. Update the hub pointer only after the desired submodule commit exists.
 
-## Repo Discovery
+## Multi-Repo Rules
 
-Use this routing order:
+- If the request is ambiguous, use [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md) to disambiguate before editing.
+- Prefer [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) over ad hoc discovery for branch policy, install commands, and validation commands.
+- If more than one repo is involved, state the intended dependency order before editing and update dependency repos first.
+- Respect manifest dependencies when sequencing work. In particular:
+  - `geesome-libs` before `geesome-ui` or `geesome-node`
+  - `geesome-ui` before `geesome-node` when both are involved
 
-1. Match the user request to a submodule in [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md).
-2. Read the matching entry in [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) for base branch and validation commands.
-3. Open that submodule's local instructions before making changes.
-4. If more than one repo is involved, call out the dependency order explicitly and update dependencies first.
+## Verification And Handoff
+
+- Use manifest-defined verification commands when they fit the task.
+- For doc-only or hub-only metadata changes, prefer the cheapest relevant validation and say what was not run.
+- Before handoff, confirm that the files changed in the repo you intended to modify.
+- Before pointer updates, verify the submodule is on the expected branch and commit, not just that the hub diff looks small.
+
+## Instruction Maintenance
+
+- Keep hub and repo-local instruction files aligned with real commands and workflows.
+- When helper aliases, base branches, install commands, or verification commands change, update the relevant instruction files in the same task or commit when practical.
+- Prefer short updates to stale detail. If a rule becomes repo-local or product-specific, move it closer to the affected submodule instead of growing the hub file.
 
 ## Hub Helpers
 
@@ -53,7 +86,7 @@ Use this routing order:
 - [bash/verify-helpers.sh](/Users/microwavedev/workspace/microwave-hub/bash/verify-helpers.sh): smoke-check the hub helper layer.
 - [docs/agent-playbook/hub-git-workflow.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-git-workflow.md): detailed hub and submodule Git rules that do not belong in startup context.
 - [docs/agent-playbook/hub-helper-usage.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helper-usage.md): quick examples for the hub helper commands.
-- [docs/agent-playbook/hub-helpers-reference.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helpers-reference.md): blueprint/reference for future helper expansion. Treat it as design guidance, not as executable source of truth.
+- [docs/agent-playbook/hub-helpers-reference.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helpers-reference.md): design guidance for future helper expansion, not executable source of truth.
 
 ## Current Submodules
 
