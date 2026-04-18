@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "hub": {
+    "repoName": "microwave-hub",
+    "defaultBranch": "main",
+    "routingDocs": [
+      "AGENTS.md",
+      "portable-agent-instructions.md",
+      "SUBMODULES.md"
+    ],
+    "helperScripts": [
+      "bash/status-all.sh",
+      "bash/worktree-safety.sh"
+    ]
+  },
+  "submodules": [
+    {
+      "name": "psycho-game",
+      "path": "psycho-game",
+      "baseBranch": "main",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "yarn test",
+      "fullVerifyCommand": "yarn test:e2e",
+      "localInstructions": "psycho-game/CLAUDE.md",
+      "keywords": [
+        "therapy app",
+        "bot journal",
+        "check-ins",
+        "therapist cabinet",
+        "telegram mini app",
+        "visual novel engine"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
+      "name": "geesome-node",
+      "path": "geesome-node",
+      "baseBranch": "master",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "yarn test",
+      "fullVerifyCommand": "yarn testCoverage",
+      "localInstructions": "geesome-node/AGENTS.md",
+      "keywords": [
+        "geesome node",
+        "ipfs node",
+        "storage node",
+        "geesome api",
+        "static site generator",
+        "groups",
+        "posts"
+      ],
+      "dependsOn": [
+        "geesome-libs",
+        "geesome-ui"
+      ],
+      "downstreamConsumers": []
+    },
+    {
+      "name": "geesome-locals",
+      "path": "geesome-locals",
+      "baseBranch": "main",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm run build",
+      "fullVerifyCommand": "npm run build",
+      "localInstructions": "geesome-locals/AGENTS.md",
+      "keywords": [
+        "porto food places",
+        "opening hours",
+        "google places refresh",
+        "local food finder"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
+      "name": "geesome-libs",
+      "path": "geesome-libs",
+      "baseBranch": "master",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm test",
+      "fullVerifyCommand": "npm test",
+      "localInstructions": "geesome-libs/AGENTS.md",
+      "keywords": [
+        "shared ipfs helpers",
+        "trie",
+        "pgp",
+        "ipld helpers"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": [
+        "geesome-node",
+        "geesome-ui"
+      ]
+    },
+    {
+      "name": "geesome-artist",
+      "path": "geesome-artist",
+      "baseBranch": "main",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": null,
+      "fullVerifyCommand": null,
+      "localInstructions": "geesome-artist/AGENTS.md",
+      "keywords": [
+        "artist posting tool",
+        "social publishing",
+        "tumblr",
+        "twitter",
+        "bluesky",
+        "creator panel"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
+      "name": "geesome-ui",
+      "path": "geesome-ui",
+      "baseBranch": "master",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "npm run build",
+      "fullVerifyCommand": "npm run build",
+      "localInstructions": "geesome-ui/AGENTS.md",
+      "keywords": [
+        "geesome frontend",
+        "old vue ui package",
+        "parcel build",
+        "published ui package"
+      ],
+      "dependsOn": [
+        "geesome-libs"
+      ],
+      "downstreamConsumers": [
+        "geesome-node"
+      ]
+    },
+    {
+      "name": "blog-master",
+      "path": "blog-master",
+      "baseBranch": "master",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm run check:example-content",
+      "fullVerifyCommand": "npm run check:example-content",
+      "localInstructions": "blog-master/AGENTS.md",
+      "keywords": [
+        "geesomechan",
+        "telegram nsfw moderation bot",
+        "spoiler reposts",
+        "stars balance",
+        "client pm review lane"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
+      "name": "mushroom-master",
+      "path": "mushroom-master",
+      "baseBranch": "main",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm run analyze:pdf-structure",
+      "fullVerifyCommand": "npm run analyze:pdf-structure",
+      "localInstructions": "mushroom-master/AGENTS.md",
+      "keywords": [
+        "mushroom lore",
+        "telegram archive",
+        "ocr reposts",
+        "character dossiers",
+        "pdf lore generation"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    }
+  ]
+}

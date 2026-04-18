@@ -2,6 +2,8 @@
 
 Use this file to quickly identify which repository the user is talking about before editing code.
 
+Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json). Use this file for routing and the manifest for branch, install, and verification details.
+
 ## Quick Routing
 
 | If the user mentions... | Start in... | Why |
@@ -37,6 +39,7 @@ Use this file to quickly identify which repository the user is talking about bef
   - static site generation
   - backend migrations and test suites
 - Read first:
+  - [geesome-node/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/geesome-node/AGENTS.md)
   - [geesome-node/README.MD](/Users/microwavedev/workspace/microwave-hub/geesome-node/README.MD)
 - Useful entry points:
   - `app/`
@@ -61,6 +64,7 @@ Use this file to quickly identify which repository the user is talking about bef
   - helper functions used by other GeeSome repos
   - library-only changes with no direct app UI
 - Read first:
+  - [geesome-libs/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/geesome-libs/AGENTS.md)
   - [geesome-libs/README.md](/Users/microwavedev/workspace/microwave-hub/geesome-libs/README.md)
 - Useful entry points:
   - `src/base36Trie.ts`
@@ -76,6 +80,7 @@ Use this file to quickly identify which repository the user is talking about bef
   - creator/admin tooling
   - Express + Sequelize + Vue app structure
 - Read first:
+  - [geesome-artist/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/geesome-artist/AGENTS.md)
   - [geesome-artist/package.json](/Users/microwavedev/workspace/microwave-hub/geesome-artist/package.json)
 - Useful entry points:
   - `index.ts`
@@ -90,6 +95,7 @@ Use this file to quickly identify which repository the user is talking about bef
   - Parcel build issues
   - package publishing or dist generation
 - Read first:
+  - [geesome-ui/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/geesome-ui/AGENTS.md)
   - [geesome-ui/package.json](/Users/microwavedev/workspace/microwave-hub/geesome-ui/package.json)
 - Useful entry points:
   - `src/`
