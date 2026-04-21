@@ -82,3 +82,9 @@ Supplemental docs:
   - code quality and duplication
   - dead code cleanup
 - If the user asks whether an approach is best practice, recommended, standard, or current guidance, verify it with current research rather than relying on memory alone.
+- When the user asks to review screenshots, E2E tests, or user flows (any phrasing — "review the e2e", "check the screenshots", "audit the flow"), the load-bearing question is always **whether each screenshot actually represents what its flow step description promises** — not merely whether a capture exists. For every flow step that cites a screenshot path, verify four axes before reporting coverage as adequate:
+  1. **File existence at the cited path** — if the flow doc points at one folder/state but the spec writes to another, flag the drift; the doc and the spec are out of sync.
+  2. **Manifest metadata matches flow promise** — the capture's `description` (or equivalent metadata) must paraphrase what the flow step says should be visually true. Null or generic descriptions make the artifact unusable for agent-driven review — treat those as unmapped captures.
+  3. **Rendered content matches description** — open the image and verify the described elements are actually present. Description-vs-reality mismatches usually trace to broken test seeding (wrong role for admin endpoints, server-side defaults overriding payload, missing publish/consent step) — fix the seeding, do not reword the description to hide the gap.
+  4. **Viewport coverage** — every responsive contract in the flow step must have all required viewports captured, not just the defaults of whichever helper was used.
+- When flow doc and UI truly diverge, record the delta in the description itself so a future reader can resolve it (widen the component or trim the flow spec). Silent rewrites that paper over the gap destroy the signal.
