@@ -1,0 +1,14 @@
+# macOS Finder metadata
+.DS_Store
+
+# Node
+node_modules/
+
+# Per-machine agent config (Claude Code local state)
+.claude/
+
+# Sibling tooling repos checked out alongside the hub — not managed
+# submodules. Each has its own .git and is orphan from the hub's
+# SUBMODULES.md routing. Ignoring prevents them from showing up as
+# "untracked" noise at the hub root.
+screenshot-generator/
