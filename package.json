@@ -4,6 +4,7 @@
   "scripts": {
     "pull": "git pull --rebase && git submodule update --init --recursive",
     "setup": "git submodule update --init --recursive",
+    "mushroom:dev": "npm --prefix mushroom-master run game:start",
     "status:all": "bash bash/status-all.sh",
     "repo:context": "bash bash/repo-context.sh",
     "task:context": "bash bash/task-context.sh",
