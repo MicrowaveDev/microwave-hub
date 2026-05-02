@@ -16,6 +16,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | GeeSome frontend, old Vue UI package, parcel build, published UI package | `geesome-ui` | Packaged frontend/UI layer for GeeSome clients. |
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation | `mushroom-master` | Telegram archiver and lore-generation pipeline for the mushroom project. |
+| microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
 
 ## Detailed Notes
 
@@ -125,6 +126,24 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 - Read first:
   - [mushroom-master/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/AGENTS.md)
   - [mushroom-master/README.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/README.md)
+
+### `microwave-girls`
+
+- Primary role: social cross-posting / scraping service with integrations across multiple networks.
+- Strong signals:
+  - Twitter scraping or posting
+  - Bluesky / atproto posting
+  - Discord posting
+  - Tumblr posting
+  - Telegram bot flows
+  - self repost / cross-network repost handling
+- Read first:
+  - [microwave-girls/package.json](/Users/microwavedev/workspace/microwave-hub/microwave-girls/package.json)
+- Useful entry points:
+  - `index.ts`
+  - `app/`
+  - `frontend/`
+  - `migrations/`
 
 ## Ambiguity Rules
 

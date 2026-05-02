@@ -22,3 +22,6 @@
 [submodule "mushroom-master"]
 	path = mushroom-master
 	url = git@github.com:MicrowaveDev/mushroom-master.git
+[submodule "microwave-girls"]
+	path = microwave-girls
+	url = git@github.com:MicrowaveDev/microwave-girls.git

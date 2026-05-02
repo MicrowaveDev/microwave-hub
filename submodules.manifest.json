@@ -209,6 +209,31 @@
       ],
       "dependsOn": [],
       "downstreamConsumers": []
+    },
+    {
+      "name": "microwave-girls",
+      "path": "microwave-girls",
+      "baseBranch": "main",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "main",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": null,
+      "fullVerifyCommand": null,
+      "localInstructions": null,
+      "keywords": [
+        "microwave girls",
+        "social cross-posting",
+        "twitter scraping",
+        "bluesky",
+        "discord posting",
+        "tumblr",
+        "telegram bot",
+        "self repost"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
     }
   ]
 }
