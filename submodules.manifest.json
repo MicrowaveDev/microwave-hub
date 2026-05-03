@@ -197,15 +197,38 @@
       "pointerUpdatePolicy": "manual_after_merge",
       "packageManager": "npm",
       "installCommand": "npm install",
-      "quickVerifyCommand": "npm run analyze:pdf-structure",
-      "fullVerifyCommand": "npm run analyze:pdf-structure",
+      "quickVerifyCommand": "npm test",
+      "fullVerifyCommand": "npm run game:test:e2e",
+      "verifyCommandsBySurface": {
+        "lore": {
+          "quick": "npm test",
+          "full": "npm run analyze:pdf-structure"
+        },
+        "game": {
+          "quick": "npm run game:test",
+          "full": "npm run game:test:e2e"
+        }
+      },
       "localInstructions": "mushroom-master/AGENTS.md",
       "keywords": [
         "mushroom lore",
         "telegram archive",
         "ocr reposts",
         "character dossiers",
-        "pdf lore generation"
+        "pdf lore generation",
+        "mycelium autobattler",
+        "telegram mini app game",
+        "backpack",
+        "inventory",
+        "prep screen",
+        "artifact card",
+        "bag preview",
+        "loadout",
+        "item caption",
+        "shop",
+        "replay",
+        "season rank",
+        "achievement badge"
       ],
       "dependsOn": [],
       "downstreamConsumers": []

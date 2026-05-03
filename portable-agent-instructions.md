@@ -62,6 +62,8 @@ Supplemental docs:
 - Batch read-only exploration. Prefer one aggregated search or one helper command over many serial one-off reads.
 - Before rebuilding a Git, status, validation, or release workflow manually, check whether the repo already provides a helper command or script.
 - Prefer repository-provided helper commands for recurring workflows.
+- Before invoking `npx <tool>` or rebuilding a command from configs, scan `package.json` scripts for a matching wrapper. Wrappers encode port, config, and seed setup that raw invocations skip; running the raw form usually surfaces the missing pieces only as errors.
+- Narrow searches by what the previous one found. When a `rg` pass identifies the right file or symbol, the next pass should look inside it (or its imports), not widen the OR pattern across the repo.
 - Avoid blind mass refreshes such as broad reformatting or regeneration when another agent may be active in the same area.
 
 ## Git Safety

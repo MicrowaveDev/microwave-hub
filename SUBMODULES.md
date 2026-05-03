@@ -15,7 +15,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | artist posting tool, social publishing, Tumblr, Twitter, Bluesky, creator panel | `geesome-artist` | Social-posting oriented app/server with integrations for multiple networks. |
 | GeeSome frontend, old Vue UI package, parcel build, published UI package | `geesome-ui` | Packaged frontend/UI layer for GeeSome clients. |
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
-| mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation | `mushroom-master` | Telegram archiver and lore-generation pipeline for the mushroom project. |
+| mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation, Mycelium Autobattler, telegram mini app game, backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank | `mushroom-master` | Two product surfaces: the lore PDF pipeline (`src/`, `data/`) and the Mycelium Autobattler Telegram Mini App (Vue frontend in `web/`, Express backend in `app/server/`). |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
 | agent viewer, agent logs, rollout JSONL, Codex sessions, Claude task outputs | `agent-viewer` | Local viewer for agent task/session outputs and log analysis exports. |
 
@@ -118,14 +118,13 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 
 ### `mushroom-master`
 
-- Primary role: Telegram channel archiver plus OCR, lore generation, character routing, and PDF output pipeline.
-- Strong signals:
-  - Telegram fetch/regenerate workflows
-  - OCR repost management
-  - hashtag routing
-  - page-image review and character manifests
+- Two product surfaces in one repo. Identify the active surface before picking a verify command.
+  - **Lore pipeline:** Telegram channel archiver plus OCR, lore generation, character routing, and PDF output. Lives in `src/`, `data/<channel>/`, and the `npm run regenerate` / `npm run analyze:pdf-structure` / `npm run set-message-hashtags` commands.
+  - **Mycelium Autobattler:** Telegram Mini App game. Vue frontend in `web/`, Express backend in `app/server/`, shared code in `app/shared/`, Playwright specs in `tests/game/`. Verified with `npm run game:test`, `npm run game:test:e2e`, `npm run game:test:screens` (and `:debug`).
+- Lore strong signals: Telegram fetch/regenerate workflows, OCR repost management, hashtag routing, page-image review, character manifests.
+- Game strong signals: backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank, achievement badge.
 - Read first:
-  - [mushroom-master/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/AGENTS.md)
+  - [mushroom-master/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/AGENTS.md) — the "Surfaces" block at the top tells you which verify command and design-rule section apply.
   - [mushroom-master/README.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/README.md)
 
 ### `microwave-girls`

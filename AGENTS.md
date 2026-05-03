@@ -23,17 +23,16 @@ If instructions conflict, prefer the nearest in-scope repo-local file rather tha
 
 ## Fast Start
 
-For non-trivial work, use this sequence:
+For non-trivial work:
 
-1. Route the request with [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md).
-2. Read the matching entry in [submodules.manifest.json](/Users/microwavedev/workspace/microwave-hub/submodules.manifest.json) for base branch, install command, and verification commands.
-3. Open the target repo's local instructions before editing.
+1. Once you know which repo, run `npm run task:context -- <repo>` first. It bundles the safety scan, the manifest entry, and the repo-local instructions into one call. Do not re-read `AGENTS.md`, `portable-agent-instructions.md`, or `SUBMODULES.md` if they are already in your startup context — query the in-context copy first.
+2. Route the request with [SUBMODULES.md](/Users/microwavedev/workspace/microwave-hub/SUBMODULES.md). If the keywords don't match, use `npm run find:repos -- <pattern>` instead of a hub-wide `rg .` — it scopes to known repo roots and avoids dumping unrelated submodule output into context.
+3. Open the target repo's local instructions before editing. The manifest entry's `localInstructions` field gives the exact path.
 4. Prefer hub helper aliases from [package.json](/Users/microwavedev/workspace/microwave-hub/package.json) instead of rebuilding workflows manually.
 
-Preferred commands:
+Other preferred commands:
 
-- `npm run task:context -- <repo>` for a start-of-task sync, safety scan, and repo context
-- `npm run repo:context -- <repo>` for read-only repo context
+- `npm run repo:context -- <repo>` for read-only repo context (no sync)
 - `npm run status:all` before broad edits, multi-repo work, or sync-heavy work
 - `npm run worktree:safety` before risky Git operations
 - `npm run pending:prs` and `npm run prepare:pointers -- <repo>` before deciding whether a hub pointer update is safe
@@ -50,6 +49,7 @@ Do not read every submodule doc up front. Route first, then load only the repo i
   - shared metadata that truly belongs to the parent repo
 - Before committing or pushing, verify whether the intended Git target is the hub or a submodule.
 - When submodule work is required, commit inside the submodule first. Update the hub pointer only after the desired submodule commit exists.
+- Branch hygiene: if the active branch name does not describe the current task, branch fresh from base (`<scope>/<short-task-slug>`) before editing. Do not piggyback an unrelated fix onto a stale topic branch — the branch name should let a future agent grep the right work.
 
 ## Multi-Repo Rules
 
@@ -65,6 +65,7 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - Use manifest-defined verification commands when they fit the task.
 - For doc-only or hub-only metadata changes, prefer the cheapest relevant validation and say what was not run.
 - Before handoff, confirm that the files changed in the repo you intended to modify.
+- If a fix touched files inside a submodule, commit them on the active branch before reporting the work as fixed. Pointer updates remain a separate, manual step; per-submodule commits are not. A diff that exists only in the working tree is a partial handoff.
 - Before pointer updates, verify the submodule is on the expected branch and commit, not just that the hub diff looks small.
 
 ## Instruction Maintenance
