@@ -22,6 +22,9 @@ Supplemental docs:
 ## Planning
 
 - Freeze the source of truth before implementation: user requirements, acceptance criteria, constraints, non-goals, and open assumptions.
+- When writing a plan, especially one saved to a file, start with a `Source Of Truth` section before task breakdowns or timelines. Include the original user request in the user's wording or a faithful short quote, then list every later correction, clarification, and added requirement with its current status.
+- Keep the plan's source-of-truth section living. When the user corrects the architecture, adds a constraint, or changes priority, update that section before changing tasks so future agents can see which requirements superseded earlier assumptions.
+- If the user explicitly asks to "make a plan", "write a plan", or "write it to md/file/docs", produce or update a durable plan artifact with that source-of-truth section unless they clearly only want an inline answer.
 - Keep user requirements, agent assumptions, and implementation choices visibly separate. Do not let assumptions silently replace the requested architecture.
 - If the user specified how the result should be produced, treat that process description as part of the spec, not as optional flavor.
 - If you want to substitute a simpler mechanism for the requested one, call out the deviation and get explicit approval first.
