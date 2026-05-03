@@ -28,3 +28,9 @@
 [submodule "agent-viewer"]
 	path = agent-viewer
 	url = git@github.com:MicrowaveDev/agent-viewer.git
+[submodule "apidoc-template"]
+	path = apidoc-template
+	url = git@github.com:MicrowaveDev/apidoc-template.git
+[submodule "apidoc-plugin-ts"]
+	path = apidoc-plugin-ts
+	url = git@github.com:MicrowaveDev/apidoc-plugin-ts.git

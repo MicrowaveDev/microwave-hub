@@ -108,3 +108,5 @@ When the active request matches one of the patterns below, load and follow the l
 - `mushroom-master`
 - `microwave-girls`
 - `agent-viewer`
+- `apidoc-template`
+- `apidoc-plugin-ts`
