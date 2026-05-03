@@ -22,6 +22,7 @@ Supplemental docs:
 ## Planning
 
 - Freeze the source of truth before implementation: user requirements, acceptance criteria, constraints, non-goals, and open assumptions.
+- When implementing any feature or fix, use this delivery flow unless the user explicitly overrides it: create or find the tracking issue first; if no suitable issue exists, create one with a clear description and acceptance criteria; implement the change; update any relevant plan, TODO, README, or docs to reflect the completed or changed scope; commit with the issue reference and a closing keyword such as `Closes #123`; open a PR that references the issue and includes a short description of the implementation and verification.
 - Keep user requirements, agent assumptions, and implementation choices visibly separate. Do not let assumptions silently replace the requested architecture.
 - If the user specified how the result should be produced, treat that process description as part of the spec, not as optional flavor.
 - If you want to substitute a simpler mechanism for the requested one, call out the deviation and get explicit approval first.
