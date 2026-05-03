@@ -73,6 +73,12 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - When helper aliases, base branches, install commands, or verification commands change, update the relevant instruction files in the same task or commit when practical.
 - Prefer short updates to stale detail. If a rule becomes repo-local or product-specific, move it closer to the affected submodule instead of growing the hub file.
 
+## Task-Specific Playbooks
+
+When the active request matches one of the patterns below, load and follow the linked playbook in addition to the hub rules above. Treat the playbook as the source of truth for that task shape.
+
+- **Agent log analysis** — when the user asks to analyze, review, or extract findings from agent chat logs, rollout JSONL files, agent-viewer exports, CI-agent traces, or workflow transcripts (including requests phrased as "what should we improve in the agent flow", "where did the agent waste time", "find regressions in this rollout"), follow [AGENT_LOG_ANALYSIS_RULES.md](/Users/microwavedev/workspace/microwave-hub/AGENT_LOG_ANALYSIS_RULES.md). Read it before producing the analysis and use its required output shape unless the user explicitly asks for a narrower report.
+
 ## Hub Helpers
 
 - [bash/lib.sh](/Users/microwavedev/workspace/microwave-hub/bash/lib.sh): shared helper functions used by hub scripts.
@@ -87,6 +93,7 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - [docs/agent-playbook/hub-git-workflow.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-git-workflow.md): detailed hub and submodule Git rules that do not belong in startup context.
 - [docs/agent-playbook/hub-helper-usage.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helper-usage.md): quick examples for the hub helper commands.
 - [docs/agent-playbook/hub-helpers-reference.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helpers-reference.md): design guidance for future helper expansion, not executable source of truth.
+- [AGENT_LOG_ANALYSIS_RULES.md](/Users/microwavedev/workspace/microwave-hub/AGENT_LOG_ANALYSIS_RULES.md): rules and report template for analyzing agent logs, rollouts, and transcripts; load when the request matches the Agent log analysis playbook above.
 
 ## Current Submodules
 
