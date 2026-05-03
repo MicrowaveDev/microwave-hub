@@ -99,3 +99,4 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - `blog-master`
 - `mushroom-master`
 - `microwave-girls`
+- `agent-viewer`

@@ -17,6 +17,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation | `mushroom-master` | Telegram archiver and lore-generation pipeline for the mushroom project. |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
+| agent viewer, agent logs, rollout JSONL, Codex sessions, Claude task outputs | `agent-viewer` | Local viewer for agent task/session outputs and log analysis exports. |
 
 ## Detailed Notes
 
@@ -144,6 +145,21 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - `app/`
   - `frontend/`
   - `migrations/`
+
+### `agent-viewer`
+
+- Primary role: local viewer for agent task/session outputs, Codex rollout JSONL, and Claude task outputs.
+- Strong signals:
+  - agent logs or session viewer
+  - Codex sessions
+  - rollout JSONL
+  - Claude task outputs
+- Read first:
+  - [agent-viewer/package.json](/Users/microwavedev/workspace/microwave-hub/agent-viewer/package.json)
+- Useful entry points:
+  - `server.js`
+  - `public/`
+  - `docs/`
 
 ## Ambiguity Rules
 

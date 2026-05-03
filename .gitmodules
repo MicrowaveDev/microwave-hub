@@ -25,3 +25,6 @@
 [submodule "microwave-girls"]
 	path = microwave-girls
 	url = git@github.com:MicrowaveDev/microwave-girls.git
+[submodule "agent-viewer"]
+	path = agent-viewer
+	url = git@github.com:MicrowaveDev/agent-viewer.git

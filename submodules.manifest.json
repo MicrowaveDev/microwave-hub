@@ -234,6 +234,28 @@
       ],
       "dependsOn": [],
       "downstreamConsumers": []
+    },
+    {
+      "name": "agent-viewer",
+      "path": "agent-viewer",
+      "baseBranch": "main",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "main",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "node --check server.js",
+      "fullVerifyCommand": "node --check server.js",
+      "localInstructions": null,
+      "keywords": [
+        "agent viewer",
+        "agent logs",
+        "rollout jsonl",
+        "codex sessions",
+        "claude task outputs"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
     }
   ]
 }
