@@ -100,6 +100,7 @@ When the active request matches one of the patterns below, load and follow the l
 
 - `psycho-game`
 - `geesome-node`
+- `geesome-client`
 - `geesome-locals`
 - `geesome-libs`
 - `geesome-artist`

@@ -74,6 +74,31 @@
       "downstreamConsumers": []
     },
     {
+      "name": "geesome-client",
+      "path": "geesome-client",
+      "baseBranch": "main",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "main",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm run check",
+      "fullVerifyCommand": "npm run check",
+      "localInstructions": "geesome-client/AGENTS.md",
+      "keywords": [
+        "geesome local client",
+        "threads client",
+        "local social posting",
+        "user pc docker service",
+        "source destination channel routes",
+        "social relay worker"
+      ],
+      "dependsOn": [
+        "geesome-node"
+      ],
+      "downstreamConsumers": []
+    },
+    {
       "name": "geesome-locals",
       "path": "geesome-locals",
       "baseBranch": "main",

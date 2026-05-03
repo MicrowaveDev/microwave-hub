@@ -28,3 +28,6 @@
 [submodule "agent-viewer"]
 	path = agent-viewer
 	url = git@github.com:MicrowaveDev/agent-viewer.git
+[submodule "geesome-client"]
+	path = geesome-client
+	url = git@github.com:galtproject/geesome-client.git

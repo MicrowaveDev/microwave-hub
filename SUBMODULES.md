@@ -9,7 +9,8 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | If the user mentions... | Start in... | Why |
 | --- | --- | --- |
 | therapy app, bot journal, check-ins, therapist cabinet, Telegram mini app, visual novel engine | `psycho-game` | This repo combines the game engine and the Bot Journal web platform. |
-| GeeSome node, IPFS node, storage node, GeeSome API, static site generator, groups, posts | `geesome-node` | Backend node for file storage, social features, APIs, and generated sites. |
+| GeeSome node, IPFS node, storage node, GeeSome API, static site generator, groups, posts | `geesome-node` | Main GeeSome app/node for file storage, social features, APIs, generated sites, and availability-oriented hosting. |
+| GeeSome local client, Threads client, local social posting, user PC Docker service, source/destination channel routes | `geesome-client` | Local browser service that keeps social-network sessions on the user's machine and executes relay posts. |
 | Porto food places, opening hours, Google Places refresh, local food finder | `geesome-locals` | Vue + Express app for checking which places are open, with Google Places refresh support. |
 | GeeSome shared IPFS helpers, trie, PGP, IPLD helpers | `geesome-libs` | Shared low-level library code used by the GeeSome stack. |
 | artist posting tool, social publishing, Tumblr, Twitter, Bluesky, creator panel | `geesome-artist` | Social-posting oriented app/server with integrations for multiple networks. |
@@ -47,6 +48,22 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - `app/`
   - `docs/`
   - `index.ts`
+
+### `geesome-client`
+
+- Primary role: local Docker/browser client for user-owned social posting sessions.
+- Strong signals:
+  - Threads account connection
+  - local social-network credentials
+  - source/destination channel route configuration
+  - local relay worker for posts queued by `geesome-node`
+- Read first:
+  - [geesome-client/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/geesome-client/AGENTS.md)
+  - [geesome-client/README.md](/Users/microwavedev/workspace/microwave-hub/geesome-client/README.md)
+- Useful entry points:
+  - `src/server.js`
+  - `public/`
+  - `docs/geesome-node-contract.md`
 
 ### `geesome-locals`
 
@@ -164,6 +181,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 
 - If a request mentions `GeeSome` without more detail:
   - backend/API/IPFS usually means `geesome-node`
+  - local PC social-network posting or Threads relay usually means `geesome-client`
   - shared helper code usually means `geesome-libs`
   - frontend package/build usually means `geesome-ui`
   - content/social publishing integrations usually means `geesome-artist`
