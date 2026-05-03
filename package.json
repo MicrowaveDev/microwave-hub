@@ -4,6 +4,7 @@
   "scripts": {
     "pull": "git pull --rebase && git submodule update --init --recursive",
     "setup": "git submodule update --init --recursive",
+    "dev:viewer": "yarn --cwd agent-viewer dev",
     "mushroom:dev": "npm --prefix mushroom-master run game:start",
     "microwave-girls:dev": "yarn --cwd microwave-girls start",
     "status:all": "bash bash/status-all.sh",
