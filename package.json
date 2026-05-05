@@ -14,6 +14,8 @@
     "find:repos": "bash bash/find-in-repos.sh",
     "pending:prs": "bash bash/pending-prs.sh",
     "prepare:pointers": "bash bash/prepare-pointer-updates.sh",
+    "gh:safe": "bash bash/gh-safe.sh",
+    "github:body:check": "bash bash/gh-safe.sh check",
     "verify:helpers": "bash bash/verify-helpers.sh"
   }
 }
