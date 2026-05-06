@@ -279,6 +279,54 @@
       ],
       "dependsOn": [],
       "downstreamConsumers": []
+    },
+    {
+      "name": "apidoc-template",
+      "path": "apidoc-template",
+      "baseBranch": "master",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "master",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": null,
+      "installCommand": null,
+      "quickVerifyCommand": null,
+      "fullVerifyCommand": null,
+      "localInstructions": null,
+      "keywords": [
+        "apidoc template",
+        "api docs template",
+        "geesome api docs",
+        "generated docs ui",
+        "apidoc html template"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": [
+        "geesome-node"
+      ]
+    },
+    {
+      "name": "apidoc-plugin-ts",
+      "path": "apidoc-plugin-ts",
+      "baseBranch": "master",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "master",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "yarn test",
+      "fullVerifyCommand": "yarn test",
+      "localInstructions": null,
+      "keywords": [
+        "apidoc plugin",
+        "api docs typescript",
+        "apiinterface",
+        "typescript api docs",
+        "generated api schema parsing"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": [
+        "geesome-node"
+      ]
     }
   ]
 }
