@@ -39,10 +39,18 @@ Supplemental docs:
 
 ## Code Quality
 
-- Commit messages must describe the problem being addressed or the completed task. Do not add AI attribution.
 - Use `data-testid` for E2E selectors.
 - For meaningful UI-state changes, capture or review the key screens and states before calling the work complete.
 - When removing or replacing a feature, scan for dead code and stale references in tests, CSS, locale keys, and helper functions.
+
+## Commit And Push Rules
+
+- Commit messages should describe the problem solved or artifact updated.
+- Do not mention Claude, Codex, AI, LLMs, or generated authorship in commit messages.
+- Do not add co-author trailers for Claude or any AI agent.
+- If a tool automatically inserts AI attribution, remove it before committing.
+- When committing or pushing, use the repository's configured Git author only. Do not add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or similar attribution trailers or prose.
+- Push only the intended branch and report the commit hash or compare link after the push.
 
 ## Authored Vs Generated
 
