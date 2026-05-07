@@ -48,6 +48,7 @@ Do not read every submodule doc up front. Route first, then load only the repo i
   - coordination scripts
   - shared metadata that truly belongs to the parent repo
 - Before committing or pushing, verify whether the intended Git target is the hub or a submodule.
+- Hub-root changes must be committed and pushed on `main` only. Do not push hub documentation, helper, metadata, or submodule-pointer changes to task or `codex/*` branches; switch to `main` or use a clean `main` worktree before committing them.
 - When submodule work is required, commit inside the submodule first. Update the hub pointer only after the desired submodule commit exists.
 - Branch hygiene: if the active branch name does not describe the current task, branch fresh from base (`<scope>/<short-task-slug>`) before editing. Do not piggyback an unrelated fix onto a stale topic branch — the branch name should let a future agent grep the right work.
 
