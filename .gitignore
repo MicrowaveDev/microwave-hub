@@ -12,3 +12,8 @@ node_modules/
 # SUBMODULES.md routing. Ignoring prevents them from showing up as
 # "untracked" noise at the hub root.
 screenshot-generator/
+
+# Playwright artifact directory left behind by visual e2e runs; surfaces at
+# the hub root because tests are run from the cwd and is never meant to be
+# tracked.
+test-results/
