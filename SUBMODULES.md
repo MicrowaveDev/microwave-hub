@@ -18,6 +18,8 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation, Mycelium Autobattler, telegram mini app game, backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank | `mushroom-master` | Two product surfaces: the lore PDF pipeline (`src/`, `data/`) and the Mycelium Autobattler Telegram Mini App (Vue frontend in `web/`, Express backend in `app/server/`). |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
 | agent viewer, agent logs, rollout JSONL, Codex sessions, Claude task outputs | `agent-viewer` | Local viewer for agent task/session outputs and log analysis exports. |
+| apiDoc template, API docs template, generated docs UI, docs theme | `apidoc-template` | HTML/CSS/JS template used by generated API documentation. |
+| apiDoc TypeScript plugin, `@apiInterface`, API docs parsing, generated API schema parsing | `apidoc-plugin-ts` | TypeScript parser/plugin support for API documentation generation. |
 
 ## Detailed Notes
 
@@ -160,6 +162,31 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - `public/`
   - `docs/`
 
+### `apidoc-template`
+
+- Primary role: generated API documentation template/theme used by GeeSome API docs.
+- Strong signals:
+  - apiDoc template or docs UI changes
+  - generated API docs layout, navigation, or client-side behavior
+  - replacing or simplifying inherited apidoc template dependencies
+- Useful entry points:
+  - `template/`
+  - `docs/`
+  - `examples/`
+
+### `apidoc-plugin-ts`
+
+- Primary role: TypeScript parser/plugin support for apiDoc annotations and generated API schema metadata.
+- Strong signals:
+  - TypeScript parsing for API docs
+  - `@apiInterface`
+  - generated API schema parsing bugs
+  - apidoc plugin dependency cleanup
+- Useful entry points:
+  - `src/`
+  - `test/`
+  - `package.json`
+
 ## Ambiguity Rules
 
 - If a request mentions `GeeSome` without more detail:
@@ -167,6 +194,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - shared helper code usually means `geesome-libs`
   - frontend package/build usually means `geesome-ui`
   - content/social publishing integrations usually means `geesome-artist`
+  - generated API documentation template/plugin work usually means `apidoc-template` or `apidoc-plugin-ts`
 - If a request mentions Telegram bots:
   - therapy/journal/check-in flows usually mean `psycho-game`
   - moderation/spoiler reposts usually mean `blog-master`

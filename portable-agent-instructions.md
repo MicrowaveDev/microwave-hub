@@ -22,6 +22,8 @@ Supplemental docs:
 ## Planning
 
 - Freeze the source of truth before implementation: user requirements, acceptance criteria, constraints, non-goals, and open assumptions.
+- When implementing any feature or fix, use this delivery flow unless the user explicitly overrides it: create or find the tracking issue first; if no suitable issue exists, create one with a clear description and acceptance criteria; implement the change; update any relevant plan, TODO, README, or docs to reflect the completed or changed scope; commit with the issue reference and a closing keyword such as `Closes #123`; open a PR that references the issue and includes a short description of the implementation and verification.
+- Prefer `gh` for GitHub issue and PR work when it is installed. Start with `gh auth status`; on macOS, `gh` may store tokens in the keyring, so if sandboxed `gh auth status` reports an invalid token after the user has logged in, retry `gh auth status` or `gh api user --jq '.login'` with escalation before deciding auth is broken. For agent-created issue or PR bodies, use the hub wrapper instead of raw body-posting commands: `npm run gh:safe -- issue create ... --body-file <markdown-file>`, `npm run gh:safe -- pr create ... --body-file <markdown-file>`, or `npm run github:body:check -- --repo OWNER/REPO --issue 123`. The wrapper rejects literal escaped newline text such as `\n`; do not pass multiline Markdown through normal quoted strings. Use real Markdown files, stdin, or shell ANSI-C quoting only when unavoidable, then validate the live issue/PR after creation or edit. If `gh` is unavailable or unauthenticated after the keyring/escalation check and no connector can create issues/PRs, ask the user for the issue number or for permission to continue with a partial local implementation.
 - Keep user requirements, agent assumptions, and implementation choices visibly separate. Do not let assumptions silently replace the requested architecture.
 - If the user specified how the result should be produced, treat that process description as part of the spec, not as optional flavor.
 - If you want to substitute a simpler mechanism for the requested one, call out the deviation and get explicit approval first.
@@ -40,6 +42,17 @@ Supplemental docs:
 - Use `data-testid` for E2E selectors.
 - For meaningful UI-state changes, capture or review the key screens and states before calling the work complete.
 - When removing or replacing a feature, scan for dead code and stale references in tests, CSS, locale keys, and helper functions.
+- Before reading E2E screenshots or other large captures with the image tool, downscale them with `npm run shrink:screenshots -- <path>` (or call `bash/shrink-screenshots.sh` directly). The many-image request cap is 2000px on the longest edge; reading raw captures eventually trips it and forces a new session. The helper prints the shrunk paths to stdout, ready to feed straight into Read calls.
+
+## Commit And Push Rules
+
+- Commit messages should describe the problem solved or artifact updated.
+- Do not mention Claude, Codex, AI, LLMs, or generated authorship in commit messages.
+- Do not add co-author trailers for Claude or any AI agent.
+- If a tool automatically inserts AI attribution, remove it before committing.
+- When committing or pushing, use the repository's configured Git author only. Do not add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or similar attribution trailers or prose.
+- When the user asks for improvements or follow-up fixes on the current open PR, prefer adding a new commit and pushing normally. Do not amend, rebase, squash, or force-push an open PR unless the user explicitly asks to rewrite history or the repo workflow requires it; if rewriting is required, state the reason before doing it.
+- Push only the intended branch and report the commit hash or compare link after the push.
 
 ## Commit And Push Rules
 
@@ -92,6 +105,7 @@ Supplemental docs:
   - UX impact
   - code quality and duplication
   - dead code cleanup
+- When the user asks whether a PR is "ready for merge", treat it as a semantic production-readiness review, not just a GitHub status check. Inspect the PR diff/commits and answer whether the changes are internally consistent and safe for users upgrading from the previous version. Include migration/runtime compatibility, existing-data behavior, rollout order, rollback or repair needs, required tests/checks, and user-visible breakage risk. GitHub mergeability, draft state, reviews, and CI are supporting facts, not the whole answer. If you cannot establish upgrade safety from the available code and validation, say it is not ready or only conditionally ready and name the remaining evidence needed.
 - If the user asks whether an approach is best practice, recommended, standard, or current guidance, verify it with current research rather than relying on memory alone.
 - When the user asks to review screenshots, E2E tests, or user flows (any phrasing — "review the e2e", "check the screenshots", "audit the flow"), the load-bearing question is always **whether each screenshot actually represents what its flow step description promises** — not merely whether a capture exists. For every flow step that cites a screenshot path, verify four axes before reporting coverage as adequate:
   1. **File existence at the cited path** — if the flow doc points at one folder/state but the spec writes to another, flag the drift; the doc and the spec are out of sync.
