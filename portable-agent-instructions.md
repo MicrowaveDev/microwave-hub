@@ -42,6 +42,7 @@ Supplemental docs:
 - Use `data-testid` for E2E selectors.
 - For meaningful UI-state changes, capture or review the key screens and states before calling the work complete.
 - When removing or replacing a feature, scan for dead code and stale references in tests, CSS, locale keys, and helper functions.
+- Before reading E2E screenshots or other large captures with the image tool, downscale them with `npm run shrink:screenshots -- <path>` (or call `bash/shrink-screenshots.sh` directly). The many-image request cap is 2000px on the longest edge; reading raw captures eventually trips it and forces a new session. The helper prints the shrunk paths to stdout, ready to feed straight into Read calls.
 
 ## Commit And Push Rules
 
@@ -50,6 +51,7 @@ Supplemental docs:
 - Do not add co-author trailers for Claude or any AI agent.
 - If a tool automatically inserts AI attribution, remove it before committing.
 - When committing or pushing, use the repository's configured Git author only. Do not add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or similar attribution trailers or prose.
+- When the user asks for improvements or follow-up fixes on the current open PR, prefer adding a new commit and pushing normally. Do not amend, rebase, squash, or force-push an open PR unless the user explicitly asks to rewrite history or the repo workflow requires it; if rewriting is required, state the reason before doing it.
 - Push only the intended branch and report the commit hash or compare link after the push.
 
 ## Authored Vs Generated
@@ -93,6 +95,7 @@ Supplemental docs:
   - UX impact
   - code quality and duplication
   - dead code cleanup
+- When the user asks whether a PR is "ready for merge", treat it as a semantic production-readiness review, not just a GitHub status check. Inspect the PR diff/commits and answer whether the changes are internally consistent and safe for users upgrading from the previous version. Include migration/runtime compatibility, existing-data behavior, rollout order, rollback or repair needs, required tests/checks, and user-visible breakage risk. GitHub mergeability, draft state, reviews, and CI are supporting facts, not the whole answer. If you cannot establish upgrade safety from the available code and validation, say it is not ready or only conditionally ready and name the remaining evidence needed.
 - If the user asks whether an approach is best practice, recommended, standard, or current guidance, verify it with current research rather than relying on memory alone.
 - When the user asks to review screenshots, E2E tests, or user flows (any phrasing — "review the e2e", "check the screenshots", "audit the flow"), the load-bearing question is always **whether each screenshot actually represents what its flow step description promises** — not merely whether a capture exists. For every flow step that cites a screenshot path, verify four axes before reporting coverage as adequate:
   1. **File existence at the cited path** — if the flow doc points at one folder/state but the spec writes to another, flag the drift; the doc and the spec are out of sync.

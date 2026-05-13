@@ -16,6 +16,7 @@
     "prepare:pointers": "bash bash/prepare-pointer-updates.sh",
     "gh:safe": "bash bash/gh-safe.sh",
     "github:body:check": "bash bash/gh-safe.sh check",
+    "shrink:screenshots": "bash bash/shrink-screenshots.sh",
     "verify:helpers": "bash bash/verify-helpers.sh"
   }
 }

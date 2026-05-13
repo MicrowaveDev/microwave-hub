@@ -91,6 +91,7 @@ When the active request matches one of the patterns below, load and follow the l
 - [bash/pending-prs.sh](/Users/microwavedev/workspace/microwave-hub/bash/pending-prs.sh): report submodules currently on non-base branches.
 - [bash/prepare-pointer-updates.sh](/Users/microwavedev/workspace/microwave-hub/bash/prepare-pointer-updates.sh): read-only check for whether a repo is clean, on base, and synced to the currently known local `origin/<base>` ref for pointer updates.
 - [bash/gh-safe.sh](/Users/microwavedev/workspace/microwave-hub/bash/gh-safe.sh): wrapper around `gh` for issue/PR create/edit commands; validates Markdown bodies and can check live issue/PR bodies.
+- [bash/shrink-screenshots.sh](/Users/microwavedev/workspace/microwave-hub/bash/shrink-screenshots.sh): downscale screenshots to fit the many-image request dimension cap (2000px) before reading them with the image tool. Originals untouched; outputs ready-to-Read paths on stdout.
 - [bash/verify-helpers.sh](/Users/microwavedev/workspace/microwave-hub/bash/verify-helpers.sh): smoke-check the hub helper layer.
 - [docs/agent-playbook/hub-git-workflow.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-git-workflow.md): detailed hub and submodule Git rules that do not belong in startup context.
 - [docs/agent-playbook/hub-helper-usage.md](/Users/microwavedev/workspace/microwave-hub/docs/agent-playbook/hub-helper-usage.md): quick examples for the hub helper commands.
