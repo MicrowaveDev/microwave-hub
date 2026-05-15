@@ -34,3 +34,6 @@
 [submodule "apidoc-plugin-ts"]
 	path = apidoc-plugin-ts
 	url = git@github.com:MicrowaveDev/apidoc-plugin-ts.git
+[submodule "microwave-travel"]
+	path = microwave-travel
+	url = git@github.com:MicrowaveDev/microwave-travel.git

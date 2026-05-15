@@ -17,6 +17,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation, Mycelium Autobattler, telegram mini app game, backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank | `mushroom-master` | Two product surfaces: the lore PDF pipeline (`src/`, `data/`) and the Mycelium Autobattler Telegram Mini App (Vue frontend in `web/`, Express backend in `app/server/`). |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
+| travel planner, route optimizer, itinerary requirements, multi-city trip, flights | `microwave-travel` | Vue + Node app for optimizing multi-city travel routes with simple constraints and deadlines. |
 | agent viewer, agent logs, rollout JSONL, Codex sessions, Claude task outputs | `agent-viewer` | Local viewer for agent task/session outputs and log analysis exports. |
 | apiDoc template, API docs template, generated docs UI, docs theme | `apidoc-template` | HTML/CSS/JS template used by generated API documentation. |
 | apiDoc TypeScript plugin, `@apiInterface`, API docs parsing, generated API schema parsing | `apidoc-plugin-ts` | TypeScript parser/plugin support for API documentation generation. |
@@ -147,6 +148,21 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - `frontend/`
   - `migrations/`
 
+### `microwave-travel`
+
+- Primary role: simple Vue + Node.js travel planner for optimizing rough multi-city itinerary requirements.
+- Strong signals:
+  - travel planner
+  - route optimizer
+  - itinerary requirements
+  - deadlines such as visiting a city before a date
+  - multi-city flight or trip planning
+- Read first:
+  - [microwave-travel/README.md](/Users/microwavedev/workspace/microwave-hub/microwave-travel/README.md)
+- Useful entry points:
+  - `src/`
+  - `server/`
+
 ### `agent-viewer`
 
 - Primary role: local viewer for agent task/session outputs, Codex rollout JSONL, and Claude task outputs.
@@ -199,4 +215,5 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - therapy/journal/check-in flows usually mean `psycho-game`
   - moderation/spoiler reposts usually mean `blog-master`
   - lore archiving/OCR/PDF generation usually mean `mushroom-master`
+- If a request mentions travel planning, route optimization, or itinerary deadlines, start in `microwave-travel`.
 - If a request spans multiple repos, say that explicitly and list the intended order before editing.

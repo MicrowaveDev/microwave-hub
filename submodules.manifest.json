@@ -259,6 +259,30 @@
       "downstreamConsumers": []
     },
     {
+      "name": "microwave-travel",
+      "path": "microwave-travel",
+      "baseBranch": "main",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "main",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm test",
+      "fullVerifyCommand": "npm run build",
+      "localInstructions": null,
+      "keywords": [
+        "travel planner",
+        "route optimizer",
+        "itinerary requirements",
+        "multi-city trip",
+        "flights",
+        "deadline",
+        "dubai before"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
       "name": "agent-viewer",
       "path": "agent-viewer",
       "baseBranch": "main",
