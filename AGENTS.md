@@ -110,6 +110,7 @@ When the active request matches one of the patterns below, load and follow the l
 - `blog-master`
 - `mushroom-master`
 - `microwave-girls`
+- `artist-helper`
 - `microwave-travel`
 - `agent-viewer`
 - `apidoc-template`

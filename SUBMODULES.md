@@ -17,6 +17,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation, Mycelium Autobattler, telegram mini app game, backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank | `mushroom-master` | Two product surfaces: the lore PDF pipeline (`src/`, `data/`) and the Mycelium Autobattler Telegram Mini App (Vue frontend in `web/`, Express backend in `app/server/`). |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
+| artist-helper, Threads proposals, Telegram PM post ideas, artist context documents, artist background and works | `artist-helper` | Telegram bot and helper workflows for daily artist Threads post proposals from Markdown context. |
 | travel planner, route optimizer, itinerary requirements, multi-city trip, flights | `microwave-travel` | Vue + Node app for optimizing multi-city travel routes with simple constraints and deadlines. |
 | agent viewer, agent logs, rollout JSONL, Codex sessions, Claude task outputs | `agent-viewer` | Local viewer for agent task/session outputs and log analysis exports. |
 | apiDoc template, API docs template, generated docs UI, docs theme | `apidoc-template` | HTML/CSS/JS template used by generated API documentation. |
@@ -147,6 +148,20 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
   - `app/`
   - `frontend/`
   - `migrations/`
+
+### `artist-helper`
+
+- Primary role: Telegram bot and helper scripts for artist posting workflows.
+- Strong signals:
+  - Threads post proposals
+  - artist background and works context
+  - Telegram PM updates saved as Markdown
+  - daily creator post ideas
+- Read first:
+  - [artist-helper/README.md](/Users/microwavedev/workspace/microwave-hub/artist-helper/README.md)
+- Useful entry points:
+  - `threadsBot.js`
+  - `data/artist-context/`
 
 ### `microwave-travel`
 

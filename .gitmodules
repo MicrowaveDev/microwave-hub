@@ -37,3 +37,6 @@
 [submodule "microwave-travel"]
 	path = microwave-travel
 	url = git@github.com:MicrowaveDev/microwave-travel.git
+[submodule "artist-helper"]
+	path = artist-helper
+	url = git@github.com:MicrowaveDev/artist-helper.git

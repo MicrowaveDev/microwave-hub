@@ -259,6 +259,30 @@
       "downstreamConsumers": []
     },
     {
+      "name": "artist-helper",
+      "path": "artist-helper",
+      "baseBranch": "master",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "master",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "yarn",
+      "installCommand": "yarn install",
+      "quickVerifyCommand": "node --check threadsBot.js",
+      "fullVerifyCommand": "node --check threadsBot.js",
+      "localInstructions": null,
+      "keywords": [
+        "artist-helper",
+        "threads proposals",
+        "telegram pm post ideas",
+        "artist context documents",
+        "artist background",
+        "artist works",
+        "daily creator post ideas"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
       "name": "microwave-travel",
       "path": "microwave-travel",
       "baseBranch": "main",
