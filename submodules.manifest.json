@@ -269,7 +269,7 @@
       "installCommand": "yarn install",
       "quickVerifyCommand": "node --check threadsBot.js",
       "fullVerifyCommand": "node --check threadsBot.js",
-      "localInstructions": null,
+      "localInstructions": "artist-helper/AGENTS.md",
       "keywords": [
         "artist-helper",
         "threads proposals",
