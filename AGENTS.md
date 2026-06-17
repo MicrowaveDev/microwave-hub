@@ -66,7 +66,8 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - Use manifest-defined verification commands when they fit the task.
 - For doc-only or hub-only metadata changes, prefer the cheapest relevant validation and say what was not run.
 - Before handoff, confirm that the files changed in the repo you intended to modify.
-- If a fix touched files inside a submodule, commit them on the active branch before reporting the work as fixed. Pointer updates remain a separate, manual step; per-submodule commits are not. A diff that exists only in the working tree is a partial handoff.
+- If a fix touched files inside a submodule, commit them on the active branch before reporting the work as fixed. A diff that exists only in the working tree is a partial handoff.
+- Commit and push by default without asking first (see the Commit And Push Rules in [portable-agent-instructions.md](/Users/microwavedev/workspace/microwave-hub/portable-agent-instructions.md)). Once a submodule change is on its base branch, updating the hub pointer is a normal commit-and-push, not a deferred manual step — stage only the affected pointer and push `main`.
 - Before pointer updates, verify the submodule is on the expected branch and commit, not just that the hub diff looks small.
 
 ## Instruction Maintenance

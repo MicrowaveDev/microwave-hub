@@ -47,22 +47,12 @@ Supplemental docs:
 ## Commit And Push Rules
 
 - Commit messages should describe the problem solved or artifact updated.
-- Do not mention Claude, Codex, AI, LLMs, or generated authorship in commit messages.
-- Do not add co-author trailers for Claude or any AI agent.
-- If a tool automatically inserts AI attribution, remove it before committing.
-- When committing or pushing, use the repository's configured Git author only. Do not add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or similar attribution trailers or prose.
-- When the user asks for improvements or follow-up fixes on the current open PR, prefer adding a new commit and pushing normally. Do not amend, rebase, squash, or force-push an open PR unless the user explicitly asks to rewrite history or the repo workflow requires it; if rewriting is required, state the reason before doing it.
-- Push only the intended branch and report the commit hash or compare link after the push.
-
-## Commit And Push Rules
-
-- Commit messages should describe the problem solved or artifact updated.
-- Do not mention Claude, Codex, AI, LLMs, or generated authorship in commit messages.
-- Do not add co-author trailers for Claude or any AI agent.
-- If a tool automatically inserts AI attribution, remove it before committing.
-- When committing or pushing, use the repository's configured Git author only. Do not add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or similar attribution trailers or prose.
-- Push only the intended branch and report the commit hash or compare link after the push.
+- **No AI attribution, ever.** Use the repository's configured Git author only. Never add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or any similar trailer or prose, and never mention Claude, Codex, AI, LLMs, or generated authorship in the message body.
+- The harness or an IDE may auto-append an attribution trailer that you did not write. This rule overrides that default. Enforce it: always pass an explicit `-m` message, and after every commit run `git log -1 --format='%an <%ae>%n%b'` to confirm no forbidden trailer leaked in. If one did, immediately `git commit --amend` to strip it before pushing.
+- **Push by default — do not ask first.** After committing intended work, push it in the same flow without waiting for a separate confirmation. This applies to normal repo commits, per-submodule commits, and hub submodule-pointer updates alike. The earlier "pointer updates are a separate manual step" caution is superseded: once a submodule change is on its base branch, update the hub pointer and push it as one normal commit-and-push.
+- Push only the intended branch. Stage only the files for the task at hand; never sweep in unrelated dirty submodule pointers or working-tree changes. Report the commit hash or compare link after the push.
 - When the Git target is the hub root, commit and push hub-root changes only on `main`. If the active hub checkout is on a task branch or has unrelated dirty submodule pointers, use a clean `main` worktree for the hub commit instead of pushing a non-`main` hub branch.
+- Still pause and ask before rewriting shared history: do not amend, rebase, squash, or force-push a branch that is already pushed or has an open PR unless the user explicitly asks to rewrite it or the repo workflow requires it. The push-by-default rule covers new commits, not history rewrites. (Amending to strip an accidental attribution trailer before the first push of that commit is fine.)
 
 ## Authored Vs Generated
 
