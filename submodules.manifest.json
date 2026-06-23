@@ -49,9 +49,9 @@
     {
       "name": "geesome-node",
       "path": "geesome-node",
-      "baseBranch": "master",
+      "baseBranch": "dev",
       "pushPolicy": "direct_to_base",
-      "compareBase": "master",
+      "compareBase": "dev",
       "pointerUpdatePolicy": "manual_after_merge",
       "packageManager": "yarn",
       "installCommand": "yarn install",
