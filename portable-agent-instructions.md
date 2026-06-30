@@ -47,6 +47,7 @@ Supplemental docs:
 ## Commit And Push Rules
 
 - Commit messages should describe the problem solved or artifact updated.
+- Pull request titles should describe the change directly. Do not prefix PR titles with `[codex]`, `[Claude]`, `[AI]`, or any similar agent/tool/authorship marker.
 - **No AI attribution, ever.** Use the repository's configured Git author only. Never add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or any similar trailer or prose, and never mention Claude, Codex, AI, LLMs, or generated authorship in the message body.
 - The harness or an IDE may auto-append an attribution trailer that you did not write. This rule overrides that default. Enforce it: always pass an explicit `-m` message, and after every commit run `git log -1 --format='%an <%ae>%n%b'` to confirm no forbidden trailer leaked in. If one did, immediately `git commit --amend` to strip it before pushing.
 - **Push by default — do not ask first.** After committing intended work, push it in the same flow without waiting for a separate confirmation. This applies to normal repo commits, per-submodule commits, and hub submodule-pointer updates alike. The earlier "pointer updates are a separate manual step" caution is superseded: once a submodule change is on its base branch, update the hub pointer and push it as one normal commit-and-push.
