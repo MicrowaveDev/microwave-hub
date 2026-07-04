@@ -40,3 +40,6 @@
 [submodule "artist-helper"]
 	path = artist-helper
 	url = git@github.com:MicrowaveDev/artist-helper.git
+[submodule "meat-master"]
+	path = meat-master
+	url = git@github.com:nuclear-pancakes/meat-master.git

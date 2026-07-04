@@ -234,6 +234,30 @@
       "downstreamConsumers": []
     },
     {
+      "name": "meat-master",
+      "path": "meat-master",
+      "baseBranch": "main",
+      "pushPolicy": "direct_to_base",
+      "compareBase": "main",
+      "pointerUpdatePolicy": "manual_after_merge",
+      "packageManager": "npm",
+      "installCommand": "npm install",
+      "quickVerifyCommand": "npm test",
+      "fullVerifyCommand": "npm run build",
+      "localInstructions": "meat-master/AGENTS.md",
+      "keywords": [
+        "meat master",
+        "meat-master",
+        "grill autobattler",
+        "bikini fighters",
+        "second backpack game",
+        "backpack-game-core consumer",
+        "shared backpack game"
+      ],
+      "dependsOn": [],
+      "downstreamConsumers": []
+    },
+    {
       "name": "microwave-girls",
       "path": "microwave-girls",
       "baseBranch": "main",

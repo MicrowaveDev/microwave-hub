@@ -16,6 +16,7 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 | GeeSome frontend, old Vue UI package, parcel build, published UI package | `geesome-ui` | Packaged frontend/UI layer for GeeSome clients. |
 | GeesomeChan, Telegram NSFW moderation bot, spoiler reposts, Stars balance, client PM review lane | `blog-master` | Contains the GeesomeChan moderation system and related operational scripts. |
 | mushroom lore, Telegram archive, OCR reposts, character dossiers, PDF lore generation, Mycelium Autobattler, telegram mini app game, backpack, inventory, prep screen, artifact card, bag preview, loadout, item caption, replay, shop, season rank | `mushroom-master` | Two product surfaces: the lore PDF pipeline (`src/`, `data/`) and the Mycelium Autobattler Telegram Mini App (Vue frontend in `web/`, Express backend in `app/server/`). |
+| meat master, grill autobattler, bikini fighters, second backpack game, backpack-game-core consumer | `meat-master` | Second backpack game prototype that consumes the shared core through a nested submodule. |
 | microwave girls, social cross-posting, Twitter scraping, Bluesky, Discord posting, Tumblr, self repost | `microwave-girls` | Social cross-posting/scraping app spanning Twitter, Bluesky, Discord, Tumblr, and Telegram. |
 | artist-helper, Threads proposals, Telegram PM post ideas, artist context documents, artist background and works | `artist-helper` | Telegram bot and helper workflows for daily artist Threads post proposals from Markdown context. |
 | travel planner, route optimizer, itinerary requirements, multi-city trip, flights | `microwave-travel` | Vue + Node app for optimizing multi-city travel routes with simple constraints and deadlines. |
@@ -130,6 +131,23 @@ Operational metadata lives in [submodules.manifest.json](/Users/microwavedev/wor
 - Read first:
   - [mushroom-master/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/AGENTS.md) — the "Surfaces" block at the top tells you which verify command and design-rule section apply.
   - [mushroom-master/README.md](/Users/microwavedev/workspace/microwave-hub/mushroom-master/README.md)
+
+### `meat-master`
+
+- Primary role: second backpack-game prototype using the shared
+  `backpack-game-core` mechanics through a nested submodule.
+- Strong signals:
+  - Meat Master / grill autobattler
+  - bikini fighter characters
+  - shared backpack-game-core consumer work
+  - starter bag/artifact gameplay borrowed from Mushroom Battles
+- Read first:
+  - [meat-master/AGENTS.md](/Users/microwavedev/workspace/microwave-hub/meat-master/AGENTS.md)
+  - [meat-master/README.md](/Users/microwavedev/workspace/microwave-hub/meat-master/README.md)
+- Useful entry points:
+  - `src/game.js`
+  - `src/main.js`
+  - `tests/core-consumption.test.js`
 
 ### `microwave-girls`
 

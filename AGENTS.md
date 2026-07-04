@@ -110,6 +110,7 @@ When the active request matches one of the patterns below, load and follow the l
 - `geesome-ui`
 - `blog-master`
 - `mushroom-master`
+- `meat-master`
 - `microwave-girls`
 - `artist-helper`
 - `microwave-travel`
