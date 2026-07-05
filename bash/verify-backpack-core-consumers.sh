@@ -61,6 +61,7 @@ if [[ -n "$mushroom_e2e_command" ]]; then
 fi
 
 run_step "Meat game tests" "$MEAT_DIR" npm run game:test
+run_step "Meat browser E2E" "$MEAT_DIR" npm run game:test:browser
 run_step "Meat production build" "$MEAT_DIR" npm run game:build
 
 echo
