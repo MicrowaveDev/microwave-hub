@@ -243,8 +243,8 @@
       "pointerUpdatePolicy": "manual_after_merge",
       "packageManager": "npm",
       "installCommand": "npm install",
-      "quickVerifyCommand": "npm test",
-      "fullVerifyCommand": "npm run build",
+      "quickVerifyCommand": "npm run game:test",
+      "fullVerifyCommand": "npm run game:build",
       "localInstructions": "meat-master/AGENTS.md",
       "keywords": [
         "meat master",

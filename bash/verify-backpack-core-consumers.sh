@@ -60,8 +60,8 @@ if [[ -n "$mushroom_e2e_command" ]]; then
   run_shell_step "Mushroom focused E2E" "$MUSHROOM_DIR" "$mushroom_e2e_command"
 fi
 
-run_step "Meat tests" "$MEAT_DIR" npm test
-run_step "Meat production build" "$MEAT_DIR" npm run build
+run_step "Meat game tests" "$MEAT_DIR" npm run game:test
+run_step "Meat production build" "$MEAT_DIR" npm run game:build
 
 echo
 echo "Backpack core consumer verification passed for $mushroom_core_sha."
