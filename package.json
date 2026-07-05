@@ -18,6 +18,7 @@
     "gh:safe": "bash bash/gh-safe.sh",
     "github:body:check": "bash bash/gh-safe.sh check",
     "shrink:screenshots": "bash bash/shrink-screenshots.sh",
+    "verify:backpack-core": "bash bash/verify-backpack-core-consumers.sh",
     "verify:helpers": "bash bash/verify-helpers.sh"
   }
 }

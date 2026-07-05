@@ -19,6 +19,7 @@
       "bash/find-in-repos.sh",
       "bash/pending-prs.sh",
       "bash/prepare-pointer-updates.sh",
+      "bash/verify-backpack-core-consumers.sh",
       "bash/verify-helpers.sh"
     ]
   },
