@@ -244,7 +244,7 @@
       "packageManager": "npm",
       "installCommand": "npm install",
       "quickVerifyCommand": "npm run game:test",
-      "fullVerifyCommand": "npm run game:test && npm run game:test:browser && npm run game:build",
+      "fullVerifyCommand": "npm run game:test && npm run game:test:browser && npm run game:deploy:check && npm run game:build",
       "localInstructions": "meat-master/AGENTS.md",
       "keywords": [
         "meat master",
