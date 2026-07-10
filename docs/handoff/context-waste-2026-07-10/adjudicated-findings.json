@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "detectorVersion": "v1-calibrated",
+  "findings": [
+    {
+      "sessionId": "019f32d7-c98d-7681-a82d-9a0eaf882bda",
+      "verdict": "confirmed",
+      "cause": "unbounded-production-status-json",
+      "avoidableInputTokens": { "low": 0, "likely": null, "high": 12554 },
+      "firstAvoidableLine": 641,
+      "fixOwner": "artist-helper-status-command"
+    },
+    {
+      "sessionId": "019f393a-b348-7da2-9b68-c6d00d1a2d08",
+      "verdict": "confirmed-narrow",
+      "cause": "raw-log-read-before-maintained-analyzer",
+      "avoidableInputTokens": { "low": 0, "likely": null, "high": 14887 },
+      "firstAvoidableLine": 717,
+      "fixOwner": "agent-viewer-log-analysis-entrypoint"
+    },
+    {
+      "sessionId": "019f3e09-4b06-7522-9808-b0670c6d410c",
+      "verdict": "confirmed",
+      "cause": "exact-route-treated-as-generic-discovery",
+      "avoidableInputTokens": { "low": 0, "likely": 5500, "high": 7055 },
+      "firstAvoidableLine": 11,
+      "fixOwner": "hub-routing-regression-test"
+    },
+    {
+      "sessionId": "019f4dbb-2d72-7602-8709-dffaf45323af",
+      "verdict": "confirmed-isolated",
+      "cause": "overbroad-corpus-schema-query",
+      "avoidableInputTokens": { "low": 0, "likely": 2000, "high": 2462 },
+      "firstAvoidableLine": 22,
+      "fixOwner": "agent-viewer-query-output-bounds"
+    },
+    {
+      "sessionId": "019f31c0-0fe7-7791-ad40-74e6daab2064",
+      "verdict": "likely-mixed",
+      "cause": "missing-canonical-batch-selector",
+      "avoidableInputTokens": { "low": 0, "likely": 1500, "high": 2866 },
+      "firstAvoidableLine": 17,
+      "fixOwner": "artist-helper-worker-prompt-generator"
+    },
+    {
+      "sessionId": "019f43cd-8326-79b1-9985-db1678d8ff59",
+      "verdict": "likely-substantial",
+      "cause": "broad-static-site-search-before-targeted-boundaries",
+      "avoidableInputTokens": { "low": 0, "likely": 6000, "high": 12879 },
+      "firstAvoidableLine": 43,
+      "fixOwner": "geesome-node-static-site-debug-helper"
+    },
+    {
+      "sessionId": "019f2f37-09f1-70d1-b86b-c83d602519c1",
+      "verdict": "confirmed-unquantified",
+      "cause": "production-image-route-miss",
+      "avoidableInputTokens": { "low": null, "likely": null, "high": null },
+      "firstAvoidableLine": 11,
+      "fixOwner": "hub-routing-regression-test"
+    }
+  ],
+  "excludedFromRanking": [
+    {
+      "sessionId": "019f3308-9f8c-7172-817a-4ca944e09d41",
+      "reason": "Worker reuse is proven, but fresh-session savings are not; productive image work shares every proposed token interval."
+    },
+    {
+      "sessionId": "019e50c0-0c62-7db3-9c82-694b7b07cad5",
+      "reason": "Local broad-read waste is likely, but the proposed session-wide token range is not packet-provable."
+    }
+  ]
+}

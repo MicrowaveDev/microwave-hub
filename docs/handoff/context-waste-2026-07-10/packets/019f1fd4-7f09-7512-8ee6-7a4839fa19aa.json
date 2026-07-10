@@ -1,0 +1,76 @@
+{
+  "escalation": "Request bounded source windows by path and line number only when this packet cannot establish necessity.",
+  "events": [],
+  "finalAssistantMessages": [
+    {
+      "line": 4773,
+      "taskIndex": 3,
+      "text": "Got it. I’ll ignore that rollout message and won’t inspect it.",
+      "timestamp": "2026-07-04T22:06:08.582Z"
+    }
+  ],
+  "schemaVersion": 2,
+  "session": {
+    "badJson": 0,
+    "completions": 1,
+    "cwd": "/Users/microwavedev/workspace/microwave-hub",
+    "end": "2026-07-04T22:06:08.653Z",
+    "id": "019f1fd4-7f09-7512-8ee6-7a4839fa19aa",
+    "metrics": {
+      "cachedInputTokens": 464128,
+      "contextReplayTokens": 231836,
+      "failures": 0,
+      "inputTokens": 467093,
+      "largeOutputBytes": 0,
+      "outputTokens": 1010,
+      "reasoningOutputTokens": 579,
+      "signals": 0,
+      "toolCalls": 0,
+      "uncachedInputTokens": 2965
+    },
+    "model": "gpt-5.5",
+    "path": "/Users/microwavedev/.codex/sessions/2026/07/01/rollout-2026-07-01T23-37-27-019f1fd4-7f09-7512-8ee6-7a4839fa19aa.jsonl",
+    "sourceRequest": "i made a run, check it: /Users/microwavedev/workspace/microwave-hub/agent-viewer/temp/codex-019f2f28-fb0d-7971-a410-6bc16c6dd38a-rollout-2026-07-04T23-04-02-019f2f28-fb0d-7971-a410-6bc16c6dd38a.jsonl",
+    "start": "2026-07-04T22:05:34.887Z"
+  },
+  "taskTree": {
+    "coordinatorSessionId": "019f1fd4-7f09-7512-8ee6-7a4839fa19aa",
+    "corroboratingSpawnEvents": 0,
+    "groupingConfidence": "high",
+    "groupingEvidence": "standalone root session",
+    "groupingIssues": [],
+    "id": "tree-0004",
+    "metrics": {
+      "failures": 0,
+      "inputTokens": 467093,
+      "largeOutputBytes": 0,
+      "signals": 0,
+      "uncachedInputTokens": 2965
+    },
+    "rootThreadId": "019f1fd4-7f09-7512-8ee6-7a4839fa19aa",
+    "sessionIds": [
+      "019f1fd4-7f09-7512-8ee6-7a4839fa19aa"
+    ]
+  },
+  "turnUsage": [
+    {
+      "cached_input_tokens": 233344,
+      "input_tokens": 235257,
+      "line": 4763,
+      "output_tokens": 923,
+      "reasoning_output_tokens": 513,
+      "timestamp": "2026-07-04T22:05:41.167Z",
+      "total_tokens": 236180
+    },
+    {
+      "cached_input_tokens": 230784,
+      "input_tokens": 231836,
+      "line": 4774,
+      "output_tokens": 87,
+      "reasoning_output_tokens": 66,
+      "timestamp": "2026-07-04T22:06:08.640Z",
+      "total_tokens": 231923
+    }
+  ],
+  "userRequests": []
+}

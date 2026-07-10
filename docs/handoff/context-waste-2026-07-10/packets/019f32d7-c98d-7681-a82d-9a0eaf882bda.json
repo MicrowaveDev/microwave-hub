@@ -1,0 +1,408 @@
+{
+  "escalation": "Request bounded source windows by path and line number only when this packet cannot establish necessity.",
+  "events": [
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "npm run task:context -- artist-helper",
+      "failed": false,
+      "kind": "tool",
+      "line": 11,
+      "name": "exec_command",
+      "outputBytes": 1221,
+      "outputPreview": "Chunk ID: 6abe32 Wall time: 2.4666 seconds Process exited with code 0 Original token count: 280 Output: > task:context > bash bash/task-context.sh artist-helper [task-context] Hub worktree is dirty; skipping pull. Use --skip-pull or clean t",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:14:02.571Z"
+    },
+    {
+      "confidence": "high",
+      "detail": "sed -n '1,220p' AGENTS.md",
+      "kind": "signal",
+      "line": 17,
+      "quantity": 1,
+      "ruleId": "instruction-reread-after-task-context"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "sed -n '1,220p' AGENTS.md",
+      "failed": false,
+      "kind": "tool",
+      "line": 17,
+      "name": "exec_command",
+      "outputBytes": 5864,
+      "outputPreview": "Chunk ID: 2c6e6e Wall time: 0.0000 seconds Process exited with code 0 Original token count: 1440 Output: # Artist Helper Agent Guide ## Scope These instructions apply to `/Users/microwavedev/workspace/microwave-hub/artist-helper`. This repo",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:14:09.367Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500",
+      "failed": false,
+      "kind": "tool",
+      "line": 23,
+      "name": "exec_command",
+      "outputBytes": 7731,
+      "outputPreview": "Chunk ID: 00ae78 Wall time: 0.5689 seconds Process exited with code 0 Original token count: 1907 Output: yarn run v1.22.22 $ node scripts/export-image-description-queue.js --brief=1 --source=site --from=2025-01-01 --to=2026-12-31 --queue-sl",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:14:15.261Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "yarn print-image-description-wave --input=data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json --wave=1",
+      "failed": false,
+      "kind": "tool",
+      "line": 35,
+      "name": "exec_command",
+      "outputBytes": 9128,
+      "outputPreview": "Chunk ID: cbe494 Wall time: 0.2346 seconds Process exited with code 0 Original token count: 2256 Output: yarn run v1.22.22 $ node scripts/print-image-description-wave.js --input=data/content/analysis/image-descriptions/2025-2026-site-images",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:14:31.959Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "{\"agent_type\":\"worker\",\"message\":\"You are an image-description worker for the artist-helper repo.\\nWork in /Users/microwavedev/workspace/microwave-hub/artist-helper. Do not revert or modify unrelated work.\\n\\nProcess exactly one generated queue batch: image-description-agent-1-wave-1.\\nQueue JSON: data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json\\nResult JSON: data/content/analysis/image-descriptions/2025-2026-site-images-subagent-results/image-description-agent-1-wave-1.json\\n\\nRead only this batch from agentBatches[] and inspect only its items. Do not edit the queue JSON.\\nFor each assigned item, inspect repo root + localPath and produce a factual ",
+      "failed": false,
+      "kind": "tool",
+      "line": 41,
+      "name": "spawn_agent",
+      "outputBytes": 75,
+      "outputPreview": "{\"agent_id\":\"019f32d9-053c-7fd0-ae98-c9f7c77a60fc\",\"nickname\":\"McClintock\"}",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:15:11.285Z"
+    },
+    {
+      "callLine": 584,
+      "detail": "Chunk ID: 06b0df Wall time: 0.9633 seconds Process exited with code 1 Original token count: 299 Output: yarn run v1.22.22 $ bash scripts/run-production-node-script.sh scripts/image-description-queue-status.js --month=2025-01-01_2026-12-31 Container artist-helper-postgres Running Container artist-hel",
+      "kind": "failure",
+      "line": 585
+    },
+    {
+      "confidence": "medium",
+      "detail": "1|sed|scripts/image-description-queue-status.js | lines 590,635",
+      "kind": "signal",
+      "line": 590,
+      "quantity": 2,
+      "ruleId": "repeated-file-read-within-task"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "sed -n '1,280p' scripts/image-description-queue-status.js",
+      "failed": false,
+      "kind": "tool",
+      "line": 590,
+      "name": "exec_command",
+      "outputBytes": 13132,
+      "outputPreview": "Chunk ID: 402947 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 3257 Output: #!/usr/bin/env node import * as dotenv from 'dotenv'; import path from 'node:path'; import {fileURLToPath} from 'node:url'; import {pro",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:53:21.193Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "node -e \"const q=require('./data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json'); console.log(JSON.stringify({statusCommand:q.statusCommand, productionStatusCommand:q.productionStatusCommand, dateRange:q.dateRange, source:q.source, queueSlug:q.queueSlug}, null, 2))\"",
+      "failed": false,
+      "kind": "tool",
+      "line": 591,
+      "name": "exec_command",
+      "outputBytes": 340,
+      "outputPreview": "Chunk ID: 0c396f Wall time: 0.0000 seconds Process exited with code 0 Original token count: 60 Output: { \"statusCommand\": \"yarn image-description-queue-status:prod --month=2025-01-01_2026-12-31\", \"dateRange\": { \"from\": \"2025-01-01\", \"to\": \"",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:53:21.194Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "yarn image-description-queue-status:prod --from=2025-01-01 --to=2026-12-31 --source=site --input=data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json",
+      "failed": false,
+      "kind": "tool",
+      "line": 624,
+      "name": "exec_command",
+      "outputBytes": 1096,
+      "outputPreview": "Chunk ID: bb8b59 Wall time: 1.1658 seconds Process exited with code 0 Original token count: 248 Output: yarn run v1.22.22 $ bash scripts/run-production-node-script.sh scripts/image-description-queue-status.js --from=2025-01-01 --to=2026-12-",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:54:27.625Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "rg -n \"function parseArgs|parseArgs|normalizeListArg|sourceFilter|function resolveDateRange|function printHelp\" scripts/image-description-queue-status.js",
+      "failed": false,
+      "kind": "tool",
+      "line": 630,
+      "name": "exec_command",
+      "outputBytes": 887,
+      "outputPreview": "Chunk ID: 4952bc Wall time: 0.0000 seconds Process exited with code 0 Original token count: 196 Output: 15:const args = parseArgs(process.argv.slice(2)); 16:const sourceFilter = normalizeListArg(args.source || args.sources); 17:const sectio",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:54:41.581Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "sed -n '300,420p' scripts/image-description-queue-status.js",
+      "failed": false,
+      "kind": "tool",
+      "line": 635,
+      "name": "exec_command",
+      "outputBytes": 3617,
+      "outputPreview": "Chunk ID: 32dd41 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 879 Output: function hasUsefulCaptionText(value) { return String(value || '').replace(/\\s+/g, ' ').trim().length >= 3; } function isStillImageMedia(",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:54:45.996Z"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "yarn image-description-queue-status:prod --from=2025-01-01 --to=2026-12-31 --input=data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json --json=1",
+      "failed": false,
+      "kind": "tool",
+      "line": 641,
+      "name": "exec_command",
+      "outputBytes": 40220,
+      "outputPreview": "Chunk ID: 000d55 Wall time: 1.4212 seconds Process exited with code 0 Original token count: 224137 Output: Warning: truncated output (original token count: 224137) Total output lines: 17518 yarn run v1.22.22 $ bash scripts/run-production-no",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:55:00.017Z"
+    },
+    {
+      "confidence": "high",
+      "detail": "exec_command: Chunk ID: 000d55 Wall time: 1.4212 seconds Process exited with code 0 Original token count: 224137 Output: Warning: truncated output (original token count: 224137) Total output lin",
+      "kind": "signal",
+      "line": 642,
+      "quantity": 40220,
+      "ruleId": "large-tool-output"
+    },
+    {
+      "activeRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "command": "grep '^ source=' data/content/analysis/image-descriptions/status-logs/2025-2026-site-images-status-list-remaining.txt | sed 's/^ source=//' | sed 's/ purpose=.*//' | sort | uniq -c",
+      "failed": false,
+      "kind": "tool",
+      "line": 647,
+      "name": "exec_command",
+      "outputBytes": 147,
+      "outputPreview": "Chunk ID: b44af0 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 11 Output: 848 @nuclear_junkyard 496 @nuclear_sorbet",
+      "taskIndex": 1,
+      "timestamp": "2026-07-05T15:55:10.805Z"
+    }
+  ],
+  "finalAssistantMessages": [
+    {
+      "line": 640,
+      "taskIndex": 1,
+      "text": "The production status wrapper is using the deployed script version, so it doesn’t expose the newer covered/not-covered summary lines from the local file. I’m asking it for JSON once, in case the deployed output still includes structured counts we can use cleanly.",
+      "timestamp": "2026-07-05T15:54:57.910Z"
+    },
+    {
+      "line": 646,
+      "taskIndex": 1,
+      "text": "The JSON confirms the deployed status output has the same older shape, with the full remaining item array but no covered/not-covered split. I’m summarizing the saved remaining-row log by source so the final note is useful without dumping thousands of rows.",
+      "timestamp": "2026-07-05T15:55:08.752Z"
+    },
+    {
+      "line": 652,
+      "taskIndex": 1,
+      "text": "Image description queue completed: [2025-2026-site-images-image-description-queue.json](/Users/microwavedev/workspace/microwave-hub/artist-helper/data/content/analysis/image-descriptions/2025-2026-site-images-image-description-queue.json) Items: 124/124 described, 0 needs human review. Import: 124 imported descriptions, 0 skipped. DB media still missing descriptions: 1344; not covered by this site queue: 1344. Human-review queue items: 0. DB needs-review rows with descriptions: 145/541. Notes: the generated status command used an invalid range-as-month value, so I reran status with `--from=2025-01-01 --to=2026-12-31 --input=...`. The required `--list-remaining=1` output is saved here: [2025-",
+      "timestamp": "2026-07-05T15:55:37.054Z"
+    }
+  ],
+  "schemaVersion": 2,
+  "session": {
+    "badJson": 0,
+    "completions": 1,
+    "cwd": "/Users/microwavedev/workspace/microwave-hub",
+    "end": "2026-07-05T15:55:37.118Z",
+    "id": "019f32d7-c98d-7681-a82d-9a0eaf882bda",
+    "metrics": {
+      "cachedInputTokens": 5475584,
+      "contextReplayTokens": 5674392,
+      "failures": 1,
+      "inputTokens": 5693101,
+      "largeOutputBytes": 40220,
+      "outputTokens": 31661,
+      "reasoningOutputTokens": 5970,
+      "signals": 3,
+      "toolCalls": 152,
+      "uncachedInputTokens": 217517
+    },
+    "model": "gpt-5.5",
+    "path": "/Users/microwavedev/.codex/sessions/2026/07/05/rollout-2026-07-05T16-13-50-019f32d7-c98d-7681-a82d-9a0eaf882bda.jsonl",
+    "sourceRequest": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+    "start": "2026-07-05T15:13:50.959Z"
+  },
+  "taskTree": {
+    "coordinatorSessionId": "019f32d7-c98d-7681-a82d-9a0eaf882bda",
+    "corroboratingSpawnEvents": 78,
+    "groupingConfidence": "high",
+    "groupingEvidence": "explicit session_meta parent_thread_id ancestry",
+    "groupingIssues": [],
+    "id": "tree-0011",
+    "metrics": {
+      "failures": 1,
+      "inputTokens": 22805901,
+      "largeOutputBytes": 76194399,
+      "signals": 177,
+      "uncachedInputTokens": 2938765
+    },
+    "rootThreadId": "019f32d7-c98d-7681-a82d-9a0eaf882bda",
+    "sessionIds": [
+      "019f32d7-c98d-7681-a82d-9a0eaf882bda",
+      "019f32d9-05b6-7fc3-abb9-c4c46cca261f",
+      "019f32d9-0616-7870-b1bd-0f9153e217d4",
+      "019f32d9-0688-7100-9e69-1c599eda4c70",
+      "019f32d9-06e0-7653-88ab-15fd3495715a",
+      "019f32d9-053c-7fd0-ae98-c9f7c77a60fc",
+      "019f32dd-6a78-7340-9848-7c0122d6eb78",
+      "019f32dd-6ad1-7923-8a61-01f2e1964b1b",
+      "019f32dd-6a2c-7a00-ae7d-06594d928b02",
+      "019f32dd-69ab-78f1-89a8-6be97ba89faf",
+      "019f32dd-71e8-78b0-8e0c-6e77c881185b",
+      "019f32e2-0a2e-7e30-8104-21510b66727e",
+      "019f32e2-0aa0-72d1-bf98-961a59b56789",
+      "019f32e2-0af6-7b92-9d48-8f3d332240c0",
+      "019f32e2-0b5a-7910-93ff-0129535d1ff6",
+      "019f32e2-0bd6-7bc0-9322-649b674de9ed",
+      "019f32e6-674b-7c33-a2b8-825d3ea3b6fd",
+      "019f32e6-66f0-75d1-827d-f5204435e373",
+      "019f32e6-6667-7c90-b377-c0379f584d5c",
+      "019f32e6-67aa-7663-ab75-44c42055c4f7",
+      "019f32e6-6812-7d50-bc9d-db3da5ccd99b",
+      "019f32eb-650c-7711-97fa-b6629c53628c",
+      "019f32eb-65e0-7ce1-9335-70b6ce35bc05",
+      "019f32eb-6577-7443-b2a2-36b3d80d0d8c",
+      "019f32eb-663e-7aa0-9428-4625e4162671",
+      "019f32eb-669f-7ba2-bef0-51e083435300",
+      "019f32ef-685c-7fb1-81e0-a5a2de77bc4a",
+      "019f32ef-68c5-7880-ac60-303bab335a4b",
+      "019f32ef-6972-76f2-8e6a-579036d4d5bd",
+      "019f32ef-69d0-7150-81f2-cb4d8e0eeab8",
+      "019f32ef-6919-73e3-8e4e-f85a52600b17",
+      "019f32f3-3c1a-7f02-8ea3-2cb03cf26f8d",
+      "019f32f3-3c83-77e2-a7d0-101458e7c030",
+      "019f32f3-3cdc-7141-83a3-7e14b163b14c",
+      "019f32f3-3d42-7833-96e5-92a427bc7f10",
+      "019f32f3-3d9d-7c11-ace8-e637b0bedf6f",
+      "019f32f7-ca20-7de1-b9d2-f4173ccca9f4",
+      "019f32f7-ca85-7a01-b133-4795b54e7d1a",
+      "019f32f7-caeb-7781-9f9a-16a49e780089",
+      "019f32f7-cb41-7121-a89b-3ea269de1240"
+    ]
+  },
+  "turnUsage": [
+    {
+      "cached_input_tokens": 10112,
+      "input_tokens": 18709,
+      "line": 13,
+      "output_tokens": 498,
+      "reasoning_output_tokens": 389,
+      "timestamp": "2026-07-05T15:14:05.234Z",
+      "total_tokens": 19207
+    },
+    {
+      "cached_input_tokens": 10112,
+      "input_tokens": 19565,
+      "line": 19,
+      "output_tokens": 146,
+      "reasoning_output_tokens": 22,
+      "timestamp": "2026-07-05T15:14:09.485Z",
+      "total_tokens": 19711
+    },
+    {
+      "cached_input_tokens": 18304,
+      "input_tokens": 20997,
+      "line": 25,
+      "output_tokens": 257,
+      "reasoning_output_tokens": 108,
+      "timestamp": "2026-07-05T15:14:16.016Z",
+      "total_tokens": 21254
+    },
+    {
+      "cached_input_tokens": 20864,
+      "input_tokens": 27456,
+      "line": 37,
+      "output_tokens": 364,
+      "reasoning_output_tokens": 236,
+      "timestamp": "2026-07-05T15:14:32.393Z",
+      "total_tokens": 27820
+    },
+    {
+      "cached_input_tokens": 27008,
+      "input_tokens": 29842,
+      "line": 51,
+      "output_tokens": 2048,
+      "reasoning_output_tokens": 209,
+      "timestamp": "2026-07-05T15:15:11.804Z",
+      "total_tokens": 31890
+    },
+    {
+      "cached_input_tokens": 85376,
+      "input_tokens": 89180,
+      "line": 586,
+      "output_tokens": 171,
+      "reasoning_output_tokens": 63,
+      "timestamp": "2026-07-05T15:53:10.249Z",
+      "total_tokens": 89351
+    },
+    {
+      "cached_input_tokens": 88960,
+      "input_tokens": 89694,
+      "line": 594,
+      "output_tokens": 515,
+      "reasoning_output_tokens": 229,
+      "timestamp": "2026-07-05T15:53:21.323Z",
+      "total_tokens": 90209
+    },
+    {
+      "cached_input_tokens": 98176,
+      "input_tokens": 98739,
+      "line": 626,
+      "output_tokens": 924,
+      "reasoning_output_tokens": 748,
+      "timestamp": "2026-07-05T15:54:28.983Z",
+      "total_tokens": 99663
+    },
+    {
+      "cached_input_tokens": 93568,
+      "input_tokens": 99971,
+      "line": 632,
+      "output_tokens": 223,
+      "reasoning_output_tokens": 76,
+      "timestamp": "2026-07-05T15:54:41.662Z",
+      "total_tokens": 100194
+    },
+    {
+      "cached_input_tokens": 99712,
+      "input_tokens": 100424,
+      "line": 637,
+      "output_tokens": 87,
+      "reasoning_output_tokens": 0,
+      "timestamp": "2026-07-05T15:54:46.060Z",
+      "total_tokens": 100511
+    },
+    {
+      "cached_input_tokens": 98688,
+      "input_tokens": 101466,
+      "line": 643,
+      "output_tokens": 640,
+      "reasoning_output_tokens": 475,
+      "timestamp": "2026-07-05T15:55:01.653Z",
+      "total_tokens": 102106
+    },
+    {
+      "cached_input_tokens": 101248,
+      "input_tokens": 114020,
+      "line": 649,
+      "output_tokens": 393,
+      "reasoning_output_tokens": 232,
+      "timestamp": "2026-07-05T15:55:10.899Z",
+      "total_tokens": 114413
+    },
+    {
+      "cached_input_tokens": 113536,
+      "input_tokens": 114476,
+      "line": 653,
+      "output_tokens": 1343,
+      "reasoning_output_tokens": 1034,
+      "timestamp": "2026-07-05T15:55:37.106Z",
+      "total_tokens": 115819
+    }
+  ],
+  "userRequests": [
+    {
+      "line": 6,
+      "taskIndex": 1,
+      "text": "Run the site image-description queue for 2025-2026 and follow the generated queue instructions with subagents. Command: yarn prepare-image-description-queue --source=site --from=2025-01-01 --to=2026-12-31 --queue-slug=2025-2026-site-images --limit=500 Then process waves using each batch.subagentPrompt, validate each wave, merge results, import descriptions, and check final status using the commands printed by the queue JSON.",
+      "timestamp": "2026-07-05T15:13:52.169Z"
+    }
+  ]
+}

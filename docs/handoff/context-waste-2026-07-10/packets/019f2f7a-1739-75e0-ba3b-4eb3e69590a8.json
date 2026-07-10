@@ -1,0 +1,379 @@
+{
+  "escalation": "Request bounded source windows by path and line number only when this packet cannot establish necessity.",
+  "events": [
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "npm run task:context -- artist-helper",
+      "failed": false,
+      "kind": "tool",
+      "line": 11,
+      "name": "exec_command",
+      "outputBytes": 1047,
+      "outputPreview": "Chunk ID: 318f1e Wall time: 0.9136 seconds Process exited with code 0 Original token count: 236 Output: > task:context > bash bash/task-context.sh artist-helper [task-context] Hub worktree is dirty; skipping pull. Use --skip-pull or clean t",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:32:50.631Z"
+    },
+    {
+      "confidence": "high",
+      "detail": "sed -n '1,220p' AGENTS.md",
+      "kind": "signal",
+      "line": 17,
+      "quantity": 1,
+      "ruleId": "instruction-reread-after-task-context"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "sed -n '1,220p' AGENTS.md",
+      "failed": false,
+      "kind": "tool",
+      "line": 17,
+      "name": "exec_command",
+      "outputBytes": 4637,
+      "outputPreview": "Chunk ID: 2e1137 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 1133 Output: # Artist Helper Agent Guide ## Scope These instructions apply to `/Users/microwavedev/workspace/microwave-hub/artist-helper`. This repo",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:32:54.802Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "jq '.agentBatches[] | select(.label == \"image-description-agent-1-wave-8\")' data/content/analysis/image-descriptions/2026-05-image-description-queue.json",
+      "failed": false,
+      "kind": "tool",
+      "line": 23,
+      "name": "exec_command",
+      "outputBytes": 6519,
+      "outputPreview": "Chunk ID: ddb055 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 1604 Output: { \"agentSlot\": 1, \"wave\": 8, \"label\": \"image-description-agent-1-wave-8\", \"itemCount\": 4, \"sources\": [ \"zeligen.blog site media\" ], \"it",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:12.549Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "{\"path\":\"/Users/microwavedev/workspace/microwave-hub/artist-helper/data/artist-context/site-media/_media/jellyfish-01.jpg\",\"detail\":\"high\"}",
+      "failed": false,
+      "kind": "tool",
+      "line": 29,
+      "name": "view_image",
+      "outputBytes": 86106,
+      "outputPreview": "[{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:22.918Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "{\"path\":\"/Users/microwavedev/workspace/microwave-hub/artist-helper/data/artist-context/site-media/_media/manta-ray-prints-01.jpg\",\"detail\":\"high\"}",
+      "failed": false,
+      "kind": "tool",
+      "line": 30,
+      "name": "view_image",
+      "outputBytes": 528826,
+      "outputPreview": "[{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:22.957Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "{\"path\":\"/Users/microwavedev/workspace/microwave-hub/artist-helper/data/artist-context/site-media/_media/manta-ray-prints-02.jpg\",\"detail\":\"high\"}",
+      "failed": false,
+      "kind": "tool",
+      "line": 31,
+      "name": "view_image",
+      "outputBytes": 2234242,
+      "outputPreview": "[{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:22.957Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "{\"path\":\"/Users/microwavedev/workspace/microwave-hub/artist-helper/data/artist-context/site-media/_media/manta-ray-prints-03.jpg\",\"detail\":\"high\"}",
+      "failed": false,
+      "kind": "tool",
+      "line": 32,
+      "name": "view_image",
+      "outputBytes": 2196010,
+      "outputPreview": "[{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:22.967Z"
+    },
+    {
+      "confidence": "high",
+      "detail": "view_image: [{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "kind": "signal",
+      "line": 33,
+      "quantity": 86106,
+      "ruleId": "large-tool-output"
+    },
+    {
+      "confidence": "high",
+      "detail": "view_image: [{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "kind": "signal",
+      "line": 34,
+      "quantity": 528826,
+      "ruleId": "large-tool-output"
+    },
+    {
+      "confidence": "high",
+      "detail": "view_image: [{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "kind": "signal",
+      "line": 35,
+      "quantity": 2234242,
+      "ruleId": "large-tool-output"
+    },
+    {
+      "confidence": "high",
+      "detail": "view_image: [{\"type\":\"input_image\",\"image_url\":\"[image redacted]\",\"detail\":\"high\"}]",
+      "kind": "signal",
+      "line": 36,
+      "quantity": 2196010,
+      "ruleId": "large-tool-output"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "if [ -e data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json ]; then printf 'exists\\n'; else printf 'missing\\n'; fi",
+      "failed": false,
+      "kind": "tool",
+      "line": 41,
+      "name": "exec_command",
+      "outputBytes": 110,
+      "outputPreview": "Chunk ID: 521be3 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 2 Output: missing",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:37.403Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "date -u +\"%Y-%m-%dT%H:%M:%SZ\"",
+      "failed": false,
+      "kind": "tool",
+      "line": 47,
+      "name": "exec_command",
+      "outputBytes": 123,
+      "outputPreview": "Chunk ID: 6227cc Wall time: 0.0000 seconds Process exited with code 0 Original token count: 6 Output: 2026-07-04T23:33:43Z",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:33:43.007Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "*** Begin Patch *** Add File: /Users/microwavedev/workspace/microwave-hub/artist-helper/data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json +[ + { + \"imageHash\": \"sha256:d098004f7b95743630a5101c\", + \"mediaId\": 2199, + \"localPath\": \"data/artist-context/site-media/_media/jellyfish-01.jpg\", + \"agentStatus\": \"described\", + \"description\": \"Vertical close-up portrait of a person against a dark background. The person has bright turquoise hair swept across one side of the face, a closely shaved side with pink-purple tones, dramatic purple eye makeup, and a long dangling earring visible on one ear. Small white string lights are draped around the nec",
+      "failed": false,
+      "kind": "tool",
+      "line": 53,
+      "name": "apply_patch",
+      "outputBytes": 244,
+      "outputPreview": "Exit code: 0 Wall time: 0 seconds Output: Success. Updated the following files: A /Users/microwavedev/workspace/microwave-hub/artist-helper/data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.j",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:34:34.353Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "jq 'length' data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json",
+      "failed": false,
+      "kind": "tool",
+      "line": 60,
+      "name": "exec_command",
+      "outputBytes": 104,
+      "outputPreview": "Chunk ID: cc88e8 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 1 Output: 4",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:34:40.674Z"
+    },
+    {
+      "activeRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "command": "git status --short",
+      "failed": false,
+      "kind": "tool",
+      "line": 61,
+      "name": "exec_command",
+      "outputBytes": 102,
+      "outputPreview": "Chunk ID: 832310 Wall time: 0.0000 seconds Process exited with code 0 Original token count: 0 Output:",
+      "taskIndex": 1,
+      "timestamp": "2026-07-04T23:34:40.731Z"
+    }
+  ],
+  "finalAssistantMessages": [
+    {
+      "line": 52,
+      "taskIndex": 1,
+      "text": "I’m adding the structured descriptions now. The first item is a portrait/jewelry detail; the other three are manta ray themed graphic/product-style images, so I’m keeping the guesses appropriately cautious.",
+      "timestamp": "2026-07-04T23:33:57.510Z"
+    },
+    {
+      "line": 59,
+      "taskIndex": 1,
+      "text": "The file is written. I’m doing a quick JSON parse/count and a scoped status check so I can confirm the output is valid and only the intended result file changed.",
+      "timestamp": "2026-07-04T23:34:40.667Z"
+    },
+    {
+      "line": 67,
+      "taskIndex": 1,
+      "text": "Wrote 4 descriptions to: `/Users/microwavedev/workspace/microwave-hub/artist-helper/data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json` Validated JSON item count: `4`.",
+      "timestamp": "2026-07-04T23:34:47.635Z"
+    }
+  ],
+  "schemaVersion": 2,
+  "session": {
+    "badJson": 0,
+    "completions": 1,
+    "cwd": "/Users/microwavedev/workspace/microwave-hub",
+    "end": "2026-07-04T23:34:47.688Z",
+    "id": "019f2f7a-1739-75e0-ba3b-4eb3e69590a8",
+    "metrics": {
+      "cachedInputTokens": 206208,
+      "contextReplayTokens": 220119,
+      "failures": 0,
+      "inputTokens": 238433,
+      "largeOutputBytes": 5045184,
+      "outputTokens": 5905,
+      "reasoningOutputTokens": 2694,
+      "signals": 5,
+      "toolCalls": 12,
+      "uncachedInputTokens": 32225
+    },
+    "model": "gpt-5.5",
+    "path": "/Users/microwavedev/.codex/sessions/2026/07/05/rollout-2026-07-05T00-32-38-019f2f7a-1739-75e0-ba3b-4eb3e69590a8.jsonl",
+    "sourceRequest": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+    "start": "2026-07-04T23:32:39.327Z"
+  },
+  "taskTree": {
+    "coordinatorSessionId": "019f2f59-ca41-76d2-ad0f-71505e345d9b",
+    "corroboratingSpawnEvents": 72,
+    "groupingConfidence": "high",
+    "groupingEvidence": "explicit session_meta parent_thread_id ancestry",
+    "groupingIssues": [],
+    "id": "tree-0007",
+    "metrics": {
+      "failures": 0,
+      "inputTokens": 17086788,
+      "largeOutputBytes": 26265324,
+      "signals": 242,
+      "uncachedInputTokens": 2332356
+    },
+    "rootThreadId": "019f2f59-ca41-76d2-ad0f-71505e345d9b",
+    "sessionIds": [
+      "019f2f59-ca41-76d2-ad0f-71505e345d9b",
+      "019f2f5c-35cf-7190-ade0-975f87664b0b",
+      "019f2f5c-3656-7551-93bb-a1684212d441",
+      "019f2f5c-3768-7162-8043-78a756440435",
+      "019f2f5c-37d7-7b42-a919-77300168f7b7",
+      "019f2f5c-36c1-7c03-87ff-f61e3dc19990",
+      "019f2f60-ca0d-7a21-8798-030236ba6ae3",
+      "019f2f60-ca9a-7230-b484-9de82e18d72f",
+      "019f2f60-cb3f-7980-bc74-44d95efaaad1",
+      "019f2f60-cc2f-7ff1-b452-b4b5b304de05",
+      "019f2f60-c9a1-7d01-8e16-fd37c8984f52",
+      "019f2f65-fec3-7a80-bbb7-3506e4e8ab7a",
+      "019f2f65-ff2e-7643-8f37-6a874cbe8fcf",
+      "019f2f65-ff85-7473-8c68-930540dba902",
+      "019f2f65-ffe1-7cc3-9b6f-ad93eb3a975d",
+      "019f2f66-0050-73a1-b797-2eb3dd0b3a43",
+      "019f2f69-8daf-72f1-9d91-7c41d94c5c0a",
+      "019f2f69-8e07-7652-ab27-17d478be842e",
+      "019f2f69-8e5f-73e3-aedb-e374d177ab80",
+      "019f2f69-8ebd-7822-84e1-810ba9d7c0e6",
+      "019f2f69-8f17-7782-8f30-2b1d57ceca91",
+      "019f2f6d-9825-7be2-bc6d-a41373f29dbf",
+      "019f2f6d-98cf-7d13-8a85-ede3cb666721",
+      "019f2f6d-987e-7eb2-9892-d3e39fa84b1e",
+      "019f2f6d-9926-7d43-b1c9-8ffa4dd9992d",
+      "019f2f6d-9989-72e3-9cbe-6fbad977f943",
+      "019f2f72-2c6f-7d80-8e2d-e363af9f9f78",
+      "019f2f72-2cc1-7980-a969-30ea73fe772e",
+      "019f2f72-2d14-7df3-ab62-97790f054eb1",
+      "019f2f72-2d75-7c62-bedd-5599d606da90",
+      "019f2f72-2c17-7913-83cb-31496f73bb0c",
+      "019f2f76-2aef-79e3-a6cc-2c77c70a862a",
+      "019f2f76-2bac-7f61-9c48-8e08c989db93",
+      "019f2f76-2b52-7711-945c-4e2a77a4b417",
+      "019f2f76-2bfe-7ca2-aa95-7df021baeb46",
+      "019f2f76-2c5f-78c0-94dd-fcf531dfc97a",
+      "019f2f7a-1739-75e0-ba3b-4eb3e69590a8"
+    ]
+  },
+  "turnUsage": [
+    {
+      "cached_input_tokens": 15232,
+      "input_tokens": 18314,
+      "line": 13,
+      "output_tokens": 581,
+      "reasoning_output_tokens": 478,
+      "timestamp": "2026-07-04T23:32:51.732Z",
+      "total_tokens": 18895
+    },
+    {
+      "cached_input_tokens": 18304,
+      "input_tokens": 19197,
+      "line": 19,
+      "output_tokens": 129,
+      "reasoning_output_tokens": 15,
+      "timestamp": "2026-07-04T23:32:54.853Z",
+      "total_tokens": 19326
+    },
+    {
+      "cached_input_tokens": 18816,
+      "input_tokens": 20337,
+      "line": 25,
+      "output_tokens": 650,
+      "reasoning_output_tokens": 516,
+      "timestamp": "2026-07-04T23:33:12.668Z",
+      "total_tokens": 20987
+    },
+    {
+      "cached_input_tokens": 19840,
+      "input_tokens": 22794,
+      "line": 37,
+      "output_tokens": 513,
+      "reasoning_output_tokens": 247,
+      "timestamp": "2026-07-04T23:33:23.105Z",
+      "total_tokens": 23307
+    },
+    {
+      "cached_input_tokens": 15232,
+      "input_tokens": 29724,
+      "line": 43,
+      "output_tokens": 599,
+      "reasoning_output_tokens": 459,
+      "timestamp": "2026-07-04T23:33:37.469Z",
+      "total_tokens": 30323
+    },
+    {
+      "cached_input_tokens": 28544,
+      "input_tokens": 30370,
+      "line": 49,
+      "output_tokens": 132,
+      "reasoning_output_tokens": 20,
+      "timestamp": "2026-07-04T23:33:43.109Z",
+      "total_tokens": 30502
+    },
+    {
+      "cached_input_tokens": 29056,
+      "input_tokens": 30561,
+      "line": 56,
+      "output_tokens": 2757,
+      "reasoning_output_tokens": 670,
+      "timestamp": "2026-07-04T23:34:34.367Z",
+      "total_tokens": 33318
+    },
+    {
+      "cached_input_tokens": 29056,
+      "input_tokens": 33394,
+      "line": 64,
+      "output_tokens": 259,
+      "reasoning_output_tokens": 68,
+      "timestamp": "2026-07-04T23:34:40.800Z",
+      "total_tokens": 33653
+    },
+    {
+      "cached_input_tokens": 32128,
+      "input_tokens": 33742,
+      "line": 68,
+      "output_tokens": 285,
+      "reasoning_output_tokens": 221,
+      "timestamp": "2026-07-04T23:34:47.679Z",
+      "total_tokens": 34027
+    }
+  ],
+  "userRequests": [
+    {
+      "line": 6,
+      "taskIndex": 1,
+      "text": "You are an image-description worker for the artist-helper repo. Work in /Users/microwavedev/workspace/microwave-hub/artist-helper. You are not alone in the codebase; do not revert or modify anyone else's work. Task: process exactly one generated queue batch: label image-description-agent-1-wave-8 in data/content/analysis/image-descriptions/2026-05-image-description-queue.json. Read only that agentBatches[] entry and inspect only its items' localPath images. Do not edit the queue JSON. For each assigned item, inspect the local image (host path is repo root + localPath) and produce a factual visual description. Use sourceCaptionText only as context, not as proof. Keep descriptions factual and visual; do not infer availability, dates, sales status, artist intent, identities, or locations unless source text explicitly says it. Write your results as a JSON array to data/content/analysis/image-descriptions/2026-05-subagent-results/image-description-agent-1-wave-8.json. Each object must inclu",
+      "timestamp": "2026-07-04T23:32:39.332Z"
+    }
+  ]
+}

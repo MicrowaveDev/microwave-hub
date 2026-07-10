@@ -1,0 +1,18 @@
+{
+  "detectorVersion": "v1-calibrated",
+  "excludedCount": 198,
+  "includedCount": 278,
+  "roots": [
+    "/Users/microwavedev/.codex/sessions"
+  ],
+  "schemaVersion": 2,
+  "since": "2026-07-03T20:41:34.000Z",
+  "sourceCommit": "754c9df75f639f079b29592e7a99fb1763f0515f",
+  "thresholds": {
+    "forkHistoryBurstMs": 250,
+    "largeOutputBytes": 20000,
+    "packetByteLimit": 48000,
+    "packetEventLimit": 50
+  },
+  "until": "2026-07-10T20:41:34.000Z"
+}

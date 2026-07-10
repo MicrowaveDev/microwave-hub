@@ -1,0 +1,797 @@
+{
+  "excluded": [
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/16/rollout-2026-03-16T00-21-12-019cf404-ac3a-7f13-acba-ea8aea750aa8.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/16/rollout-2026-03-16T18-15-42-019cf7dc-6696-73d3-926b-9b156479802c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/18/rollout-2026-03-18T21-24-36-019d02d6-0e8c-70b2-a434-406d5fb93303.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/19/rollout-2026-03-19T13-37-47-019d0651-09af-75a1-af08-d13cd87248d6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/19/rollout-2026-03-19T13-50-12-019d065c-69cd-7673-8663-a09a2d25edcf.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/20/rollout-2026-03-20T13-30-21-019d0b70-9793-7b20-b236-2809f5dcbf1c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/23/rollout-2026-03-23T20-18-58-019d1c59-c57a-71c3-9303-a2f842c05338.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/24/rollout-2026-03-24T11-12-09-019d1f8b-8133-7043-ae0d-eb271ca52704.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/24/rollout-2026-03-24T14-45-44-019d204f-0cf1-7f82-9060-00612a605cc0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/27/rollout-2026-03-27T14-17-56-019d2fa8-ab16-7c61-8ae0-1306ac0911ff.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/27/rollout-2026-03-27T23-53-43-019d31b7-d126-7c80-beb3-04a1722bac03.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T04-34-40-019d32b9-0a8d-76b1-a0c1-25a1b8c56054.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T19-40-37-019d35f6-7390-70d3-8d23-543876fd298c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T21-36-27-019d3660-804a-7be0-bb9c-396a6a5fcfc6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T22-02-28-019d3678-520f-7d41-a25a-feb7ec7ddf71.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T22-02-28-019d3678-524f-77a0-b54a-207cd68607ee.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T22-02-28-019d3678-528d-7841-b1a6-673a884f7d88.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/28/rollout-2026-03-28T22-19-55-019d3688-4b69-7a13-ae07-aea3087125ad.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/29/rollout-2026-03-29T00-13-59-019d36f0-bb68-7821-92cf-59289741b2da.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/29/rollout-2026-03-29T21-55-19-019d3b61-3684-7a83-8c1e-9b74750c8c4f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/30/rollout-2026-03-30T02-20-03-019d3c53-935a-7150-bf60-5448517011e1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/30/rollout-2026-03-30T14-57-25-019d3f08-f6d9-7643-8599-f65c31ed4ce0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/30/rollout-2026-03-30T23-34-25-019d40e2-4a13-7311-bdca-bab99415a647.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/31/rollout-2026-03-31T00-19-04-019d410b-2dda-7be3-aef0-d39794a74b43.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/31/rollout-2026-03-31T00-54-22-019d412b-7f0d-76e2-8de9-002df7be5788.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/31/rollout-2026-03-31T01-34-30-019d4150-3a7e-72f3-a8d0-2aeeb4a1938e.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/03/31/rollout-2026-03-31T17-03-30-019d44a2-c346-7cb3-a426-f632d639457a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/01/rollout-2026-04-01T17-15-45-019d49d4-5621-7ae3-9726-6eb3a3d909b1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/05/rollout-2026-04-05T19-10-01-019d5ed6-60cc-7b10-acbf-810755ead1c0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/07/rollout-2026-04-07T21-59-50-019d69be-9490-7ce2-bd8e-a893d159d520.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/08/rollout-2026-04-08T16-23-41-019d6db1-2fb5-7f20-aa07-390098f31fd3.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/08/rollout-2026-04-08T18-58-59-019d6e3f-5ca3-7813-9e55-386ebca79bf5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/10/rollout-2026-04-10T12-30-36-019d7728-7f1e-7973-a8d0-5e210efc2d62.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/10/rollout-2026-04-10T16-27-34-019d7801-737f-7653-a9db-8dec28c7ed7c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/10/rollout-2026-04-10T16-28-12-019d7802-07b3-7dd3-81af-3e84ad7374b8.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/10/rollout-2026-04-10T17-27-44-019d7838-8a8c-7801-ac84-0286ba27eb51.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/11/rollout-2026-04-11T00-30-51-019d79bb-e84d-7a72-96c3-dcf87bd77a42.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/11/rollout-2026-04-11T17-08-56-019d7d4d-addb-7fc3-bf11-41f1503dfd8a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/11/rollout-2026-04-11T19-22-33-019d7dc8-0314-73e1-b652-33e03083b9a6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/12/rollout-2026-04-12T00-06-26-019d7ecb-ea3e-7812-bb9b-8fc1f05fee55.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/12/rollout-2026-04-12T00-14-31-019d7ed3-5375-7811-a1a9-65ddf4a38ec6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/12/rollout-2026-04-12T18-00-43-019d82a3-7497-7242-8e1c-66aceb4cbbb5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/12/rollout-2026-04-12T18-04-22-019d82a6-cb1d-7601-9580-35bd8778e42c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/13/rollout-2026-04-13T20-58-26-019d886c-8385-7142-974d-e6bca8a9fe24.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/13/rollout-2026-04-13T21-25-05-019d8884-ea1a-79e3-9a1f-f4156b482c9f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/14/rollout-2026-04-14T22-45-25-019d8df4-d05d-7b33-a932-6649d246e9e5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/15/rollout-2026-04-15T00-54-41-019d8e6b-29fa-74a2-9cbe-61e31b2f28df.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/18/rollout-2026-04-18T15-16-51-019da0f3-9771-7db3-a95f-6a60d6746be5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/18/rollout-2026-04-18T15-53-25-019da115-1148-7b03-a10c-da82623f7d5a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/18/rollout-2026-04-18T17-37-12-019da174-140b-7441-b933-b1ac5c18407c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/19/rollout-2026-04-19T20-44-33-019da745-f840-7783-8975-f567b378b9bf.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T00-15-37-019db253-e69d-7623-be2d-cad857ee9cda.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T01-18-18-019db28d-4f18-7e13-91fa-c5fe994a1edf.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T01-52-25-019db2ac-8a8d-7681-92d8-e6fbf5ac3115.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T09-22-07-019db448-40a3-72c1-b6df-80fc5b0640ac.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T09-38-46-019db457-7f81-7373-88e6-d270c41a1569.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T10-04-08-019db46e-b876-7b42-b5ad-cb912b85399e.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T10-05-26-019db46f-eaa4-7fd2-8dfd-fb0546283d26.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T12-16-59-019db4e8-57c5-76b0-a52a-73bda0032ab9.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T13-43-27-019db537-83e4-7cf2-b6ba-453e1c293dae.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T16-03-37-019db5b7-d623-7423-911e-d524b5fbb6a9.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T17-25-03-019db602-62b1-7652-9787-bd61bffad2c9.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T17-32-03-019db608-cd0b-7473-85a6-4047ac303d75.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/22/rollout-2026-04-22T17-47-04-019db616-8de4-7ed3-8182-bd01b82b07bd.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/25/rollout-2026-04-25T13-28-12-019dc49c-a006-7612-91a0-7c10be873f59.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T14-14-48-019dc9ed-a650-7543-bf80-bd8e3a185743.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T14-29-54-019dc9fb-79e2-7bb0-8c80-1740afc525c7.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T14-46-13-019dca0a-6b32-73b2-a393-cfffc2b163bd.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T16-08-19-019dca55-92c2-7700-a259-8c5b86b364e2.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T19-22-40-019dcb07-84f5-7bc2-86c4-e75ec673a3ad.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T20-21-40-019dcb3d-865f-7071-b713-b52928b00b62.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/26/rollout-2026-04-26T20-53-54-019dcb5b-0c1c-7990-9c0b-abfd82b4e7ea.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/27/rollout-2026-04-27T00-47-19-019dcc30-bc85-7ff3-ab7e-1d9f90a84082.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/28/rollout-2026-04-28T11-06-55-019dd38e-5bc5-7c82-842a-abf2e7436194.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/28/rollout-2026-04-28T16-59-13-019dd4d0-e597-7602-9da6-89db76069128.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/29/rollout-2026-04-29T18-49-11-019dda5b-ee54-7533-9f8d-ef1c81574382.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/29/rollout-2026-04-29T19-21-17-019dda79-536f-7d83-b733-07ab09932675.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/29/rollout-2026-04-29T19-41-23-019dda8b-b86c-7783-99f3-308151d19895.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/29/rollout-2026-04-29T21-32-39-019ddaf1-96f3-7041-894a-584d13bd155d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/04/30/rollout-2026-04-30T18-26-09-019ddf6d-35bc-77c2-84dd-f51cb4d47bf4.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T11-22-22-019ded5c-4b90-7400-b41d-3ee8bf3ed57f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T11-27-40-019ded61-26a0-7262-9dde-f5d2c66efbbd.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T11-34-16-019ded67-3290-7fc0-a299-dbe77a6b825d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T13-37-08-019dedd7-ae30-7080-a442-39d4e65966aa.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T13-53-45-019dede6-e574-7931-ad9d-dec76a1534c6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T14-48-52-019dee19-5cd2-7390-a3d3-9f084bbdb560.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T15-41-06-019dee49-2e08-7c51-9838-4a157c8395aa.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T17-15-44-019dee9f-d039-7e40-b053-cf33959a5f87.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/03/rollout-2026-05-03T17-44-28-019deeba-1fdc-75f2-b17d-a2cf2c8ba9b8.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/04/rollout-2026-05-04T11-30-27-019df28a-10f9-75e1-9c79-6ea2dfe6b634.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/04/rollout-2026-05-04T23-57-16-019df535-cad1-7153-8903-948b39c2c5c1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/05/rollout-2026-05-05T01-40-21-019df594-2cdc-76c2-ac81-a971f18894a9.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/05/rollout-2026-05-05T17-38-53-019df901-bb85-75a1-bb0d-d4798536aee1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/05/rollout-2026-05-05T22-40-53-019dfa16-38d8-7ad0-8823-744ca375262a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/06/rollout-2026-05-06T17-30-32-019dfe20-724d-7040-a876-fdc57e28577f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/06/rollout-2026-05-06T17-39-19-019dfe28-7d64-7e83-95f6-f3e4438711d7.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/06/rollout-2026-05-06T22-47-01-019dff42-30cb-7ce0-825e-bc4be5dac3c2.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/07/rollout-2026-05-07T16-34-38-019e0313-a20a-7012-968f-4f9ced576594.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/07/rollout-2026-05-07T16-38-07-019e0316-d281-7550-a6a3-3b1518795670.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/07/rollout-2026-05-07T21-56-29-019e043a-495f-72a0-bc08-03f04e6c7dab.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/09/rollout-2026-05-09T22-07-34-019e0e91-2922-78b0-931c-9fb454670802.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/09/rollout-2026-05-09T23-52-55-019e0ef1-9b76-7652-b586-526159699803.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/10/rollout-2026-05-10T21-57-49-019e13ae-9531-77a3-8b53-01029048a9a3.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/10/rollout-2026-05-10T22-40-20-019e13d5-82d0-7f51-9626-27a869e10f83.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/10/rollout-2026-05-10T23-20-09-019e13f9-f7eb-76b2-a013-e5711ae2e4c2.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/11/rollout-2026-05-11T17-03-01-019e17c7-0b70-7511-9acd-e6590f4aa6db.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/11/rollout-2026-05-11T18-41-30-019e1821-3725-7403-8e48-007ff339b3b2.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/11/rollout-2026-05-11T19-00-00-019e1832-26f3-7992-b5f6-32102290a68f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/13/rollout-2026-05-13T17-54-29-019e2242-e473-7383-a3ce-43746b5b3785.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/14/rollout-2026-05-14T00-04-23-019e2395-8af8-7931-8d37-52531ccf72ba.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/14/rollout-2026-05-14T00-11-21-019e239b-ed41-7e30-9a62-dad9d7ac92e4.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/14/rollout-2026-05-14T01-05-47-019e23cd-c0ac-7472-b610-84416e09d801.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/14/rollout-2026-05-14T01-59-26-019e23fe-e07c-7103-97d0-fb960ca20178.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/14/rollout-2026-05-14T02-27-50-019e2418-e119-74f2-935e-0b042fdeb35d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/15/rollout-2026-05-15T00-18-14-019e28c8-959d-7e21-a57f-f0b519ea062d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/15/rollout-2026-05-15T00-45-02-019e28e1-1f3a-76b1-bc82-fe49df517631.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/15/rollout-2026-05-15T02-02-43-019e2928-3dff-7f21-9cfd-c2df577f2fba.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/15/rollout-2026-05-15T16-42-36-019e2c4d-ca06-73c2-b001-6dc2f7b13d7e.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/15/rollout-2026-05-15T20-14-23-019e2d0f-b23d-7c11-a65f-bd22ef187c84.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/16/rollout-2026-05-16T18-56-10-019e31ee-7261-7e10-bd31-f0c791607e6c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/17/rollout-2026-05-17T13-13-08-019e35da-bf9e-7c12-928c-b3c2917aff2c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/17/rollout-2026-05-17T13-40-20-019e35f3-a417-7b42-a337-9a61bd49d7d4.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/18/rollout-2026-05-18T00-39-04-019e384e-bd25-7152-a4ee-530d6a7b634e.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/19/rollout-2026-05-19T00-33-02-019e3d6f-903f-7950-af25-dbc46906fa52.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/19/rollout-2026-05-19T13-01-25-019e401c-bd17-74d3-992d-e69599ee7ef3.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/21/rollout-2026-05-21T19-20-44-019e4bc4-ba17-7562-90f7-6c6d8411939b.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T12-07-56-019e5485-3544-7823-9979-7df5371cbe6f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T17-52-07-019e55c0-5110-71c0-976c-5c1bb41055c3.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T18-06-51-019e55cd-cd50-70e0-a0c0-4998696e1911.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-19-17-019e56eb-da01-79b3-b45c-11375f0ff625.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-19-49-019e56ec-56a9-7ca0-bd4a-eb9c5bd20b31.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-20-05-019e56ec-9416-76f2-a1d6-51b1ff29a819.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-25-26-019e56f1-7847-71e2-9807-c32a363619ca.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-27-03-019e56f2-f403-79f2-a475-6ef3c046e39d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-32-15-019e56f7-b745-7fc1-a93f-f968ed05fb9f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-33-44-019e56f9-1378-77a1-851f-4ab196a0e0f1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-33-53-019e56f9-3456-7c71-b612-7ec060f1e33d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-43-26-019e5701-f361-7792-8850-e9f9cbadd234.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-44-35-019e5703-0159-78a1-b5fc-cab1405e7adf.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/23/rollout-2026-05-23T23-58-26-019e570f-b168-7671-bbb9-29b5619b7513.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T00-02-52-019e5713-be1a-75e0-9fe4-6e261349e18a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T00-41-59-019e5737-90e7-7072-837d-16bf06fa0c4f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T00-42-15-019e5737-cc6a-76e1-af6d-80ac49619189.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T09-25-27-019e5916-ce9d-7f73-9de1-e73381d77456.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T09-26-10-019e5917-77a7-7801-9e6d-27ea31e10011.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T09-26-16-019e5917-8ca2-7323-af70-e78670f68ce2.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T09-28-05-019e5919-39bb-7561-9a34-1bf7afa5ac69.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T09-29-34-019e591a-9336-75a1-b60a-78baa8b339a0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-21-03-019e5ba5-f6db-7341-9b2b-1c4a972d84f6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-23-14-019e5ba7-f5a9-7dc3-8fd2-fa52ebab6e94.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-24-28-019e5ba9-166d-7ac3-a47d-80c3ee49e1f5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-26-06-019e5baa-966a-7e80-a1e4-f4788861e295.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-29-10-019e5bad-624c-7362-8c8e-1391b72184dd.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-55-07-019e5bc5-26da-7252-9711-5120ec5c5347.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T21-58-03-019e5bc7-d56e-7163-8f9c-7f3dfcb97127.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-39-33-019e5bed-d594-72b0-98a4-e6ff4ee909a1.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-40-10-019e5bee-655b-74b2-9d00-6c34d1b44ea6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-40-24-019e5bee-9a04-77c0-8047-46c829396f64.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-42-27-019e5bf0-7a42-7663-bb1f-5f8205115182.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-43-04-019e5bf1-0b03-7133-b963-2d9936362b0a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/24/rollout-2026-05-24T22-44-56-019e5bf2-c28c-7831-a311-024850634a18.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/26/rollout-2026-05-26T23-11-19-019e6657-9f91-7632-b1be-bc609d213abb.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/27/rollout-2026-05-27T00-01-46-019e6685-d189-7101-83ac-1bf23aa226f7.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/27/rollout-2026-05-27T12-33-23-019e6935-f2ad-7ab0-a970-938713bef118.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/05/27/rollout-2026-05-27T21-30-41-019e6b21-db5a-7c41-a7a9-ff0bf415f9c5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/07/rollout-2026-06-07T21-43-57-019ea366-15ef-78c3-95a1-4204dd4e1717.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/20/rollout-2026-06-20T22-39-58-019ee6f9-e7d5-7c83-90d2-dc0bef063525.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/22/rollout-2026-06-22T18-18-40-019ef057-66e7-77c3-ae1f-020e2a11e3d0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/22/rollout-2026-06-22T18-33-14-019ef064-bd8e-7c90-8280-183a5539da7d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/23/rollout-2026-06-23T03-26-57-019ef24d-5e60-7b11-9939-51781b3fa5cb.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/23/rollout-2026-06-23T22-09-28-019ef651-1083-7ea3-b0ad-a71f7e11319f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/24/rollout-2026-06-24T18-01-55-019efa94-c7f9-7720-a368-ef4b5c16e157.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/24/rollout-2026-06-24T18-11-03-019efa9d-2742-7ac1-86a4-8079e9da875b.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/24/rollout-2026-06-24T18-11-10-019efa9d-409f-7293-a9bc-41601f709150.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/26/rollout-2026-06-26T11-16-49-019f036e-9e2a-7c63-90bf-390f56836e78.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/27/rollout-2026-06-27T21-53-17-019f0adb-b0f2-77e1-bc99-aa28995a8e8a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/29/rollout-2026-06-29T17-24-56-019f1432-b8cc-7271-8066-665e1f558c1d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/06/30/rollout-2026-06-30T16-50-58-019f1939-fb45-7ea0-bca4-d4c7f8648cb7.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T16-17-49-019f2368-59f6-7013-9be9-e7e85f9534d0.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T16-32-41-019f2375-f586-7a81-8491-7cce3a78f96f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T21-46-25-019f2495-31ad-7033-9436-aee13df5de65.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T22-07-27-019f24a8-727b-7d63-aa23-98f5105ba82d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T22-49-21-019f24ce-d11f-7701-afc5-8ece3346537a.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/02/rollout-2026-07-02T23-44-12-019f2501-098e-7e62-a32f-c5534884843e.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/03/rollout-2026-07-03T00-35-00-019f252f-8b6d-7660-a146-dd2152a3f0cd.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T21-55-23-019f4dd0-4851-7c13-81f7-97a9d9f1da46.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T21-55-24-019f4dd0-4a9e-75c2-81cc-80e5cd32759b.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c19e-7d42-86a7-0c7a861e233d.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c201-78b1-88a6-b52d73505b31.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c250-7af2-b7ad-9eb92c60b9b6.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c2b9-7603-9612-6294f71ac709.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c339-79b0-8eb0-e06e9e50d186.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-15-34-019f4de2-c3bb-76d0-b44a-042a33fcccb5.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-17-57-019f4de4-f328-76b3-8c3b-d5cde21aaa11.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-20-08-019f4de6-ef54-7152-8c01-9dc07a684091.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-20-08-019f4de6-efc2-74d3-996f-d10c0866764f.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-23-23-019f4de9-e929-73f1-b38d-ebc9afadbe8c.jsonl",
+      "reason": "missing-timestamp"
+    },
+    {
+      "path": "/Users/microwavedev/.codex/sessions/2026/07/10/rollout-2026-07-10T22-23-23-019f4de9-e990-7d33-8ee8-309a7f40baf0.jsonl",
+      "reason": "missing-timestamp"
+    }
+  ],
+  "malformedSessions": []
+}
