@@ -1,186 +1,241 @@
 # Past-Week Log Context-Waste Analysis Plan
 
-## Table Of Contents
-
-- [Goal](#goal)
-- [Source Of Truth](#source-of-truth)
-- [Outputs](#outputs)
-- [Metrics](#metrics)
-- [Sub-Agent Workstreams](#sub-agent-workstreams)
-- [Execution Sequence](#execution-sequence)
-- [Ranking Method](#ranking-method)
-- [Final Report Shape](#final-report-shape)
-- [Verification](#verification)
-- [Open Assumptions](#open-assumptions)
-
 ## Goal
 
-Identify which agent logs from the past week caused the largest avoidable context-token waste, then explain the reusable workflow fixes that would prevent similar waste.
+Build a repeatable pipeline that scans every agent log in a frozen seven-day window, ranks the sessions and task trees most likely to contain avoidable context use, and sends only compact evidence packets to parallel sub-agents for causal review.
 
-This is an analysis-only workflow. Sub-agents may read logs, exports, scripts, and repo documentation, but should not edit product code, move branches, update submodules, clean worktrees, or mutate source logs.
+The pipeline must distinguish three different questions:
 
-## Source Of Truth
+1. Which sessions consumed the most input tokens?
+2. Which sessions contain the strongest deterministic signals of avoidable work?
+3. Which recurring causes offer the highest-value reusable fixes?
 
-Before dispatching sub-agents, the coordinator freezes the request:
+These rankings must remain separate. A large successful task is not automatically wasteful, and a heuristic event count is not a token estimate.
 
-- User ask: analyze logs from the past week and find which logs created the largest waste of context tokens.
-- Default time window: the rolling seven-day period ending on July 10, 2026. Freeze exact start and end timestamps in the run manifest before analysis begins.
-- Primary target: agent logs, rollout JSONL files, agent-viewer exports, and workflow transcripts.
-- Required result: ranked log/session findings, with token-waste evidence and reusable prevention recommendations.
-- Non-goal: summarizing every session equally. The work should prioritize the biggest context-token waste and the causes behind it.
+This is an analysis-only workflow. The scanner and sub-agents may write only to the dated analysis folder. They must not edit source logs, product code, branches, worktrees, or submodule pointers.
 
-If multiple log stores exist, prefer maintained analyzer output or cleaned exports before raw logs.
+## Frozen Inputs
 
-## Outputs
+Before implementation or dispatch, create `run-manifest.json` containing:
 
-Create these artifacts under a dated analysis folder, for example `docs/handoff/context-waste-2026-07-10/`:
+- exact inclusive start and exclusive end timestamps, with timezone
+- discovered log roots and accepted formats
+- paths included and excluded, with reasons
+- analyzer version and Git commit
+- scoring configuration and packet limits
+- requested outputs and non-goals
 
-- `run-manifest.md`: exact date window, source locations inspected, excluded sources, assumptions, and sub-agent assignments.
-- `candidate-index.json`: one record per candidate log/session with path, timestamp, repo/workflow if known, total token indicators, tool-call counts, and first-pass waste score.
-- `top-context-waste.md`: ranked findings for the highest-waste logs.
-- `subagent-notes/`: one Markdown note per sub-agent containing evidence, line references, and confidence.
-- `fix-backlog.md`: smallest reusable fixes, grouped by instruction change, helper/script, validator, or repo-structure change.
+Default window for this run: the rolling seven-day period ending July 10, 2026. The coordinator must replace this prose default with exact timestamps in the manifest.
 
-## Metrics
+The current Codex source is `~/.codex/sessions/**/rollout-*.jsonl`. The initial inventory found hundreds of candidate files, so no language-model agent should inventory or read the full corpus directly.
 
-Measure both absolute cost and avoidability:
+## Architecture
 
-- Total context volume: prompt/input tokens if available, transcript byte size as fallback, and repeated system/developer/instruction payload size when visible.
-- Avoidable context volume: large reads that did not materially help, repeated instruction reads, repeated raw-log dumps, full-file reads where targeted windows would work, repeated command output pasted into context, and duplicate metadata blocks.
-- Tool waste: read-only commands that could have been batched, serial repo probing, repeated failed commands, and unnecessary broad searches.
-- Recovery loops: validation failures, wrong-directory work, branch confusion, dirty-worktree blockers, or retries that added context without progressing.
-- Delay to useful action: number of turns/tool calls before the agent used the right helper, route, analyzer, or target repo.
+```text
+raw logs (read-only)
+  -> deterministic scanner
+  -> session index + task-tree index + evidence packets
+  -> calibration sample
+  -> parallel deep-dive sub-agents
+  -> independent QA sample
+  -> deterministic aggregation
+  -> coordinator synthesis
+```
 
-Use token counts where logs expose them. Otherwise estimate with a consistent method and mark estimates clearly.
+The deterministic scanner owns exhaustive work. Sub-agents receive normalized packets and use judgment only where causality, necessity, or the best reusable fix cannot be decided from counts alone.
 
-## Sub-Agent Workstreams
+## Implementation Phase
+
+Add a streaming scanner in `agent-viewer`, for example:
+
+```bash
+yarn agent:rank-context-waste \
+  --since 2026-07-03T00:00:00+01:00 \
+  --until 2026-07-11T00:00:00+01:00 \
+  --output <analysis-folder>
+```
+
+Prefer extending shared parsing functions from `scripts/analyze-log.mjs` over creating a second incompatible parser. The new command must process files sequentially or with bounded concurrency and must never concatenate raw logs into one prompt or output.
+
+The scanner should produce:
+
+- `run-manifest.json`: reproducible inputs and configuration
+- `sessions.jsonl`: one normalized record per physical log
+- `task-trees.jsonl`: parent/cohort grouping for coordinators and sub-agents
+- `rankings.json`: deterministic rankings and selected review cohorts
+- `packets/<session-id>.json`: bounded evidence for sub-agent review
+- `scanner-warnings.json`: malformed records, uncertain grouping, and unsupported formats
+
+Add fixture-based tests for token accounting, duplicate token events, large-output detection, command-family normalization, date boundaries, malformed JSONL, and task-tree grouping.
+
+## Deterministic Measurements
+
+For each session, record actual values when present:
+
+- final cumulative `input_tokens`, `cached_input_tokens`, `output_tokens`, and `reasoning_output_tokens`
+- per-turn `last_token_usage`, deduplicated when identical `token_count` events repeat
+- session duration, turn count, tool-call count, failure count, and completion count
+- bytes by record class and tool-output bytes returned to the model
+- first user request, working directory, model, session ID, and timestamps
+
+Do not sum cumulative `total_token_usage` snapshots. Use the final valid cumulative snapshot, and use deduplicated `last_token_usage` only for turn-level attribution.
+
+Calculate token-facing measures without claiming they are all avoidable:
+
+```text
+uncached_input_tokens = max(0, input_tokens - cached_input_tokens)
+context_replay_tokens = sum(deduplicated per-turn input_tokens after the first model turn)
+large_output_bytes = sum(tool outputs above the configured threshold)
+```
+
+The scanner should detect deterministic waste signals with line references:
+
+- repeated identical or near-identical tool calls
+- repeated reads of the same file or instruction source
+- broad reads followed by narrower reads of the same material
+- tool outputs above size thresholds
+- serial read-only calls that match a known batch/helper opportunity
+- failed command followed by equivalent retries
+- repeated validation failures or recovery loops
+- delayed use of a helper explicitly named in in-scope instructions
+- completion emitted after a failed required validator
+- duplicate user/system/developer payloads when they explain context growth
+
+Each signal must include a rule ID, log line numbers, raw measurable quantity, and confidence. Keep heuristic detection versioned and auditable.
+
+## Task-Tree Grouping
+
+Rank both physical sessions and logical task trees. Sub-agent runs can create many files with similar timestamps; treating each file as an independent user task can double-count one workflow and distort the leaderboard.
+
+Use explicit parent/thread metadata when available. Otherwise create a conservative cohort key from time overlap, originator, working directory, source request fingerprint, and any sub-agent tool-call identifiers. Mark inferred relationships with confidence and never merge uncertain sessions silently.
+
+The task-tree record should report:
+
+- coordinator session and child sessions
+- total measured tokens across the tree
+- wall-clock span and peak parallelism
+- duplicated context across children, when measurable
+- child outputs that were never used by the coordinator
+- grouping evidence and confidence
+
+## Evidence Packets
+
+Sub-agents should not receive complete raw logs by default. Each packet should fit a fixed budget and contain:
+
+- frozen user request and session metadata
+- measured token totals and per-turn deltas
+- compact chronological tool-call table
+- deterministic signal list with line references
+- normalized command families and file-read targets
+- bounded excerpts around each cited event
+- completion and validation state
+- related task-tree summary
+
+Default packet cap: 12,000 tokens or 50 cited events, whichever comes first. Redact base64, encrypted reasoning, secrets, bulky metadata, and unrelated repeated instruction blocks. Preserve stable source paths and line numbers.
+
+A reviewer may request one bounded raw-log window only when the packet cannot establish whether an operation was necessary. Record every escalation in the review note so packet quality can be improved later.
+
+## Calibration Before Fan-Out
+
+Before launching the full review cohort, have two sub-agents independently review the same stratified sample:
+
+- two high-token sessions
+- two high-signal sessions
+- one low-ranked control
+- one inferred multi-session task tree
+
+Compare their labels for necessity, waste category, and confidence. The coordinator resolves disagreements, updates detector thresholds or packet fields, freezes scoring version `v1`, and regenerates all packets. Do not tune rules after seeing only the desired top results.
+
+This calibration prevents a flawed heuristic from being multiplied across many parallel reviewers.
+
+## Parallel Sub-Agent Plan
 
 ### Coordinator
 
-Inputs: user request, this plan, log-analysis rules, available analyzer commands, and all sub-agent outputs.
+Owns the manifest, cohort selection, conflict resolution, and final synthesis. It does not manually scan the corpus.
 
-Outputs: `run-manifest.md`, final ranked report, and final recommendations.
+### Deep-Dive Reviewers
 
-Write scope: analysis folder only.
+Dispatch reviewers only after calibration. Give each reviewer non-overlapping packets, a fixed rubric, and no more than three ordinary sessions or one large task tree per assignment. Run assignments in parallel up to the environment's safe concurrency limit.
 
-Completion criteria: every top finding has evidence, a waste category, estimated or actual context cost, root cause, and a reusable fix.
+Each review note must use this schema:
 
-### Inventory Agent
+- request coverage: handled correctly, late, incorrectly, or not handled
+- verdict: necessary cost, likely waste, confirmed waste, or insufficient evidence
+- avoidable-token range: low, likely, and high estimate, with method
+- cited waste events and first avoidable decision
+- root cause: instruction, missing helper, missed helper, validator, routing, or task design
+- smallest reusable fix
+- confidence and raw-window escalations
 
-Inputs: log roots, agent-viewer exports, rollout JSONL files, filesystem metadata, and analyzer availability.
+Reviewers estimate avoidable tokens only from attributable turn deltas. They must not convert tool calls or failures into invented token amounts.
 
-Outputs: `candidate-index.json` with all logs in the frozen time window.
+### Pattern Synthesizers
 
-Write scope: `candidate-index.json` and inventory notes only.
+After deep dives finish, dispatch two synthesis agents over the review notes, not raw logs. One clusters recurring causes and owners; the other looks for counterexamples, false positives, and fixes that would merely move cost elsewhere.
 
-Completion criteria: all included and excluded sources are listed with reason, and each candidate has enough metadata for scoring.
+### QA Reviewer
 
-### Analyzer Agent
+Independently verify all top-five findings, a random 10% of other reviewed findings, and at least five low-ranked controls. QA checks citations, token arithmetic, task-tree grouping, request coverage, and whether the proposed fix is reusable.
 
-Inputs: `candidate-index.json`, reusable analyzer output, and cleaned exports.
+### Coordinator Finalization
 
-Outputs: first-pass metrics for every candidate log/session.
+The coordinator resolves disagreements using source windows, then runs a deterministic aggregator to produce tables. Narrative synthesis comes after the numbers are frozen.
 
-Write scope: analyzer notes only.
+## Cohort Selection
 
-Completion criteria: candidates are ranked by likely context waste using uniform metrics, with the top cohort selected for deep review.
+Do not use a single weighted score with arbitrary token equivalents. Select overlapping cohorts so different waste shapes survive triage:
 
-### Deep-Dive Agents
+- top 15 sessions by actual input tokens
+- top 15 by uncached input tokens
+- top 15 by large tool-output bytes
+- top 15 by repeated-read/retry signal count
+- top 10 by failure and recovery-loop count
+- top 10 task trees by duplicated child context or unused child work
+- five random low-signal controls
 
-Inputs: assigned top candidate logs, analyzer citations, and narrow surrounding context.
+Deduplicate the union by task tree. If the union is too large, cap it with stratified sampling while retaining every extreme outlier. Publish the selection rule and excluded count.
 
-Outputs: one evidence note per assigned log.
+After human review, publish separate leaderboards:
 
-Write scope: assigned note files only.
+- absolute context cost
+- estimated avoidable context tokens, with ranges
+- waste rate: avoidable input divided by total input
+- recurrence leverage: similar confirmed events across distinct task trees
+- latency/supervision impact
 
-Completion criteria: each note freezes the original user request, gives a compact timeline, identifies concrete context-waste moments, and cites log lines or stable excerpts.
+## Final Outputs
 
-Parallelism: run multiple deep-dive agents in parallel after the first-pass ranking is complete. Assign non-overlapping log sets to avoid duplicate reading.
+Write these artifacts under `docs/handoff/context-waste-2026-07-10/`:
 
-### Pattern-Synthesis Agent
+- `methodology.md`: data window, parser version, grouping, calibration, thresholds, and limitations
+- `top-context-waste.md`: ranked session and task-tree findings
+- `pattern-clusters.md`: recurring causes, counterexamples, and prevalence
+- `fix-backlog.md`: smallest fixes grouped by instruction, helper, validator, analyzer, or repo structure
+- `subagent-notes/`: schema-valid review and synthesis notes
+- the deterministic scanner outputs listed above
 
-Inputs: all deep-dive notes and candidate metrics.
+The final report must follow `AGENT_LOG_ANALYSIS_RULES.md`: request coverage, compact timeline, waste clusters, helper findings, validation/handoff assessment, reusable fixes, residual risks, and relevant workspace state.
 
-Outputs: clustered waste patterns and reusable fixes.
+For every top finding report the session/task-tree ID, actual token cost, avoidable-token range, confidence, cited evidence, why the work was avoidable, the first better action, and the reusable fix.
 
-Write scope: synthesis note and `fix-backlog.md`.
+## Acceptance Criteria
 
-Completion criteria: findings are grouped by leverage, not by chronology, and each proposed fix names the likely owner: instruction, helper, validator, analyzer, or repo structure.
+- Re-running the scanner with the same manifest produces byte-stable normalized records and rankings.
+- Every source file in the date window is included once or excluded with a reason.
+- Duplicate `token_count` events and cumulative snapshots do not inflate totals.
+- Physical sessions and logical task trees are both visible, with uncertain grouping labeled.
+- No sub-agent receives the entire weekly corpus or an unbounded raw log.
+- At least two reviewers calibrate on the same sample before fan-out.
+- Top-five findings and low-ranked controls receive independent QA.
+- Every avoidable-token estimate is a range tied to measured per-turn deltas.
+- Heuristic event weights are never presented as tokens.
+- Source logs and unrelated workspace state remain unchanged.
 
-### QA Agent
+## Residual Risks
 
-Inputs: final draft report, all cited notes, and source references.
-
-Outputs: QA checklist appended to the final report.
-
-Write scope: QA note only, unless the coordinator asks for report corrections.
-
-Completion criteria: every ranked claim is traceable to evidence, estimates are labeled, and no raw source log has been modified.
-
-## Execution Sequence
-
-1. Coordinator freezes the exact seven-day date window and creates `run-manifest.md`.
-2. Inventory Agent discovers logs and cleaned exports, without broad raw-log scraping when a maintained analyzer exists.
-3. Analyzer Agent runs reusable analyzers first, then scores every candidate.
-4. Coordinator selects the top cohort for deep review. Suggested default: top 10 by estimated avoidable context tokens, plus any outlier with unusually high tool-call count or recovery-loop count.
-5. Deep-Dive Agents inspect only cited lines first, widening context only when needed to understand cause.
-6. Pattern-Synthesis Agent clusters the causes across logs and drafts reusable fixes.
-7. QA Agent verifies evidence, rankings, and scope control.
-8. Coordinator publishes `top-context-waste.md` and `fix-backlog.md`.
-
-## Ranking Method
-
-Rank each log with a weighted score:
-
-```text
-context_waste_score =
-  avoidable_context_tokens_or_estimate
-  + repeated_instruction_tokens_or_estimate
-  + 500 * avoidable_tool_calls
-  + 1000 * failed_recovery_loops
-  + 750 * missed_helper_events
-```
-
-Then report both:
-
-- `absolute waste`: the logs that likely burned the most context overall.
-- `fix leverage`: the logs whose causes are most reusable across future workflows.
-
-Do not let a very large but necessary transcript outrank a smaller session with clearly preventable repeated context loading unless the absolute waste difference is material.
-
-## Final Report Shape
-
-The final report should follow the log-analysis playbook:
-
-- Request coverage assessment.
-- Compact timeline of the analysis workflow.
-- Ranked top context-waste logs.
-- Waste pattern clusters.
-- Missed-helper or missing-helper findings.
-- Validation and final-handoff assessment for the reviewed sessions.
-- Smallest reusable fixes.
-- Residual risks and open assumptions.
-- Workspace or repo state, if it affected analysis.
-
-Each top-log finding should include:
-
-- log/session identifier and timestamp
-- estimated or actual wasted context tokens
-- confidence level
-- why it was waste, not merely large context
-- the first moment where the workflow should have narrowed, batched, or used a helper
-- recommended reusable fix
-
-## Verification
-
-- Re-run or review analyzer output after the final top cohort is selected.
-- Spot-check at least two low-ranked logs to make sure the scorer is not missing a different waste shape.
-- Confirm all date-window inclusions and exclusions from filesystem metadata or log timestamps.
-- Confirm no sub-agent modified source logs, branches, submodule pointers, or product files.
-- Confirm final claims cite stable paths, log line numbers, analyzer output IDs, or exact session identifiers.
-
-## Open Assumptions
-
-- The phrase "past week" means the rolling seven-day period ending July 10, 2026 unless the user specifies a different window.
-- Token counts may not be present in every log; transcript byte size and repeated-block size are acceptable fallback estimates if labeled.
-- The coordinator remains responsible for integration and final judgment; sub-agents provide evidence and draft findings, not final ranking authority.
+- Logs may not expose enough parent-child metadata for definitive task-tree grouping.
+- Cached-input accounting indicates billing/cache behavior, not whether context was useful.
+- A tool output can be large but necessary; deterministic rules identify candidates, not guilt.
+- Some wasted reasoning is not observable from tool calls or token counters.
+- Cross-provider logs may require format-specific adapters before their metrics are comparable.
