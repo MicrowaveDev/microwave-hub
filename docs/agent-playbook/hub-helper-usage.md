@@ -28,6 +28,10 @@ Use these commands when working from the hub root.
   - Generate compact ownership-scoped assignments, reject dependency/interface drift, and validate bounded structured handoffs.
 - `npm run compare:agent-context-strategies -- --input <runs.json> [--output <report.json>]`
   - Compare reused, reset, and fresh workers only across identical batches. It recommends a change only when total input and latency improve without weaker correctness or more intervention.
+- `npm run context:collect-strategy-experiment -- --manifest <assignment.json> --output <report.json>`
+  - Collect real token, latency, startup, intervention, and correctness telemetry from three tagged rollout sessions, verify their final answers against one equivalent-task contract, and run the strategy comparison.
+- `npm run context:weekly-gate -- --status-only`
+  - Report whether the fixed baseline and two post-change weekly windows are ready. After the reported readiness time, omit `--status-only` to generate bounded informational comparisons from local Codex sessions.
 - `npm run find:repos -- OAuth`
   - Search across the hub and submodules with a bounded 40-line, 400-character-per-line preview and total counts.
 - `npm run find:repos -- --files 'AGENTS\.md$'`
@@ -45,6 +49,8 @@ Use these commands when working from the hub root.
   - Run a lightweight smoke test for the helper layer.
 - `npm run verify:instructions`
   - Verify exact-route trigger parity, local instruction links, and the root `AGENTS.md` byte ceiling.
+- `npm run verify:context-efficiency-contracts`
+  - Verify the authoritative P0/P1 fixture inventory and output-budget contracts for context-efficiency commands.
 
 ## Notes
 

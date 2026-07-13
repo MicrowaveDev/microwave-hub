@@ -22,3 +22,4 @@ test-results/
 temp/agent-command-output/
 temp/agent-flow-checkpoints/
 temp/context-efficiency-implementation/
+temp/context-efficiency-weekly/

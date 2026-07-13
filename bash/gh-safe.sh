@@ -223,6 +223,7 @@ main() {
       local action="$2"
       case "$action" in
         create|edit) extract_and_validate_body pr "${@:3}" ;;
+        merge) fail "pull request merges are user-only; hand off the PR URL instead" ;;
       esac
       require_gh
       gh "$@"

@@ -130,6 +130,31 @@ function handoffFor(repo, packet, overrides = {}) {
   };
 }
 
+function completedChildFor(repo, packet, overrides = {}) {
+  const handoff = handoffFor(repo, packet);
+  const packetArtifact = path.join(repo, 'temp', 'context-efficiency-implementation', 'run-1', 'packet.json');
+  const artifact = path.join(repo, 'temp', 'context-efficiency-implementation', 'run-1', 'handoff.json');
+  const packetRaw = `${JSON.stringify(packet, null, 2)}\n`;
+  const raw = `${JSON.stringify(handoff, null, 2)}\n`;
+  fs.writeFileSync(packetArtifact, packetRaw);
+  fs.writeFileSync(artifact, raw);
+  return {
+    id: 'child-1',
+    parentId: 'coordinator-1',
+    taskId: packet.taskId,
+    disposition: 'completed',
+    completionReceipt: {
+      repoPath: repo,
+      packetArtifact: path.relative(repo, packetArtifact),
+      packetSha256: sha256(packetRaw),
+      artifact: path.relative(repo, artifact),
+      artifactSha256: sha256(raw),
+      validation: validateHandoff(packet, handoff, raw),
+    },
+    ...overrides,
+  };
+}
+
 test.after(() => fs.rmSync(TEST_ROOT, { recursive: true, force: true }));
 
 test('rejects SHA-256 sidecar corruption', () => {
@@ -203,6 +228,55 @@ test('atomically updates active state and appends a hash-chained event', () => {
   assert.equal(fs.readFileSync(result.paths.sidecar, 'utf8').split(/\s+/)[0], sha256(result.bytes));
   assert.equal(fs.readFileSync(result.paths.ledger, 'utf8').trim().split('\n').length, 2);
   assert.deepEqual(fs.readdirSync(result.paths.base).filter((name) => name.endsWith('.tmp') || name === '.update-lock'), []);
+});
+
+test('accepts child completion backed by a validated structured handoff', () => {
+  const { repo, head } = makeRepo();
+  const packet = generatePacket(packetFor(repo, head)).packet;
+  const child = completedChildFor(repo, packet);
+  const result = init('completed-child-receipt', stateFor(repo, head, {
+    ids: { rootTaskId: 'replaced-by-init', coordinatorId: 'coordinator-1', children: [child], mappings: {} },
+  }));
+  assert.equal(result.state.ids.children[0].completionReceipt.validation.disposition, 'completed');
+});
+
+test('rejects new child completion without an accepted validation receipt', () => {
+  const { repo, head } = makeRepo();
+  const packet = generatePacket(packetFor(repo, head)).packet;
+  const child = completedChildFor(repo, packet);
+  const ids = (completed) => ({ rootTaskId: 'replaced-by-init', coordinatorId: 'coordinator-1', children: [completed], mappings: {} });
+  init('completed-child-transition', stateFor(repo, head, { ids: ids({ id: child.id, parentId: child.parentId, taskId: child.taskId, disposition: 'planned' }) }));
+  assert.throws(
+    () => updateCheckpoint({
+      rootTaskId: 'completed-child-transition',
+      patch: { ids: { children: [{ id: child.id, parentId: child.parentId, taskId: child.taskId, disposition: 'completed' }] } },
+      writer: 'test-suite',
+      projectRoot: TEST_ROOT,
+    }),
+    (error) => error.details.some((detail) => detail.includes('requires a structured completionReceipt')),
+  );
+  assert.throws(
+    () => init('completed-child-no-receipt', stateFor(repo, head, { ids: ids({ id: child.id, parentId: child.parentId, taskId: child.taskId, disposition: 'completed' }) })),
+    (error) => error.details.some((detail) => detail.includes('requires a structured completionReceipt')),
+  );
+  assert.throws(
+    () => init('completed-child-rejected-receipt', stateFor(repo, head, { ids: ids({ ...child, completionReceipt: { ...child.completionReceipt, validation: { ...child.completionReceipt.validation, disposition: 'failed' } } }) })),
+    (error) => error.details.some((detail) => detail.includes('validation disposition is not accepted')),
+  );
+});
+
+test('rejects child completion when its handoff artifact is malformed or changed', () => {
+  const { repo, head } = makeRepo();
+  const packet = generatePacket(packetFor(repo, head)).packet;
+  const child = completedChildFor(repo, packet);
+  const artifact = path.join(repo, child.completionReceipt.artifact);
+  const ids = { rootTaskId: 'replaced-by-init', coordinatorId: 'coordinator-1', children: [child], mappings: {} };
+  fs.writeFileSync(artifact, '{"disposition":"completed"}\n');
+  assert.throws(
+    () => init('completed-child-malformed-artifact', stateFor(repo, head, { ids })),
+    (error) => error.details.some((detail) => detail.includes('handoff artifact is missing schemaVersion'))
+      && error.details.some((detail) => detail.includes('SHA-256 mismatch')),
+  );
 });
 
 test('keeps resume output bounded and omits frozen plan prose', () => {

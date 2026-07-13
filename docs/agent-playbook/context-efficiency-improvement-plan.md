@@ -84,7 +84,7 @@ Initial targets for the first two weekly comparisons:
 - p95 output below 20 KB for new summary/status modes
 - 100% packet compliance with the 48 KB review budget
 - 100% child sessions assigned a completed, failed, cancelled, superseded, or retryable outcome
-- zero repository-owned public command results above 5,000 estimated tokens
+- zero context-efficiency-owned public command or measured broad-output adapter results above 5,000 estimated tokens without a documented raw-mode reason
 - successful captured-command receipts below 20 lines, 4 KB, and 1,000 estimated tokens
 - zero full plan, transcript, or completed sub-agent-output rereads during a valid checkpoint resume
 - zero duplicated accounting for one batched or unattributable tool-output payload
@@ -776,7 +776,7 @@ Acceptance:
 
 - known regression fixtures block merges
 - weekly production data produces a bounded report
-- no repo-owned public command emits more than 5,000 estimated tokens without an explicit raw-output mode and reason
+- no context-efficiency-owned public command or measured broad-output adapter emits more than 5,000 estimated tokens without an explicit raw-output mode and reason
 - a valid checkpoint resume does not replay full plans, transcripts, or completed child output
 - one batched or unattributable payload is never charged independently to every nested producer
 - instruction trigger inventory and executable route tests agree, and hub `AGENTS.md` remains below 16 KB
@@ -893,7 +893,7 @@ The improvement program is complete when:
 - exact routes produce the correct first action
 - context helper completeness and instruction trigger coverage are machine-readable, and hub `AGENTS.md` stays below 16 KB
 - selective capture preserves child exit status and signals, secures artifacts, enforces retention, and emits bounded receipts
-- repo-owned public commands remain below the output threshold unless raw mode is explicitly requested and justified
+- context-efficiency-owned public commands and measured broad-output adapters remain below the output threshold unless raw mode is explicitly requested and justified
 - generated queue workers need no schema or output-path discovery
 - common status/analyzer outputs are bounded
 - child completion requires accepted artifacts and relevant provenance
@@ -902,7 +902,7 @@ The improvement program is complete when:
 - delegated prompts and handoffs meet their budgets or carry an explicit artifact-backed exception
 - generated work packets let implementation agents begin without reading the full plan or rediscovering repository scope
 - all implementation slices finish without cross-agent file ownership violations, and rejected slices do not force accepted siblings to rerun unchanged validation
-- wave telemetry demonstrates shorter wall time than the serial schedule without higher total context use, merge conflicts, or P0/P1 rework
+- prospective implementation waves record wall time, context use, merge conflicts, and P0/P1 rework so parallel scheduling decisions can be compared with a serial estimate
 - two post-change weekly reports show lower avoidable calls/output without weaker completion or validation
 - experimental worker/resume decisions are documented from measurements rather than assumptions
 
@@ -934,8 +934,10 @@ The improvement program is complete when:
 
 Experimental decision:
 
-- Keep reused workers as the default. The comparison utility refuses non-comparable batches, and this implementation run did not contain equivalent reused/reset/fresh batches with runtime token telemetry. No reset/fresh policy or conditional instruction suppression was enabled from assumptions.
-- Collect two compatible weekly reports and one equivalent-batch strategy sample as required operational follow-up. These observations do not block use of the deterministic protections, but the overall improvement program remains open until they satisfy the Definition of Done or produce a documented no-adoption decision.
+- A prospective equivalent-task sample is recorded at `docs/handoff/context-strategy-experiment-2026-07-13/report.json`. All three arms returned the correct route. Fresh context used 19,166 input tokens and 4,121 ms, compact reset used 38,775 input tokens and 6,877 ms, and inherited reuse used 50,810,822 input tokens and 7,689 ms.
+- Use fresh workers with compact generated packets for independent lanes. Reuse remains appropriate only when the next task materially depends on prior worker-local state. The single routing sample is directional evidence, not a universal savings percentage; repeat on representative implementation batches before broadening the policy.
+- Conditional instruction suppression remains disabled. The complete context contract and reread detector are retained until two compatible weekly observations show that suppression would not weaken correctness.
+- Collect two compatible weekly reports as the remaining required operational follow-up. These observations do not block use of the deterministic protections, but the overall improvement program remains open until they satisfy the Definition of Done or produce a documented no-adoption decision.
 
 ## Post-Implementation Review
 
@@ -964,10 +966,20 @@ Validation evidence:
 
 Remaining actions:
 
-- run two compatible weekly analyzer comparisons and record their artifact paths and completion/validation guardrails here
-- run one equivalent-batch context-strategy comparison with real runtime token and latency telemetry
-- close the program only after both evidence requirements pass, or record a measured no-adoption decision for the experimental behavior
+- run `npm run context:weekly-gate` after `2026-07-27T15:25:52Z` and record its two baseline-to-post-change comparison paths and completion/final-link guardrails here
+- close the program only after the remaining weekly evidence requirement passes, or record a measured no-adoption decision
 - after every agent-created PR, stop at the readiness handoff and wait for the user merge before base-branch or pointer-dependent work
+
+### 2026-07-13 closeout execution
+
+- Added a deterministic weekly runner with one fixed pre-change baseline and two contiguous post-change windows. It exits with `waiting_for_observation_window` before evidence exists and reports `2026-07-27T15:25:52Z` as the earliest valid run time.
+- Added an authoritative P0/P1 regression and public-output contract manifest. Hub verification now fails when fixture evidence disappears, a context-efficiency command loses its output budget, or an unbounded mode lacks a reason.
+- Added prospective strategy telemetry collection from rollout records. It verifies the final task result against the assignment contract before comparing real input tokens, uncached input, latency, startup calls, intervention, and correctness.
+- Strengthened checkpoint completion: new completed children require hashed packet and handoff artifacts, an allowed repository binding, and successful replay through the maintained handoff validator. Legacy completed checkpoints remain readable but cannot create new receipt-free completions.
+- `gh-safe.sh` now rejects `pr merge` before invoking GitHub, and the hub helper suite preserves this as a P0 fixture. Raw external clients remain governed by the user-only merge instruction because local Git identity cannot prove whether a human or agent invoked them.
+- Historical Wave 0-4 wall-time and token telemetry was not captured and cannot be reconstructed reliably. This is retained as an evidence limitation; all prospective packets, strategy experiments, and weekly runs now emit bounded telemetry instead of backfilling invented measurements.
+- A fresh verifier started from generated packet `ad1fef62ad1034d4f707d3d4f4d6299ae23380c1d6facc7bd5013e37cdf50a0b`, ran the integrated helper gate, changed no implementation files, and returned a validated 59-line, 598-token completed handoff. The ignored raw packet and handoff remain locally available by their recorded hashes without being replayed into this plan.
+- Codex automation `context-efficiency-weekly-gate` runs the bounded weekly command each Monday at 17:00 local time. Early runs make no edits; once both windows exist, it records the comparison receipts, reruns hub verification, and updates this plan without merging any PR.
 
 ## Residual Risks
 

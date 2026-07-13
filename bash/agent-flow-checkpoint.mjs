@@ -5,11 +5,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { validateHandoff } from './agent-work-packet.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PROJECT_ROOT = path.resolve(HERE, '..');
 export const SCHEMAS = JSON.parse(fs.readFileSync(path.join(HERE, 'agent-flow-schemas.json'), 'utf8'));
 const CHECKPOINT = SCHEMAS.checkpoint;
+const HANDOFF = SCHEMAS.handoff;
 
 export class FlowStateError extends Error {
   constructor(message, details = []) {
@@ -83,6 +85,59 @@ function resolveContained(root, candidate, label, errors, mustExist = false) {
   return absolute;
 }
 
+function validateCompletionReceipt(child, repoRoots, errors, checkEnvironment) {
+  const receipt = child.completionReceipt;
+  assert(isRecord(receipt), `completed child ${child.id} requires a structured completionReceipt`, errors);
+  if (!isRecord(receipt)) return;
+  for (const field of CHECKPOINT.completionReceiptRequired) {
+    assert(Object.hasOwn(receipt, field), `completed child ${child.id} completionReceipt is missing ${field}`, errors);
+  }
+  assert(typeof receipt.repoPath === 'string' && path.isAbsolute(receipt.repoPath), `completed child ${child.id} completionReceipt.repoPath must be absolute`, errors);
+  const repoRoot = typeof receipt.repoPath === 'string' ? path.resolve(receipt.repoPath) : null;
+  assert(repoRoot && repoRoots.has(repoRoot), `completed child ${child.id} completionReceipt.repoPath is not a checkpoint repo`, errors);
+  assert(typeof receipt.packetArtifact === 'string' && receipt.packetArtifact.length > 0 && !path.isAbsolute(receipt.packetArtifact), `completed child ${child.id} completionReceipt.packetArtifact must be repo-relative`, errors);
+  assert(/^[0-9a-f]{64}$/.test(receipt.packetSha256 || ''), `completed child ${child.id} completionReceipt.packetSha256 must be SHA-256`, errors);
+  assert(typeof receipt.artifact === 'string' && receipt.artifact.length > 0 && !path.isAbsolute(receipt.artifact), `completed child ${child.id} completionReceipt.artifact must be repo-relative`, errors);
+  assert(/^[0-9a-f]{64}$/.test(receipt.artifactSha256 || ''), `completed child ${child.id} completionReceipt.artifactSha256 must be SHA-256`, errors);
+  assert(isRecord(receipt.validation), `completed child ${child.id} completionReceipt.validation must be structured`, errors);
+  if (isRecord(receipt.validation)) {
+    assert(receipt.validation.ok === true, `completed child ${child.id} completion validation must be successful`, errors);
+    assert(CHECKPOINT.acceptedCompletionValidationDispositions.includes(receipt.validation.disposition), `completed child ${child.id} completion validation disposition is not accepted: ${receipt.validation.disposition}`, errors);
+  }
+  if (!checkEnvironment || !repoRoot || !repoRoots.has(repoRoot) || typeof receipt.artifact !== 'string' || path.isAbsolute(receipt.artifact)) return;
+  const packetArtifact = resolveContained(repoRoot, receipt.packetArtifact, `completed child ${child.id} packet artifact`, errors, true);
+  const artifact = resolveContained(repoRoot, receipt.artifact, `completed child ${child.id} handoff artifact`, errors, true);
+  if (!packetArtifact || !artifact || !fs.existsSync(packetArtifact) || !fs.existsSync(artifact)) return;
+  let raw;
+  let packetRaw;
+  let packet;
+  let handoff;
+  try {
+    packetRaw = fs.readFileSync(packetArtifact);
+    raw = fs.readFileSync(artifact);
+    packet = JSON.parse(packetRaw);
+    handoff = JSON.parse(raw);
+  } catch (error) {
+    errors.push(`completed child ${child.id} completion artifact is not valid JSON: ${error.message}`);
+    return;
+  }
+  assert(sha256(packetRaw) === receipt.packetSha256, `completed child ${child.id} packet artifact SHA-256 mismatch`, errors);
+  assert(isRecord(handoff), `completed child ${child.id} handoff artifact must be a JSON object`, errors);
+  if (!isRecord(handoff)) return;
+  for (const field of HANDOFF.required) {
+    assert(Object.hasOwn(handoff, field), `completed child ${child.id} handoff artifact is missing ${field}`, errors);
+  }
+  assert(sha256(raw) === receipt.artifactSha256, `completed child ${child.id} handoff artifact SHA-256 mismatch`, errors);
+  assert(handoff.disposition === receipt.validation?.disposition, `completed child ${child.id} handoff and validation dispositions do not match`, errors);
+  assert(CHECKPOINT.acceptedCompletionValidationDispositions.includes(handoff.disposition), `completed child ${child.id} handoff disposition is not accepted: ${handoff.disposition}`, errors);
+  try {
+    const actual = validateHandoff(packet, handoff, raw.toString('utf8'));
+    assert(actual.ok === receipt.validation?.ok && actual.disposition === receipt.validation?.disposition, `completed child ${child.id} stored validation does not match replayed validation`, errors);
+  } catch (error) {
+    errors.push(`completed child ${child.id} handoff replay validation failed: ${error.message}`);
+  }
+}
+
 function gitHead(repoRoot) {
   try {
     return execFileSync('git', ['-C', repoRoot, 'rev-parse', 'HEAD'], {
@@ -136,7 +191,7 @@ function validatePathGroups(state, errors) {
   for (const item of state.files?.evidence || []) resolveContained(primary, item, 'files.evidence', errors, true);
 }
 
-export function validateStateShape(state, { checkEnvironment = true, now = Date.now() } = {}) {
+export function validateStateShape(state, { checkEnvironment = true, now = Date.now(), legacyCompletedChildIds = new Set() } = {}) {
   const errors = [];
   assert(isRecord(state), 'checkpoint must be a JSON object', errors);
   if (!isRecord(state)) return errors;
@@ -152,6 +207,7 @@ export function validateStateShape(state, { checkEnvironment = true, now = Date.
   assert(isRecord(state.versions), 'versions must be an object', errors);
   assert(isRecord(state.ids) && typeof state.ids.rootTaskId === 'string' && typeof state.ids.coordinatorId === 'string', 'ids must name rootTaskId and coordinatorId', errors);
   assert(Array.isArray(state.ids?.children), 'ids.children must be an array', errors);
+  const repoRoots = new Set((state.repos || []).map((repo) => repo.path).filter((repoPath) => typeof repoPath === 'string' && path.isAbsolute(repoPath)).map((repoPath) => path.resolve(repoPath)));
   for (const child of state.ids?.children || []) {
     assert(typeof child.id === 'string' && typeof child.parentId === 'string' && typeof child.taskId === 'string', 'every child must include id, parentId, and taskId', errors);
     assert(CHECKPOINT.childDispositions.includes(child.disposition), `invalid child disposition: ${child.disposition}`, errors);
@@ -159,6 +215,9 @@ export function validateStateShape(state, { checkEnvironment = true, now = Date.
       const heartbeat = Date.parse(child.heartbeatAt || '');
       assert(Number.isFinite(heartbeat), `active child ${child.id} requires heartbeatAt`, errors);
       if (Number.isFinite(heartbeat)) assert(now - heartbeat <= (state.activeAgentMaxAgeSeconds || 3600) * 1000, `active child is stale: ${child.id}`, errors);
+    }
+    if (child.disposition === 'completed' && !(legacyCompletedChildIds.has(child.id) && !Object.hasOwn(child, 'completionReceipt'))) {
+      validateCompletionReceipt(child, repoRoots, errors, checkEnvironment);
     }
   }
   assert(Array.isArray(state.repos) && state.repos.length > 0, 'repos must be a non-empty array', errors);
@@ -323,7 +382,10 @@ export function readCheckpoint({ rootTaskId, projectRoot = PROJECT_ROOT, checkEn
   if (!/^[0-9a-f]{64}$/.test(expected) || sha256(bytes) !== expected) throw new FlowStateError(`checkpoint SHA-256 sidecar mismatch; ${recoveryHint}`);
   let state;
   try { state = JSON.parse(bytes); } catch (error) { throw new FlowStateError(`checkpoint JSON is corrupt: ${error.message}; ${recoveryHint}`); }
-  const errors = validateStateShape(state, { checkEnvironment });
+  const legacyCompletedChildIds = new Set((state.ids?.children || [])
+    .filter((child) => child.disposition === 'completed' && !Object.hasOwn(child, 'completionReceipt'))
+    .map((child) => child.id));
+  const errors = validateStateShape(state, { checkEnvironment, legacyCompletedChildIds });
   if (errors.length) throw new FlowStateError(`checkpoint validation failed; ${recoveryHint}`, errors);
   let ledger;
   try { ledger = validateLedger(paths.ledger); } catch (error) {
@@ -350,8 +412,11 @@ export function updateCheckpoint({ rootTaskId, patch, writer = 'agent-flow-check
         }
       }
     }
+    const legacyCompletedChildIds = new Set((current.state.ids?.children || [])
+      .filter((child) => child.disposition === 'completed' && !Object.hasOwn(child, 'completionReceipt'))
+      .map((child) => child.id));
     const serialized = serializeState(merged, writer);
-    const errors = validateStateShape(serialized.state);
+    const errors = validateStateShape(serialized.state, { legacyCompletedChildIds });
     if (errors.length) throw new FlowStateError('checkpoint update validation failed', errors);
     const ledgerLine = prepareLedgerEvent(paths, eventType, writer, serialized.state, { patchedFields: Object.keys(patch).sort() });
     writePair(paths, serialized);

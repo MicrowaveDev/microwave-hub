@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "programId": "context-efficiency-2026-07",
+  "implementationCommit": "d3a3d345272ed8fc38e44a8d7ee2d677961cc410",
+  "implementationCompletedAt": "2026-07-13T15:25:52.000Z",
+  "requiredWeeklyWindows": 2,
+  "windowDays": 7
+}

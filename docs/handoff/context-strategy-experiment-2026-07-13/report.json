@@ -1,0 +1,82 @@
+{
+  "batchId": "route-image-description-20260713",
+  "collectedAt": "2026-07-13T16:09:22.808Z",
+  "comparison": {
+    "comparableBatches": [
+      "route-image-description-20260713"
+    ],
+    "reason": "fresh improved total input and latency without weaker correctness or more intervention.",
+    "schemaVersion": 1,
+    "summaries": {
+      "fresh": {
+        "batches": 1,
+        "correctnessRate": 1,
+        "inputTokens": 19166,
+        "interventions": 0,
+        "latencyMs": 4121,
+        "runs": 1,
+        "startupCalls": 0,
+        "uncachedInputTokens": 990
+      },
+      "reset": {
+        "batches": 1,
+        "correctnessRate": 1,
+        "inputTokens": 38775,
+        "interventions": 0,
+        "latencyMs": 6877,
+        "runs": 1,
+        "startupCalls": 1,
+        "uncachedInputTokens": 2423
+      },
+      "reused": {
+        "batches": 1,
+        "correctnessRate": 1,
+        "inputTokens": 50810822,
+        "interventions": 0,
+        "latencyMs": 7689,
+        "runs": 1,
+        "startupCalls": 0,
+        "uncachedInputTokens": 1241030
+      }
+    },
+    "verdict": "adopt_fresh"
+  },
+  "expectedCommand": "npm run task:context -- artist-helper",
+  "interpretation": "One prospective equivalent-task sample. Do not generalize the selected strategy without repeated representative batches.",
+  "runs": [
+    {
+      "agentId": "019f5c3c-3470-7832-88b3-3e640b4c20d9",
+      "batchId": "route-image-description-20260713",
+      "correct": true,
+      "inputTokens": 50810822,
+      "interventions": 0,
+      "latencyMs": 7689,
+      "startupCalls": 0,
+      "strategy": "reused",
+      "uncachedInputTokens": 1241030
+    },
+    {
+      "agentId": "019f5c3c-350d-7553-a591-71fc4749f9a0",
+      "batchId": "route-image-description-20260713",
+      "correct": true,
+      "inputTokens": 38775,
+      "interventions": 0,
+      "latencyMs": 6877,
+      "startupCalls": 1,
+      "strategy": "reset",
+      "uncachedInputTokens": 2423
+    },
+    {
+      "agentId": "019f5c3c-3563-7d51-9c76-070679b5355e",
+      "batchId": "route-image-description-20260713",
+      "correct": true,
+      "inputTokens": 19166,
+      "interventions": 0,
+      "latencyMs": 4121,
+      "startupCalls": 0,
+      "strategy": "fresh",
+      "uncachedInputTokens": 990
+    }
+  ],
+  "schemaVersion": 1
+}

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "id": "route-first-action",
+      "priority": "P0",
+      "evidenceFile": "bash/verify-helpers.sh",
+      "evidencePattern": "validate-agent-route-trace.mjs"
+    },
+    {
+      "id": "user-only-pr-merge",
+      "priority": "P0",
+      "evidenceFile": "bash/verify-helpers.sh",
+      "evidencePattern": "Expected gh-safe to reject agent pull request merges"
+    },
+    {
+      "id": "checkpoint-completion-receipt",
+      "priority": "P0",
+      "evidenceFile": "bash/test-agent-flow-state.mjs",
+      "evidencePattern": "rejects new child completion without an accepted validation receipt"
+    },
+    {
+      "id": "queue-selector-path-lifecycle",
+      "priority": "P0",
+      "evidenceFile": "artist-helper/scripts/verify-image-description-queue-contract.js",
+      "evidencePattern": "Image description queue contract verification passed"
+    },
+    {
+      "id": "output-attribution-counted-once",
+      "priority": "P0",
+      "evidenceFile": "agent-viewer/test/measurement-foundation.test.mjs",
+      "evidencePattern": "attributes matched, unmatched, duplicate, nested, and session-correlated outputs once"
+    },
+    {
+      "id": "context-reread-detection",
+      "priority": "P1",
+      "evidenceFile": "agent-viewer/test/measurement-foundation.test.mjs",
+      "evidencePattern": "measures repeated inputs, outputs, rereads, artifact replay, and multi-task final linkage"
+    },
+    {
+      "id": "capture-exit-security-budget",
+      "priority": "P1",
+      "evidenceFile": "bash/test-capture-command-output.mjs",
+      "evidencePattern": "receipt"
+    },
+    {
+      "id": "packet-handoff-budget",
+      "priority": "P1",
+      "evidenceFile": "bash/test-agent-flow-state.mjs",
+      "evidencePattern": "validates compact handoffs and enforces line and token budgets"
+    },
+    {
+      "id": "weekly-premature-closure",
+      "priority": "P1",
+      "evidenceFile": "bash/test-weekly-context-regression.mjs",
+      "evidencePattern": "refuses closure before two complete observation windows"
+    },
+    {
+      "id": "strategy-result-verification",
+      "priority": "P1",
+      "evidenceFile": "bash/test-context-strategy-collector.mjs",
+      "evidencePattern": "does not trust an incorrect self-reported result"
+    }
+  ],
+  "publicOutputContracts": [
+    { "command": "route:agent", "maxEstimatedTokens": 1000 },
+    { "command": "validate:agent-route", "maxEstimatedTokens": 1000 },
+    { "command": "capture:command", "maxEstimatedTokens": 1000 },
+    { "command": "flow:checkpoint", "maxEstimatedTokens": 1000 },
+    { "command": "flow:packet", "maxEstimatedTokens": 3000 },
+    { "command": "compare:agent-context-strategies", "maxEstimatedTokens": 5000 },
+    { "command": "context:collect-strategy-experiment", "maxEstimatedTokens": 1000 },
+    { "command": "context:weekly-gate", "maxEstimatedTokens": 5000 },
+    { "command": "find:repos", "maxEstimatedTokens": 1000 },
+    {
+      "command": "task:context",
+      "maxEstimatedTokens": null,
+      "rawModeReason": "The explicit context loader may return the complete repo-local instruction contract; completeness metadata and hashes prevent redundant rereads."
+    }
+  ]
+}

@@ -15,9 +15,12 @@ python3 -m json.tool "$ROOT_DIR/package.json" >/dev/null
 "$ROOT_DIR/bash/task-context.sh" --json artist-helper \
   | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const x=JSON.parse(s);const t=x.targets[0];if(!t.workflowLoaded||!t.instruction?.complete||!t.instruction.content.includes("# Artist Helper Agent Guide"))process.exit(1)})'
 node "$ROOT_DIR/bash/verify-instruction-contracts.mjs" >/dev/null
+node "$ROOT_DIR/bash/verify-context-efficiency-contracts.mjs" >/dev/null
 node "$ROOT_DIR/bash/test-capture-command-output.mjs" >/dev/null
 node --test "$ROOT_DIR/bash/test-agent-flow-state.mjs" >/dev/null
 node --test "$ROOT_DIR/bash/test-context-strategy-comparison.mjs" >/dev/null
+node --test "$ROOT_DIR/bash/test-context-strategy-collector.mjs" >/dev/null
+node --test "$ROOT_DIR/bash/test-weekly-context-regression.mjs" >/dev/null
 route="$(node "$ROOT_DIR/bash/resolve-agent-route.mjs" --prompt 'Run the production image-description queue for July')"
 [[ "$route" == "npm run task:context -- artist-helper" ]]
 route="$(node "$ROOT_DIR/bash/resolve-agent-route.mjs" --prompt 'Refactor a small parser')"
@@ -44,6 +47,10 @@ printf '## Summary\n\n- Closes #1.\n\n## Verification\n\n- Helper smoke.\n' \
 if printf '## Summary\\n\\n- Closes #1.\\n\\n## Verification\\n\\n- Bad smoke.\n' \
   | "$ROOT_DIR/bash/gh-safe.sh" check --kind pr >/dev/null 2>&1; then
   echo "Expected gh-safe to reject literal escaped newlines." >&2
+  exit 1
+fi
+if "$ROOT_DIR/bash/gh-safe.sh" pr merge 1 >/dev/null 2>&1; then
+  echo "Expected gh-safe to reject agent pull request merges." >&2
   exit 1
 fi
 

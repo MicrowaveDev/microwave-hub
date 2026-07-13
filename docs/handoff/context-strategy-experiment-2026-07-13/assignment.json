@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "batchId": "route-image-description-20260713",
+  "expectedCommand": "npm run task:context -- artist-helper",
+  "arms": [
+    {
+      "strategy": "reused",
+      "agentId": "019f5c3c-3470-7832-88b3-3e640b4c20d9",
+      "interventions": 0
+    },
+    {
+      "strategy": "reset",
+      "agentId": "019f5c3c-350d-7553-a591-71fc4749f9a0",
+      "interventions": 0
+    },
+    {
+      "strategy": "fresh",
+      "agentId": "019f5c3c-3563-7d51-9c76-070679b5355e",
+      "interventions": 0
+    }
+  ]
+}

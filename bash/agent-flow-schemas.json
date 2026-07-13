@@ -38,6 +38,17 @@
       "pending",
       "rejected",
       "blocked_interface_drift"
+    ],
+    "completionReceiptRequired": [
+      "repoPath",
+      "packetArtifact",
+      "packetSha256",
+      "artifact",
+      "artifactSha256",
+      "validation"
+    ],
+    "acceptedCompletionValidationDispositions": [
+      "completed"
     ]
   },
   "workPacket": {
