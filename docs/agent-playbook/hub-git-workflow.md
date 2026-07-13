@@ -23,7 +23,7 @@ When a change belongs in a submodule:
 1. Commit inside the submodule.
 2. Run the repo-appropriate validation.
 3. Push the submodule branch.
-4. Hand off the compare link for merge unless the user explicitly asked you to merge.
+4. Hand off the PR or compare link to the user for merge. Agents must never merge pull requests, including when asked to complete a task end to end or to merge a specific PR.
 5. Update the hub pointer only after the desired submodule commit exists on the remote base branch.
 
 When multiple repos are involved, push dependencies before dependents.

@@ -70,6 +70,7 @@ Do not read every submodule doc up front. Route first, then load only the repo i
 - Before handoff, confirm that the files changed in the repo you intended to modify.
 - If a fix touched files inside a submodule, commit them on the active branch before reporting the work as fixed. A diff that exists only in the working tree is a partial handoff.
 - Commit and push by default without asking first (see the Commit And Push Rules in [portable-agent-instructions.md](/Users/microwavedev/workspace/microwave-hub/portable-agent-instructions.md)). Once a submodule change is on its base branch, updating the hub pointer is a normal commit-and-push, not a deferred manual step — stage only the affected pointer and push `main`.
+- Never merge a pull request. Merging is reserved for the user; agents must stop after pushing, opening or updating the PR, checking readiness, and handing off its URL.
 - Before pointer updates, verify the submodule is on the expected branch and commit, not just that the hub diff looks small.
 
 ## Instruction Maintenance

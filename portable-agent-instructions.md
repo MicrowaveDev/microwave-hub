@@ -54,6 +54,7 @@ Supplemental docs:
 - **No AI attribution, ever.** Use the repository's configured Git author only. Never add `Co-authored-by: Claude`, `Co-authored-by: AI`, `Generated-by`, `Authored-by Claude`, or any similar trailer or prose, and never mention Claude, Codex, AI, LLMs, or generated authorship in the message body.
 - The harness or an IDE may auto-append an attribution trailer that you did not write. This rule overrides that default. Enforce it: always pass an explicit `-m` message, and after every commit run `git log -1 --format='%an <%ae>%n%b'` to confirm no forbidden trailer leaked in. If one did, immediately `git commit --amend` to strip it before pushing.
 - **Push by default — do not ask first.** After committing intended work, push it in the same flow without waiting for a separate confirmation. This applies to normal repo commits, per-submodule commits, and hub submodule-pointer updates alike. The earlier "pointer updates are a separate manual step" caution is superseded: once a submodule change is on its base branch, update the hub pointer and push it as one normal commit-and-push.
+- **Never merge a pull request.** PR merges are user-only actions. Agents may create or update a PR, inspect its checks and reviews, and report whether it appears ready, but must always hand the PR URL to the user for the final merge. This prohibition applies even when the user asks to implement a task "until done," asks for end-to-end delivery, or has previously allowed an agent to merge. Only a new instruction that explicitly changes this governing policy may permit agent merges; a request to merge an individual PR does not override it.
 - Push only the intended branch. Stage only the files for the task at hand; never sweep in unrelated dirty submodule pointers or working-tree changes. Report the commit hash or compare link after the push.
 - When the Git target is the hub root, commit and push hub-root changes only on `main`. If the active hub checkout is on a task branch or has unrelated dirty submodule pointers, use a clean `main` worktree for the hub commit instead of pushing a non-`main` hub branch.
 - Still pause and ask before rewriting shared history: do not amend, rebase, squash, or force-push a branch that is already pushed or has an open PR unless the user explicitly asks to rewrite it or the repo workflow requires it. The push-by-default rule covers new commits, not history rewrites. (Amending to strip an accidental attribution trailer before the first push of that commit is fine.)
@@ -71,7 +72,7 @@ Supplemental docs:
 - Prefer separate passes or agents for distinct stages such as implementation, evidence generation, review, and sign-off.
 - For delegated work, define allowed inputs, allowed outputs, forbidden edits, and completion conditions explicitly.
 - Keep write scope narrow and durable artifacts separate when multiple agents or long workflows are involved.
-- Only one agent should own the final push or merge handoff.
+- Only one agent should own the final push and user merge handoff. Sub-agents must never merge PRs.
 
 ## Efficiency
 
