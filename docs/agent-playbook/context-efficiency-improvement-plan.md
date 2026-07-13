@@ -1,5 +1,14 @@
 # Agent Flow And Context-Efficiency Improvement Plan
 
+## Contents
+
+- Goal, evidence, and success measures
+- Dependency order and sub-agent execution model
+- Phases 0-2: fixtures, routing, and context contracts
+- Phases 3-5: bounded output, queue assignment, and lifecycle validation
+- Phases 6-8: orchestration, experiments, and weekly regression gate
+- Implementation slices, definition of done, implementation log, and residual risks
+
 ## Goal
 
 Reduce avoidable context loading, discovery loops, retries, and supervision in future agent tasks without weakening correctness, validation, or final handoff quality.
@@ -892,6 +901,37 @@ The improvement program is complete when:
 - wave telemetry demonstrates shorter wall time than the serial schedule without higher total context use, merge conflicts, or P0/P1 rework
 - two post-change weekly reports show lower avoidable calls/output without weaker completion or validation
 - experimental worker/resume decisions are documented from measurements rather than assumptions
+
+## Implementation Log
+
+### 2026-07-13 kickoff
+
+- Tracking issue: `MicrowaveDev/microwave-hub#6`.
+- Repository audit confirmed independent clean implementation lanes in `agent-viewer` and `artist-helper`; unrelated dirty repos remain outside scope.
+- Hub route/context foundation implemented locally: versioned exact-route contracts, executable resolver, instruction trigger/headroom verification, complete repo-local instruction loading, and machine-readable `task:context --json` output.
+- Hub helper verification covers exact route matches/non-matches and complete/non-truncated context contracts with instruction hashes.
+- `agent-viewer` lane owns attribution, task/final linkage, bounded detector metrics, fixtures, and before/after comparison.
+- `artist-helper` lane owns canonical batch selection, result-path and validation contracts, run identity, lifecycle, and bounded wave waiting.
+- Hub capture and orchestration utilities are assigned to disjoint file allowlists; shared aliases, instructions, and verification remain coordinator-owned.
+
+### 2026-07-13 implementation completion
+
+- `agent-viewer` PR `MicrowaveDev/agent-viewer#4` merged to `main` at `b74f13584cc65cbb59eaeace3dd575755b4cae8b`.
+- Cleaned exports now preserve correlation metadata while redacting payload bodies; nested, batched, duplicate, unmatched, and session-correlated output is counted once with explicit confidence.
+- Analyzer artifacts use schema/detector versions, omit raw tool bodies, link tasks/completions/finals, and report repeated oversized inputs, command output, instruction rereads, artifact replay, and lifecycle gaps.
+- `agent:compare-context` produces bounded compatible comparisons. Weekly comparisons are informational; opt-in deterministic gates fail on incompatible versions, routing/reread/replay/attribution regressions, or weaker completion/final-link rates.
+- `artist-helper` PRs `MicrowaveDev/artist-helper#28` and `#29` merged to `master` at `0a690cc`. Schema-v2 queues now use compact canonical selectors, authoritative result paths, queue/run identity, reproducible digest, generator/source provenance, and run-scoped queue/result directories.
+- Queue result validation is centralized and enforces containment, symbolic-link rejection, atomic publication, duplicate/media identity checks, lifecycle state, timestamps, confidence, author, and inspection provenance while retaining schema-v1 read compatibility.
+- Queue status/wait output is bounded and distinguishes missing, running, failed, retryable, completed, cancelled, superseded, and timeout states.
+- Hub exact-route matching and route-trace validation, complete `task:context --json`, instruction trigger/headroom verification, secure command capture/cleanup, audited bounded artifact reads, checkpoints, work packets, handoff validation, and context-strategy comparison are implemented.
+- `find:repos` is bounded by default. A representative hub search measured 712,755 raw bytes but returned only the header, two requested lines, and an omitted-count receipt.
+- A live checkpoint for issue 6 initialized, detected real submodule revision drift, advanced only through verified descendant commits, and resumed from bounded state without rereading the plan or worker transcripts.
+- Integrated validation passed through captured receipts: hub helper suite, 14 `agent-viewer` tests, the image-description contract suite, and content fixtures.
+
+Experimental decision:
+
+- Keep reused workers as the default. The comparison utility refuses non-comparable batches, and this implementation run did not contain equivalent reused/reset/fresh batches with runtime token telemetry. No reset/fresh policy or conditional instruction suppression was enabled from assumptions.
+- Collect two compatible weekly reports and one equivalent-batch strategy sample as operational follow-up. These observation windows validate outcomes; they are not missing implementation work and must not block deterministic protections already merged.
 
 ## Residual Risks
 

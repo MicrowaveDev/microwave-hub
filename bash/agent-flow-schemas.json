@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "checkpoint": {
+    "$id": "microwave-hub/agent-flow-checkpoint/v1",
+    "maxActiveBytes": 16384,
+    "maxLedgerBytes": 262144,
+    "defaultMaxAgeSeconds": 86400,
+    "required": [
+      "objective",
+      "acceptanceCriteria",
+      "phase",
+      "workstream",
+      "versions",
+      "ids",
+      "repos",
+      "dependencies",
+      "files",
+      "validations",
+      "nextActions",
+      "schemaVersion",
+      "writer",
+      "updatedAt",
+      "contentHash"
+    ],
+    "childDispositions": [
+      "planned",
+      "active",
+      "completed",
+      "failed",
+      "cancelled",
+      "superseded",
+      "retryable",
+      "blocked_interface_drift"
+    ],
+    "dependencyDispositions": [
+      "accepted",
+      "pending",
+      "rejected",
+      "blocked_interface_drift"
+    ]
+  },
+  "workPacket": {
+    "$id": "microwave-hub/agent-work-packet/v1",
+    "maxPacketBytes": 49152,
+    "required": [
+      "taskId",
+      "runId",
+      "lane",
+      "sliceId",
+      "priority",
+      "repoRoot",
+      "baseRevision",
+      "allowedPaths",
+      "forbiddenPaths",
+      "dependencies",
+      "interfaces",
+      "acceptanceCriteria",
+      "validations",
+      "budget",
+      "artifactDirectory",
+      "handoffSchemaVersion",
+      "stopConditions",
+      "nextMergeBarrier",
+      "schemaVersion",
+      "writer",
+      "generatedAt",
+      "packetHash"
+    ],
+    "acceptedDependencyDispositions": ["accepted", "not_applicable"],
+    "defaultBudget": {
+      "promptTokens": 2000,
+      "handoffLines": 100,
+      "handoffEstimatedTokens": 3000,
+      "reviewBytes": 49152
+    }
+  },
+  "handoff": {
+    "$id": "microwave-hub/agent-handoff/v1",
+    "maxLines": 100,
+    "maxEstimatedTokens": 3000,
+    "required": [
+      "schemaVersion",
+      "baseRevision",
+      "dirtyState",
+      "scopeCompleted",
+      "changedFiles",
+      "diffstat",
+      "verdict",
+      "validations",
+      "skippedTests",
+      "decisions",
+      "artifacts",
+      "disposition",
+      "nextAction",
+      "commitSha",
+      "changedPathAllowlistPassed",
+      "acceptanceResults"
+    ],
+    "dispositions": [
+      "completed",
+      "failed",
+      "cancelled",
+      "superseded",
+      "retryable",
+      "blocked_interface_drift"
+    ]
+  }
+}

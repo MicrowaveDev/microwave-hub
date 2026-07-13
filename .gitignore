@@ -17,3 +17,8 @@ screenshot-generator/
 # the hub root because tests are run from the cwd and is never meant to be
 # tracked.
 test-results/
+
+# Bounded agent-flow artifacts and captured command output.
+temp/agent-command-output/
+temp/agent-flow-checkpoints/
+temp/context-efficiency-implementation/
