@@ -19,6 +19,23 @@ The seven-day analysis covered 278 sessions and 21 task trees. The strongest reu
 
 The analysis did not prove that fresh sub-agents are always cheaper than reused agents or that resumable orchestration always saves context. Those remain experiments.
 
+## External Plan Review
+
+The CryptoLegacy output-reduction plan contributes several mechanisms that transfer cleanly to this workspace:
+
+- capture potentially large command output to ignored project-local artifacts and return a compact receipt
+- preserve child exit codes and signals instead of letting a capture wrapper hide failures
+- sanitize failure previews and enforce restrictive permissions, retention, collision, and cleanup rules
+- use files-first/count-first discovery before capture; capture is a fallback for necessary large output
+- make repository-owned public commands quiet by default while acknowledging that arbitrary shell commands cannot be universally intercepted
+- checkpoint long-running multi-agent work so compaction or continuation does not trigger full-plan, transcript, or sub-agent-output replay
+- give every sub-agent a prompt/output budget and a structured handoff contract
+- detect repeated task reminders, replayed sub-agent outputs, raw image/base64 reads, and repeated oversized patch payloads
+- attribute batched tool output once when per-command attribution is impossible
+- preserve routing behavior while moving procedural detail out of always-on instruction files
+
+This plan does not import the other project's product-specific E2E/browser rules, its absolute instruction-size threshold, or its claimed percentage savings. Microwave Hub will establish its own baselines and command-family adapters.
+
 ## Success Measures
 
 Measure behavior by task tree and active user task, not only by physical session.
@@ -34,6 +51,10 @@ Primary metrics:
 - validation-recovery loops
 - incomplete child sessions without an explicit lifecycle outcome
 - final responses linked to a governing request and passing validator
+- captured-output receipts, direct-output bypasses, and raw-artifact reopen events
+- repeated sub-agent output, task-ledger, or custom-tool payload hashes
+- checkpoint resume bytes and commands before the recorded next action
+- output attribution confidence: exact producer, correlated session, or counted-once aggregate
 
 Correctness guardrails:
 
@@ -52,6 +73,10 @@ Initial targets for the first two weekly comparisons:
 - p95 output below 20 KB for new summary/status modes
 - 100% packet compliance with the 48 KB review budget
 - 100% child sessions assigned a completed, failed, cancelled, superseded, or retryable outcome
+- zero repository-owned public command results above 5,000 estimated tokens
+- successful captured-command receipts below 20 lines, 4 KB, and 1,000 estimated tokens
+- zero full plan, transcript, or completed sub-agent-output rereads during a valid checkpoint resume
+- zero duplicated accounting for one batched or unattributable tool-output payload
 
 Do not set an aggregate token-savings target until two comparable post-change weeks exist. Nearby token deltas are upper bounds, not causal savings.
 
@@ -112,6 +137,34 @@ Acceptance:
 - output is bounded and stable
 - changed scanner versions or incompatible windows are reported
 - task completion and validation rates appear beside token and output reductions
+
+### 0.3 Repair producer attribution before percentage claims
+
+Owner: `agent-viewer`
+
+When one tool result contains output from multiple nested commands, attribute each separable segment to its producer. If separation is not reliable, record one `unattributable-aggregate` payload instead of cloning the same bytes/tokens onto every nested command.
+
+Correlate asynchronous poll output with the originating command/session ID where available. Otherwise use an explicit session bucket such as `tool:poll/session:<id>`.
+
+Acceptance:
+
+- a batched-output fixture is counted once
+- poll output is linked to the originating session or marked uncorrelated
+- confidence is recorded for every producer attribution
+- before/after percentage claims use the corrected baseline
+
+### 0.4 Measure prompt and custom-tool input replay
+
+Owner: `agent-viewer`
+
+Add metrics and findings for oversized or repeated-identical custom-tool inputs, especially large literal patches, inline workflow scripts, and unchanged payload retries.
+
+Acceptance:
+
+- report p50, p95, maximum, and repeated stable hashes by tool family
+- distinguish a corrected hunk from resending an unchanged full patch
+- recommend reusable templates plus compact lane data for large workflow prompts
+- never expose full sensitive payload bodies in the report
 
 ## Phase 1: Deterministic Routing
 
@@ -201,6 +254,22 @@ Acceptance:
 - cross-task instruction reads are not grouped together
 - warning includes the loaded section and prior helper result
 
+### 2.3 Preserve always-on instruction headroom
+
+Owner: hub instruction maintenance
+
+Keep routing triggers and hard workspace invariants in root `AGENTS.md`; move procedural detail into linked playbooks or repo-local instructions. Before extraction, freeze a machine-readable inventory containing normalized trigger text, route target, invariant ID, target link, and byte offset.
+
+Microwave Hub's current root file is about 11 KB. Use 16 KB as the initial local ceiling, not the external project's threshold. Adjust it only with measured startup-context evidence.
+
+Acceptance:
+
+- every pre-change trigger and hard invariant maps one-to-one after editing
+- every linked playbook exists
+- all unconditional routes remain early in the file
+- root `AGENTS.md` stays at or below 16 KB
+- adding procedural prose that belongs in a linked playbook fails instruction verification
+
 ## Phase 3: Bounded Output Utilities
 
 ### 3.1 Establish an output-budget convention
@@ -224,7 +293,80 @@ Default budgets:
 - review evidence packet: 48 KB
 - larger output requires a saved artifact plus a compact summary
 
-### 3.2 Improve rollout analysis entry points
+### 3.2 Add selective project-local command capture
+
+Owner: hub helper layer
+
+Add one argv-safe capture supervisor for command families known to be noisy. This is not a universal shell interceptor and must not wrap small exact reads.
+
+Suggested interface:
+
+```bash
+bash bash/capture-command-output.sh --cwd <repo> -- <command> <arg>...
+```
+
+The shell entrypoint should be a thin launcher. A Node supervisor should:
+
+- spawn without a shell or interpolated command string
+- resolve the containing hub/submodule Git root
+- write combined stdout/stderr to `<repo>/temp/agent-command-output/`
+- use a sanitized command-family prefix and UTC timestamp with milliseconds
+- reserve paired `.log` and `.meta.json` names atomically, adding collision suffixes
+- record command family, redacted argv display, cwd, start/end, duration, exit code, signal, bytes, lines, estimated tokens, SHA-256, helper version, and cleanup expiry
+- use `umask 077`, directory mode `0700`, and file mode `0600`
+- finalize the log before atomically publishing metadata as the completion marker
+- reject symlink/path escape, tracked or potentially trackable artifact paths, TTY/interactive commands, and out-of-workspace destinations
+
+The helper must forward `INT`, `TERM`, and `HUP` to the child process group. Natural child exit/signal and wrapper-enforced states such as `output_limit_exceeded` must remain distinct. Do not implement capture through `tee` or another output pipeline.
+
+Successful receipt contract:
+
+- at most 20 lines, 4 KB, and 1,000 estimated tokens
+- no raw output body
+- command family, exit, duration, line/byte/token estimate, log path, metadata path, and suggested bounded next action
+
+Failure previews are optional and only for sanitized text. Strip terminal controls, replace control bytes, redact learned secret values, cap lines at 512 bytes, and cap the complete preview at 4 KB/800 estimated tokens. Binary or undecodable output receives a path-only receipt. Capture success must never turn a failing child into exit `0`.
+
+Supported explicit modes:
+
+- `--summary-only`
+- `--preview-lines <n>` within the receipt budget
+- `--raw-output --reason <bounded reason>` for justified terminal replay
+- bounded artifact reads that record the requested line/byte range
+
+Acceptance:
+
+- fixtures cover exits `1`, `126`, `127`, and `143` separately from termination signals
+- giant lines, ANSI/OSC, NUL/binary, mixed stdout/stderr, learned secrets, collisions, interruption, disk-full, and child-process descendants are covered
+- ordinary owned entrypoints never print their full captured report
+- arbitrary shell commands remain a documented routing/detection boundary
+
+### 3.3 Add capture adapters and retention
+
+Owner: hub helper layer plus command owners
+
+Add thin adapters only where semantic summaries are reliable:
+
+- broad search: match/file counts and capped paths
+- diff: stat, changed paths, whitespace status, raw diff path
+- analyzer: event counts, finding titles, top offenders, full report path
+- JSON/YAML: size, top-level schema, selected-field hint
+- test suites: exit, pass/fail/skip counts, failing names, bounded errors
+- broad inventory: count and capped paths grouped by root/type
+- dirty workspace status: repo counts and capped changed paths
+
+Use files-first/count-first discovery before capture. Capture is not permission to run an unnecessarily broad command.
+
+Retention contract:
+
+- ignore the complete artifact directory in every participating repo
+- default retention seven days and default project cap 200 MB
+- default per-capture ceiling 50 MB; exceeding it stops the child group and records a wrapper failure
+- `.keep` sidecars or a machine-readable retention manifest protect durable evidence
+- cleanup has report-only and explicit apply modes, uses a lock, excludes active reservations, never follows symlinks, and evicts oldest unpinned completed pairs first
+- cleanup failure is reported separately and never replaces the child's exit status
+
+### 3.4 Improve rollout analysis entry points
 
 Owner: `agent-viewer`
 
@@ -239,7 +381,7 @@ Acceptance:
 - analyzer preview exposes source request, key event types, and cited lines without dumping raw records
 - encrypted reasoning, image payloads, and repeated metadata remain redacted
 
-### 3.3 Add bounded domain status modes
+### 3.5 Add bounded domain status modes
 
 Owners: relevant command owners, beginning with `artist-helper`
 
@@ -383,6 +525,87 @@ Acceptance:
 - idempotent stages have explicit invalidation rules
 - one final end-to-end validation always runs
 
+### 6.3 Add compaction-resilient orchestration checkpoints
+
+Owner: hub orchestration utilities and `agent-viewer`
+
+Every non-trivial multi-agent workflow should maintain one ignored, atomic, bounded checkpoint under a project-local temporary directory, for example:
+
+```text
+<repo>/temp/agent-flow-checkpoints/<root-task-id>/active.json
+```
+
+Cap `active.json` at 16 KB and pair it with a SHA-256 sidecar. Keep historical detail in a separate append-only bounded event ledger rather than repeatedly enlarging the active checkpoint or canonical plan.
+
+Checkpoint fields:
+
+- objective, frozen acceptance criteria, constraints, and canonical plan paths
+- current phase/workstream and behavior/scoring versions
+- root, coordinator, child, and nested IDs with parent/task mappings
+- frozen prompt/helper/repo hashes where relevant
+- completed run IDs and dispositions
+- blocker, external/concurrency state, and retry budget
+- owned changed files, completed validations, and retained evidence paths
+- next one to three exact actions
+- schema version, writer, update timestamp, and content hash
+
+Update atomically:
+
+1. after source-of-truth freeze and before the first spawn
+2. before each spawn with expected scope and ownership
+3. after each final, stop, validation, or artifact disposition
+4. after an accepted finding or helper/scoring version change
+5. before a long wait, handoff, compaction boundary, or final response
+6. after commit, push, merge, or pointer changes
+
+Resume protocol:
+
+- read the checkpoint and only the named plan/status section
+- validate schema/hash, repo commits, referenced artifacts, containment, and active-agent state
+- mark external drift explicitly
+- execute the recorded next action
+- open ledger rows, raw logs, or full plan sections only for a named mismatch
+
+Acceptance:
+
+- a fresh continuation resumes after reading no more than the 16 KB checkpoint plus targeted status
+- normal resume rereads zero full transcripts, plans, or completed child outputs
+- stale/corrupt checkpoints fail closed and name the frozen recovery manifest
+- analyzer flags full-plan/output replay when a valid checkpoint existed
+
+### 6.4 Bound sub-agent prompts and handoffs
+
+Owner: orchestration prompt templates
+
+Every delegated lane receives a compact contract:
+
+- final response at most 100 lines and 3,000 tokens unless a larger artifact is explicitly requested
+- raw command output goes to an artifact; the final returns a summary and path
+- broad searches use files-first/count-first modes
+- images are inspected with image-aware tools; never read bitmap files as text/base64
+- quiet test/E2E helpers are not wrapped with `cat`, `tail`, or broad `grep`
+- reusable workflows use a template plus compact lane data instead of embedding a large inline script
+
+Every handoff returns:
+
+- base revision and scoped dirty-state summary
+- scope completed
+- changed files and diffstat
+- behavior-level result/verdict
+- validation and explicitly skipped tests
+- assumptions or decisions required from the coordinator
+- artifact/raw-log paths
+- blocker/disposition and assigned next action
+
+The parent synthesizes structured receipts instead of copying worker prose or rereading `.output` files.
+
+Acceptance:
+
+- oversized `TaskOutput` and saved-output replays are detector findings
+- acknowledgement-only finals cannot replace substantive evidence without a durable artifact reference
+- one worker's raw logs never appear in another worker prompt
+- prompts above 2,000 tokens are either reusable templates or explicitly justified
+
 ## Phase 7: Controlled Experiments
 
 ### 7.1 Compare worker context strategies
@@ -421,6 +644,11 @@ Run the deterministic weekly scanner and compare against the preceding compatibl
 - exact-route conformance
 - redundant instruction rereads
 - output-budget violations
+- owned-command capture bypasses, raw artifact reopens, and receipt-size violations
+- repeated or oversized sub-agent, prompt, patch, and custom-tool payloads by stable hash
+- checkpoint replay violations and checkpoint resume byte counts
+- producer-attribution confidence, including unattributable aggregate output
+- instruction byte headroom, trigger inventory parity, and broken route links
 - selector/path failures
 - child lifecycle gaps
 - validation-recovery loops
@@ -433,6 +661,10 @@ Acceptance:
 
 - known regression fixtures block merges
 - weekly production data produces a bounded report
+- no repo-owned public command emits more than 5,000 estimated tokens without an explicit raw-output mode and reason
+- a valid checkpoint resume does not replay full plans, transcripts, or completed child output
+- one batched or unattributable payload is never charged independently to every nested producer
+- instruction trigger inventory and executable route tests agree, and hub `AGENTS.md` remains below 16 KB
 - coverage or validation degradation blocks a claimed context-efficiency win
 - every new high-leverage pattern is preserved as a synthetic fixture
 
@@ -440,16 +672,20 @@ Acceptance:
 
 Recommended pull-request sequence:
 
-1. `agent-viewer`: regression fixtures and before/after comparison command.
-2. Hub: exact route resolver and conformance tests.
-3. Hub: `task:context --json` completeness contract.
-4. `agent-viewer`: context-contract-aware reread detection and task/final linkage.
-5. `artist-helper`: canonical batch selector, resolved result path, and narrow validator contract.
-6. `artist-helper`: artifact-backed child lifecycle and inspection provenance.
-7. `artist-helper`: bounded status output and wave barrier.
-8. Relevant domain repos: bounded debug/status modes only for demonstrated broad-output cases.
-9. `agent-viewer`: weekly comparison report and deterministic regression gate.
-10. Queue runtime: worker reuse and resume experiments after clean baseline data exists.
+1. `agent-viewer`: synthetic regression fixtures and producer-attribution repair.
+2. `agent-viewer`: before/after comparison command plus prompt, sub-agent, patch, and custom-tool payload metrics.
+3. Hub: exact route resolver and conformance tests.
+4. Hub: `task:context --json`, instruction trigger inventory, and 16 KB headroom check.
+5. Hub: capture supervisor, receipt schema, security checks, retention, and cleanup.
+6. Hub and demonstrated command owners: files/count-first adapters and quiet public defaults.
+7. `agent-viewer`: context-contract reread, capture-bypass, artifact-replay, checkpoint-replay, and task/final detectors.
+8. `artist-helper`: canonical batch selector, resolved result path, and narrow validator contract.
+9. `artist-helper`: artifact-backed child lifecycle and inspection provenance.
+10. `artist-helper`: bounded status output and wave barrier.
+11. Hub: checkpoint utility, event ledger, resume validator, and compact sub-agent templates.
+12. Relevant domain repos: bounded debug/status modes only for demonstrated broad-output cases.
+13. `agent-viewer`: weekly comparison report and deterministic regression gate.
+14. Queue runtime: worker reuse, reset, and resume experiments after clean baseline data exists.
 
 Each submodule change lands and passes local validation before the hub pointer is updated on `main`.
 
@@ -458,12 +694,17 @@ Each submodule change lands and passes local validation before the hub pointer i
 The improvement program is complete when:
 
 - all P0/P1 regression fixtures pass
+- nested, batched, and unattributable output is counted once with explicit attribution confidence
 - exact routes produce the correct first action
-- context helper completeness is machine-readable
+- context helper completeness and instruction trigger coverage are machine-readable, and hub `AGENTS.md` stays below 16 KB
+- selective capture preserves child exit status and signals, secures artifacts, enforces retention, and emits bounded receipts
+- repo-owned public commands remain below the output threshold unless raw mode is explicitly requested and justified
 - generated queue workers need no schema or output-path discovery
 - common status/analyzer outputs are bounded
 - child completion requires accepted artifacts and relevant provenance
 - task-linked finals make coverage review deterministic
+- a fresh coordinator can resume a representative multi-agent workflow from a valid checkpoint without rereading full plans, transcripts, or completed worker outputs
+- delegated prompts and handoffs meet their budgets or carry an explicit artifact-backed exception
 - two post-change weekly reports show lower avoidable calls/output without weaker completion or validation
 - experimental worker/resume decisions are documented from measurements rather than assumptions
 
@@ -471,6 +712,12 @@ The improvement program is complete when:
 
 - Adding many narrow helpers can create discovery and maintenance cost; prefer bounded modes on existing commands.
 - Output caps can hide required evidence; every cap needs an explicit saved-artifact escalation path.
+- Raw capture artifacts can contain secrets. Redact recognized learned values from receipts and metadata, retain restrictive permissions, and continue to prohibit commands that dump known secret files because arbitrary stdout cannot be guaranteed redactable.
+- Capture changes TTY, color, buffering, and progress behavior; reject interactive commands and test adapters against representative tools.
+- Cleanup can race with readers or create storage pressure; use atomic manifests, locking, age and size caps, and separate report/apply modes.
+- A receipt path can become an invitation to reopen the whole raw log; analyzer rules should flag unbounded artifact replay and require bounded reads with a reason.
 - Context suppression can become stale after instruction changes; completeness metadata must include changed-file detection.
+- Checkpoints can become stale or performative; validate hashes, repo state, referenced artifacts, and active-agent state before trusting the recorded next action.
+- Prompt and handoff budgets can omit decisive evidence; exceptions must name a durable artifact and the narrow question that requires opening it.
 - More lifecycle metadata can become performative unless derived from actual artifacts and tool events.
 - Token reduction can optimize the wrong outcome; completion, validation, latency, and supervision remain co-equal measures.
