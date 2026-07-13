@@ -82,18 +82,120 @@ Do not set an aggregate token-savings target until two comparable post-change we
 
 ## Dependency Order
 
-Implement in this order:
+Use this critical path, while running independent repository lanes in parallel:
 
 ```text
-agent-viewer measurement contracts
-  -> hub routing and context contracts
-  -> artist-helper assignment and validation contracts
-  -> bounded domain outputs
+measurement schema + synthetic baseline
+  -> attribution repair and comparison metrics
+  -> deterministic regression gate
+
+exact route/context contract
+  -> generated queue assignment contract
+  -> lifecycle/provenance contract
   -> orchestration experiments
-  -> weekly regression gate
+
+output budget contract
+  -> capture supervisor
+  -> repo-specific adapters
+  -> capture/replay detectors
+
+checkpoint schema
+  -> checkpoint utility + handoff templates
+  -> resume detector
+  -> orchestration experiments
 ```
 
-Measurement lands first so later changes can be evaluated against the same task-aware definitions. Hub routing lands before queue changes because every queue worker inherits that startup flow. Assignment contracts land before orchestration experiments so schema-discovery waste does not contaminate reuse measurements.
+Only the first node of each chain is a barrier. After those interfaces are frozen, `agent-viewer`, hub, and `artist-helper` work can proceed concurrently. Measurement lands before savings claims, but it does not need to block implementation whose behavior is already covered by frozen synthetic fixtures. Assignment and checkpoint contracts land before orchestration experiments so schema discovery and replay waste do not contaminate reuse measurements.
+
+## Sub-Agent Execution Model
+
+### Coordinator responsibilities
+
+Use one coordinator that schedules and integrates but does not duplicate implementation work. The coordinator:
+
+- freezes acceptance criteria, schemas, command interfaces, and baseline revisions before spawning
+- writes a bounded implementation manifest and checkpoint
+- assigns one repository or disjoint file set to each implementation agent
+- records dependency IDs, expected artifacts, validation commands, and merge order
+- consumes structured handoff receipts rather than rereading full worker transcripts
+- stops spawning when a failed interface or merge gate would invalidate downstream work
+- integrates submodule commits sequentially and updates hub pointers only after local validation passes
+
+The coordinator should not perform speculative code exploration already assigned to a worker. It may open raw worker evidence only for a named validation failure or disputed handoff claim.
+
+### Concurrency and ownership
+
+Default to at most four active implementation agents plus the coordinator. Increase concurrency only when every additional agent has an independent repository or non-overlapping ownership manifest.
+
+Preferred long-lived lanes:
+
+| Lane | Primary scope | Exclusive ownership |
+| --- | --- | --- |
+| M | `agent-viewer` measurement and detectors | analyzer schemas, fixtures, attribution, reports |
+| H-R | hub routing utilities | route resolver, context contract, instruction inventory |
+| H-C | hub capture utilities | capture supervisor, receipts, retention, capture tests |
+| H-O | hub orchestration utilities | checkpoints, packets, handoffs, resume tests |
+| H-I | hub integration | shared aliases, instruction edits, cross-utility verification |
+| Q | `artist-helper` queue contracts | selectors, result paths, lifecycle, provenance, wave barrier |
+| D | domain adapters | one assigned domain repo per agent after the capture API freezes |
+
+Rules:
+
+- never assign two implementation agents to the same files at the same time
+- use one agent per submodule unless a file-level ownership split is explicit and mechanically checked
+- allow `H-C` and `H-O` to overlap only after `H-R` lands: they receive disjoint path allowlists, and all shared `package.json`, instruction, and verification-alias edits are deferred to `H-I`
+- do not let workers update hub submodule pointers; the coordinator owns pointer integration
+- freeze shared schemas in versioned fixtures before parallel consumers implement against them
+- when one lane changes a frozen interface, pause dependent lanes, version the interface, and regenerate their work packets
+- use a separate verifier agent at wave boundaries; it reviews diffs and runs declared gates but does not silently repair implementation files
+
+### Generated work packets
+
+Generate one compact JSON packet per assignment instead of embedding the full plan in every prompt. Suggested location:
+
+```text
+temp/context-efficiency-implementation/<run-id>/assignments/<lane>-<slice>.json
+```
+
+Bootstrap Wave 0 from a reviewed static packet template. `H3` replaces that bootstrap with the maintained packet generator; do not delay the first parallel wave waiting for the final utility.
+
+Each packet contains:
+
+- root task/run ID, lane, slice ID, dependency IDs, and priority
+- repo root, base revision, allowed files or directories, and forbidden shared files
+- exact plan section anchors rather than the full plan body
+- frozen schema/interface hashes and fixture paths
+- behavior-level acceptance criteria
+- required and optional validation commands
+- output budget, artifact directory, and handoff schema version
+- stop conditions and the next merge barrier
+
+Before editing, a worker validates the base revision, ownership paths, dependency dispositions, and schema hashes. A mismatch returns `blocked_interface_drift`; it does not trigger broad rediscovery.
+
+### Handoff and merge barriers
+
+Workers return the structured handoff defined in Phase 6.4 plus commit SHA, changed-path allowlist result, and machine-readable acceptance results. The coordinator may merge a slice only when:
+
+- its dependency IDs are accepted
+- changed files stay inside ownership
+- local validation passes at the worker's reported revision
+- the verifier reports no P0/P1 issue
+- the checkpoint records the disposition and exact next action
+
+Batch independent accepted commits into one pointer-update window. Do not repeatedly update and revalidate hub pointers after every parallel worker completion.
+
+### Efficiency telemetry
+
+Measure the implementation process itself:
+
+- coordinator input tokens and tool-output bytes per accepted slice
+- worker startup tokens, prompt size, final size, and raw-artifact reopen count
+- elapsed wall time per wave and critical-path idle time
+- duplicate file reads or commands across workers by stable hash
+- merge conflicts, ownership violations, interface-drift blocks, and rework loops
+- validation reuse rate when the same commit and command result already has a valid receipt
+
+The parallel execution model is successful only if elapsed implementation time falls without increasing total tokens, merge conflicts, failed gates, or coordinator rework.
 
 ## Phase 0: Freeze Regression Cases
 
@@ -670,24 +772,104 @@ Acceptance:
 
 ## Implementation Slices
 
-Recommended pull-request sequence:
+Execute these waves. Items in one wave run concurrently unless they share a lane.
 
-1. `agent-viewer`: synthetic regression fixtures and producer-attribution repair.
-2. `agent-viewer`: before/after comparison command plus prompt, sub-agent, patch, and custom-tool payload metrics.
-3. Hub: exact route resolver and conformance tests.
-4. Hub: `task:context --json`, instruction trigger inventory, and 16 KB headroom check.
-5. Hub: capture supervisor, receipt schema, security checks, retention, and cleanup.
-6. Hub and demonstrated command owners: files/count-first adapters and quiet public defaults.
-7. `agent-viewer`: context-contract reread, capture-bypass, artifact-replay, checkpoint-replay, and task/final detectors.
-8. `artist-helper`: canonical batch selector, resolved result path, and narrow validator contract.
-9. `artist-helper`: artifact-backed child lifecycle and inspection provenance.
-10. `artist-helper`: bounded status output and wave barrier.
-11. Hub: checkpoint utility, event ledger, resume validator, and compact sub-agent templates.
-12. Relevant domain repos: bounded debug/status modes only for demonstrated broad-output cases.
-13. `agent-viewer`: weekly comparison report and deterministic regression gate.
-14. Queue runtime: worker reuse, reset, and resume experiments after clean baseline data exists.
+Each completed slice receives an immutable gate disposition named `G-<slice-id>`. Downstream work may start as soon as all listed slice gates pass; wave barriers are fan-in integration checkpoints, not global reasons to idle an otherwise unblocked lane.
 
-Each submodule change lands and passes local validation before the hub pointer is updated on `main`.
+### Wave 0: Freeze interfaces and baseline
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| M0 | M | Freeze synthetic corpus, scoring schema, attribution confidence model, and compatible baseline window | none |
+| H0 | H-R | Freeze route/context, output receipt, checkpoint, work-packet, and handoff schemas as fixtures | none |
+| Q0 | Q | Produce a narrow queue command/file inventory and secret-free selector/path/lifecycle fixtures | none |
+
+Barrier `B0`:
+
+- verifier confirms positive/negative fixtures and schema hashes
+- coordinator records accepted interface versions in the checkpoint
+- no implementation starts against an unversioned cross-lane contract
+
+### Wave 1: Independent foundations
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| M1 | M | Repair nested/batched producer attribution and add before/after plus prompt/custom-tool replay metrics | G-M0 |
+| H1 | H-R | Implement exact route resolver, conformance tests, `task:context --json`, instruction inventory, and headroom check | G-H0 |
+| Q1 | Q | Implement canonical batch selector, absolute result-path contract, containment checks, and narrow validator entrypoint | G-Q0, G-H0 |
+
+Barrier `B1`:
+
+- all three lanes pass local validation
+- verifier reviews behavior against frozen fixtures
+- coordinator accepts submodule commits without updating hub pointers yet
+
+### Wave 2: Capture, lifecycle, and core detectors
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| M2 | M | Add context-reread, task/final linkage, child lifecycle, and attribution regression detectors | G-M1 |
+| H2 | H-C | Implement capture supervisor, bounded receipt, security fixtures, retention, and cleanup | G-H1 |
+| H3 | H-O | Implement checkpoint utility, event ledger, resume validator, bootstrap replacement packet generator, and compact handoff templates | G-H1 |
+| Q2 | Q | Implement artifact-backed child dispositions, semantic validation, and inspection provenance | G-Q1, G-M0 |
+
+Barrier `B2`:
+
+- capture exit/signal/security matrix passes
+- checkpoint and work-packet schema/hash/resume matrix passes
+- lifecycle fixtures distinguish completed, failed, cancelled, superseded, and retryable
+- corrected measurement baseline is available before any savings statement
+
+### Wave 3: Orchestration and adapters
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| M3 | M | Add capture-bypass, artifact-replay, checkpoint-replay, and oversized handoff detectors | G-M2, G-H2, G-H3 |
+| Q3 | Q | Implement bounded queue status, wave barrier, and stage telemetry | G-Q2, G-H0 |
+| D3-* | D | Add demonstrated files/count-first or bounded-output adapters, one agent per domain repo | G-H2 |
+
+Barrier `B3`:
+
+- a synthetic multi-agent task resumes from a checkpoint without full replay
+- all domain adapters conform to the same receipt schema
+- verifier checks ownership, bounded output, and no raw artifact leakage
+- coordinator batches accepted submodule pointer updates into one hub `main` integration window
+
+### Wave 4: Regression gate
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| M4 | M | Implement bounded weekly comparison report and deterministic regression gate | G-M3, G-H3, G-Q3 |
+| H4 | H-I | Wire hub verification aliases and instruction/route/capture/checkpoint conformance checks | G-H2, G-H3, G-M3 |
+| Q4 | Q | Run queue end-to-end regression corpus and publish machine-readable acceptance receipts | G-Q3, G-M3 |
+
+Barrier `B4`:
+
+- P0/P1 fixtures block regressions
+- completion and validation guardrails appear beside efficiency results
+- coordinator performs one integrated hub validation and pointer update
+
+### Wave 5: Measured experiments
+
+| ID | Lane | Assignment | Depends on |
+| --- | --- | --- | --- |
+| E5-1 | runtime | Compare reused, reset/compacted, and fresh worker contexts | B4 and clean baseline |
+| E5-2 | H-R | Evaluate conditional instruction suppression | B4 and clean baseline |
+| E5-3 | M | Produce two compatible weekly reports and implementation-efficiency telemetry | G-E5-1, G-E5-2 |
+
+Adopt experimental behavior only after the decision rules in Phase 7 pass. Failed experiments leave the deterministic improvements intact.
+
+### Fast-path scheduling rules
+
+- spawn Wave 0 lanes together after one coordinator context pass
+- prepare the next wave's packets while the verifier checks the current barrier
+- immediately start a slice after its listed `G-*` dependencies clear; do not wait for the rest of the wave or unrelated optional domain adapters
+- keep `D3-*` off the critical path and limit it to repositories with measured broad-output waste
+- retry only the failed slice; accepted sibling commits and receipts remain reusable when their base/interface hashes still match
+- cancel downstream packets automatically when a dependency is rejected or its interface version changes
+- integrate once per barrier, not once per worker completion
+
+Each submodule change lands and passes local validation before the hub pointer is updated on `main`. Hub-root changes are committed directly on `main` by the coordinator, with only intended files staged.
 
 ## Definition Of Done
 
@@ -705,6 +887,9 @@ The improvement program is complete when:
 - task-linked finals make coverage review deterministic
 - a fresh coordinator can resume a representative multi-agent workflow from a valid checkpoint without rereading full plans, transcripts, or completed worker outputs
 - delegated prompts and handoffs meet their budgets or carry an explicit artifact-backed exception
+- generated work packets let implementation agents begin without reading the full plan or rediscovering repository scope
+- all implementation slices finish without cross-agent file ownership violations, and rejected slices do not force accepted siblings to rerun unchanged validation
+- wave telemetry demonstrates shorter wall time than the serial schedule without higher total context use, merge conflicts, or P0/P1 rework
 - two post-change weekly reports show lower avoidable calls/output without weaker completion or validation
 - experimental worker/resume decisions are documented from measurements rather than assumptions
 
@@ -719,5 +904,8 @@ The improvement program is complete when:
 - Context suppression can become stale after instruction changes; completeness metadata must include changed-file detection.
 - Checkpoints can become stale or performative; validate hashes, repo state, referenced artifacts, and active-agent state before trusting the recorded next action.
 - Prompt and handoff budgets can omit decisive evidence; exceptions must name a durable artifact and the narrow question that requires opening it.
+- Too many parallel agents can spend more context on startup and coordination than they save; cap concurrency, keep optional adapters off the critical path, and compare against the serial estimate.
+- Long-lived parallel lanes can drift from their base or frozen interfaces; validate revisions and hashes before edits, handoff, validation reuse, and integration.
+- A separate verifier can duplicate every worker read; give it fixture results, diffstat, changed paths, and bounded evidence first, escalating to source only for a named risk.
 - More lifecycle metadata can become performative unless derived from actual artifacts and tool events.
 - Token reduction can optimize the wrong outcome; completion, validation, latency, and supervision remain co-equal measures.
