@@ -7,13 +7,15 @@
 - Phases 0-2: fixtures, routing, and context contracts
 - Phases 3-5: bounded output, queue assignment, and lifecycle validation
 - Phases 6-8: orchestration, experiments, and weekly regression gate
-- Implementation slices, definition of done, implementation log, and residual risks
+- Implementation slices, definition of done, implementation log, post-implementation review, and residual risks
 
 ## Goal
 
 Reduce avoidable context loading, discovery loops, retries, and supervision in future agent tasks without weakening correctness, validation, or final handoff quality.
 
 This plan turns the July 2026 context-waste analysis into implementation work. It prioritizes repeated, QA-supported causes and keeps speculative changes behind measured experiments.
+
+Program status: deterministic implementation is complete and validated. Full program closure remains pending until the operational measurements in Phase 7 and the two compatible weekly comparisons in Phase 8 are recorded. This distinction prevents shipped safeguards from being confused with unproven savings claims.
 
 ## Evidence Baseline
 
@@ -125,9 +127,9 @@ Use one coordinator that schedules and integrates but does not duplicate impleme
 - freezes acceptance criteria, schemas, command interfaces, and baseline revisions before spawning
 - writes a bounded implementation manifest and checkpoint
 - assigns one repository or disjoint file set to each implementation agent
-- records dependency IDs, expected artifacts, validation commands, and merge order
+- records dependency IDs, expected artifacts, validation commands, and integration order
 - consumes structured handoff receipts rather than rereading full worker transcripts
-- stops spawning when a failed interface or merge gate would invalidate downstream work
+- stops spawning when a failed interface or integration gate would invalidate downstream work
 - integrates submodule commits sequentially and updates hub pointers only after local validation passes
 
 The coordinator should not perform speculative code exploration already assigned to a worker. It may open raw worker evidence only for a named validation failure or disputed handoff claim.
@@ -177,19 +179,21 @@ Each packet contains:
 - behavior-level acceptance criteria
 - required and optional validation commands
 - output budget, artifact directory, and handoff schema version
-- stop conditions and the next merge barrier
+- stop conditions and the next integration barrier
 
 Before editing, a worker validates the base revision, ownership paths, dependency dispositions, and schema hashes. A mismatch returns `blocked_interface_drift`; it does not trigger broad rediscovery.
 
-### Handoff and merge barriers
+### Handoff and integration barriers
 
-Workers return the structured handoff defined in Phase 6.4 plus commit SHA, changed-path allowlist result, and machine-readable acceptance results. The coordinator may merge a slice only when:
+Workers return the structured handoff defined in Phase 6.4 plus commit SHA, changed-path allowlist result, and machine-readable acceptance results. The coordinator may accept a slice for integration only when:
 
 - its dependency IDs are accepted
 - changed files stay inside ownership
 - local validation passes at the worker's reported revision
 - the verifier reports no P0/P1 issue
 - the checkpoint records the disposition and exact next action
+
+Pull request merges are never coordinator or sub-agent actions. After the readiness gate passes, the coordinator hands the PR URL and bounded readiness evidence to the user. Work that depends on the base-branch commit remains blocked until the user merge is observed on the remote base branch.
 
 Batch independent accepted commits into one pointer-update window. Do not repeatedly update and revalidate hub pointers after every parallel worker completion.
 
@@ -667,7 +671,7 @@ Update atomically:
 3. after each final, stop, validation, or artifact disposition
 4. after an accepted finding or helper/scoring version change
 5. before a long wait, handoff, compaction boundary, or final response
-6. after commit, push, merge, or pointer changes
+6. after commit, push, observed user merge, or pointer changes
 
 Resume protocol:
 
@@ -914,7 +918,7 @@ The improvement program is complete when:
 - `artist-helper` lane owns canonical batch selection, result-path and validation contracts, run identity, lifecycle, and bounded wave waiting.
 - Hub capture and orchestration utilities are assigned to disjoint file allowlists; shared aliases, instructions, and verification remain coordinator-owned.
 
-### 2026-07-13 implementation completion
+### 2026-07-13 deterministic implementation completion
 
 - `agent-viewer` PR `MicrowaveDev/agent-viewer#4` merged to `main` at `b74f13584cc65cbb59eaeace3dd575755b4cae8b`.
 - Cleaned exports now preserve correlation metadata while redacting payload bodies; nested, batched, duplicate, unmatched, and session-correlated output is counted once with explicit confidence.
@@ -931,7 +935,39 @@ The improvement program is complete when:
 Experimental decision:
 
 - Keep reused workers as the default. The comparison utility refuses non-comparable batches, and this implementation run did not contain equivalent reused/reset/fresh batches with runtime token telemetry. No reset/fresh policy or conditional instruction suppression was enabled from assumptions.
-- Collect two compatible weekly reports and one equivalent-batch strategy sample as operational follow-up. These observation windows validate outcomes; they are not missing implementation work and must not block deterministic protections already merged.
+- Collect two compatible weekly reports and one equivalent-batch strategy sample as required operational follow-up. These observations do not block use of the deterministic protections, but the overall improvement program remains open until they satisfy the Definition of Done or produce a documented no-adoption decision.
+
+## Post-Implementation Review
+
+### 2026-07-13 review
+
+Request coverage:
+
+- deterministic routing, bounded output, capture, checkpoint, packet, attribution, queue-selector, lifecycle, and provenance work: implemented and validated
+- equivalent reused/reset/fresh worker experiment: correctly deferred because no comparable runtime sample exists
+- two compatible weekly outcome comparisons: pending; therefore aggregate savings and full program completion are not yet established
+- user-only pull request merge authority: initially violated by the execution flow and contradicted by the coordinator merge wording in this plan
+
+Findings and corrections:
+
+1. P0: the plan allowed the coordinator to merge accepted slices. The integration contract now reserves every PR merge for the user and blocks dependent work until the merged base-branch commit is observed.
+2. P1: the implementation log used an unconditional completion label while Definition of Done still required operational evidence. Status now distinguishes deterministic implementation completion from full program closure.
+3. P1: the user-only merge rule existed only as prose and could drift. `verify-instruction-contracts.mjs` now checks the policy across hub, portable, and Git workflow instructions and rejects obsolete user-request exceptions.
+4. P2: experiments and weekly observations were described as optional-looking follow-up. They are now explicit closure requirements with no effect on the availability of deterministic safeguards.
+
+Validation evidence:
+
+- `npm run verify:helpers`: passed, including route, context, capture, checkpoint, packet, and instruction contracts
+- `agent-viewer` `yarn test`: 14 tests passed
+- `artist-helper` `yarn verify-image-description-queue-contract`: passed
+- scoped submodule worktrees were clean on their expected base branches during review
+
+Remaining actions:
+
+- run two compatible weekly analyzer comparisons and record their artifact paths and completion/validation guardrails here
+- run one equivalent-batch context-strategy comparison with real runtime token and latency telemetry
+- close the program only after both evidence requirements pass, or record a measured no-adoption decision for the experimental behavior
+- after every agent-created PR, stop at the readiness handoff and wait for the user merge before base-branch or pointer-dependent work
 
 ## Residual Risks
 

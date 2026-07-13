@@ -8,6 +8,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const contracts = JSON.parse(fs.readFileSync(path.join(root, 'bash/agent-route-contracts.json'), 'utf8'));
 const agentsPath = path.join(root, 'AGENTS.md');
 const agentsText = fs.readFileSync(agentsPath, 'utf8');
+const portableText = fs.readFileSync(path.join(root, 'portable-agent-instructions.md'), 'utf8');
+const gitWorkflowText = fs.readFileSync(path.join(root, 'docs/agent-playbook/hub-git-workflow.md'), 'utf8');
 const errors = [];
 const instructionBytes = Buffer.byteLength(agentsText);
 
@@ -28,6 +30,25 @@ for (const match of agentsText.matchAll(/\[[^\]]+\]\((\/Users\/microwavedev\/wor
   if (!fs.existsSync(match[1])) errors.push(`Broken local instruction link: ${match[1]}`);
 }
 
+const mergePolicyContracts = [
+  [agentsText, 'Never merge a pull request.', 'AGENTS.md'],
+  [portableText, '**Never merge a pull request.**', 'portable-agent-instructions.md'],
+  [gitWorkflowText, 'Agents must never merge pull requests', 'docs/agent-playbook/hub-git-workflow.md'],
+];
+for (const [text, requiredText, file] of mergePolicyContracts) {
+  if (!text.includes(requiredText)) errors.push(`Missing user-only PR merge policy in ${file}`);
+}
+
+const obsoleteMergeExceptions = [
+  'unless the user explicitly asked you to merge',
+  'if the user explicitly asked you to merge',
+];
+for (const phrase of obsoleteMergeExceptions) {
+  for (const [text, , file] of mergePolicyContracts) {
+    if (text.toLowerCase().includes(phrase)) errors.push(`Obsolete agent merge exception in ${file}: ${phrase}`);
+  }
+}
+
 if (errors.length) {
   errors.forEach((error) => console.error(`ERROR: ${error}`));
   process.exit(1);
@@ -39,4 +60,5 @@ process.stdout.write(`${JSON.stringify({
   instructionBytes,
   instructionByteLimit: contracts.instructionByteLimit,
   routeCount: contracts.routes.length,
+  userOnlyPrMergePolicy: true,
 })}\n`);
