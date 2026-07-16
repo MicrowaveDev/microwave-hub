@@ -62,7 +62,7 @@ fi
 
 run_step "Meat game tests" "$MEAT_DIR" npm run game:test
 run_step "Meat browser E2E" "$MEAT_DIR" npm run game:test:browser
-run_shell_step "Meat hosted deploy config check" "$MEAT_DIR" "MEAT_MASTER_ENV=production MEAT_MASTER_RUNTIME_MODE=server MEAT_MASTER_STORE=postgres MEAT_MASTER_DATABASE_URL=postgres://verify:verify@localhost:5432/verify TELEGRAM_BOT_TOKEN=verify-token MEAT_MASTER_PUBLIC_URL=https://meat.example.test MEAT_MASTER_SUPPORT_TOKEN=verify-support npm run game:deploy:check"
+run_shell_step "Meat hosted deploy config check" "$MEAT_DIR" "MEAT_MASTER_ENV=production MEAT_MASTER_RUNTIME_MODE=server MEAT_MASTER_STORE=postgres MEAT_MASTER_DATABASE_URL=postgres://verify:verify@localhost:5432/verify TELEGRAM_BOT_TOKEN=verify-token TELEGRAM_BOT_USERNAME=verify_meat_bot TELEGRAM_WEBHOOK_SECRET=verify-webhook-secret MEAT_MASTER_PUBLIC_URL=https://meat.example.test MEAT_MASTER_SUPPORT_TOKEN=verify-support npm run game:deploy:check"
 run_shell_step "Meat local package config check" "$MEAT_DIR" "MEAT_MASTER_ENV=production MEAT_MASTER_RUNTIME_MODE=local MEAT_MASTER_STORE=sqlite MEAT_MASTER_DB_PATH=.data/verify-deploy.sqlite MEAT_MASTER_COMMUNITY_SERVER_URL=https://community.example.test npm run game:deploy:check"
 run_step "Meat production build" "$MEAT_DIR" npm run game:build
 
