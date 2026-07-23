@@ -6,6 +6,7 @@
     "setup": "git submodule update --init --recursive",
     "dev:viewer": "yarn --cwd agent-viewer dev",
     "mushroom:dev": "npm --prefix mushroom-master run game:start",
+    "meatmaster:dev": "npm --prefix meat-master run dev",
     "microwave-girls:dev": "yarn --cwd microwave-girls start",
     "microwave-travel:dev": "npm --prefix microwave-travel run dev",
     "status:all": "bash bash/status-all.sh",
