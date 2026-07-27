@@ -12,7 +12,11 @@ Last reviewed: 2026-07-27
 - [Cold starts and hidden costs](#cold-starts-and-hidden-costs)
 - [UI options](#ui-options)
 - [Recommended character-composition workflow](#recommended-character-composition-workflow)
+- [Checkpoint and LoRA support](#checkpoint-and-lora-support)
+- [Microwave Girls generation workflow](#microwave-girls-generation-workflow)
 - [Recommended product UI](#recommended-product-ui)
+- [Adult-content and provider restrictions](#adult-content-and-provider-restrictions)
+- [Runpod monitoring and enforcement surfaces](#runpod-monitoring-and-enforcement-surfaces)
 - [Security and operational constraints](#security-and-operational-constraints)
 - [Recommendation](#recommendation)
 - [Sources](#sources)
@@ -45,6 +49,12 @@ workflow is:
 - ControlNet OpenPose for pose and composition;
 - LoRA or IP-Adapter for character identity;
 - inpainting for selective corrections.
+
+There is an important provider-policy blocker for sexually explicit generation:
+Runpod's Terms of Service currently identify pornography and graphic adult
+content as unauthorized. Forge can technically run adult-capable models, but
+that does not make an explicit workload permissible on Runpod. Written
+confirmation from Runpod is required before choosing it for that use case.
 
 ## Can Forge Neo run as an API on Runpod?
 
@@ -358,6 +368,228 @@ For strong art direction, generating the background first and adding or
 correcting characters through masks is usually more reliable than asking one
 text-to-image pass to solve every detail.
 
+## Checkpoint and LoRA support
+
+Forge Neo's Automatic1111-compatible API supports ordinary checkpoint and LoRA
+use well.
+
+### Responsibilities
+
+A checkpoint is the main image model. It defines the base architecture,
+capabilities, and much of the visual behavior. A generation attempt normally
+uses one checkpoint.
+
+A LoRA is a smaller adapter applied on top of a compatible checkpoint. Common
+roles include:
+
+- recurring character identity;
+- clothing or costume;
+- visual style;
+- location or background;
+- expression, action, or other learned concept.
+
+Pose should normally use ControlNet OpenPose when exact positioning matters. A
+pose LoRA is less exact and is better treated as a learned concept or stylistic
+preference.
+
+### Storage
+
+Default Forge locations are:
+
+```text
+models/Stable-diffusion/   # checkpoints
+models/Lora/               # LoRAs
+```
+
+Forge also accepts model-directory command-line options and a central
+`--model-ref` hierarchy. On Runpod, model files should live in a persistent
+volume, prepared container, or other cached location. Downloading a
+multi-gigabyte checkpoint during every serverless cold start would make latency
+and cost unpredictable.
+
+Example:
+
+```bash
+python launch.py \
+  --api \
+  --listen \
+  --port 7860 \
+  --ckpt-dir /runpod-volume/models/checkpoints \
+  --lora-dir /runpod-volume/models/loras
+```
+
+Only an administrator should install model files. The product UI should select
+registered model IDs rather than accept arbitrary download URLs.
+
+### API operations
+
+The relevant Automatic1111-style routes normally include:
+
+```text
+GET  /sdapi/v1/sd-models
+GET  /sdapi/v1/loras
+POST /sdapi/v1/refresh-checkpoints
+POST /sdapi/v1/refresh-loras
+```
+
+The running Forge installation's `/docs` route remains the definitive contract
+for the deployed version.
+
+A checkpoint can be selected for a request using
+`override_settings.sd_model_checkpoint`. LoRAs are activated in the positive
+prompt using `<lora:filename:weight>`.
+
+```json
+{
+  "prompt": "adult fictional woman, mw_mira, red jacket, <lora:mira_character_v2:0.85>, <lora:editorial_comic_style:0.35>",
+  "negative_prompt": "low quality, malformed anatomy, duplicate person",
+  "width": 1024,
+  "height": 1024,
+  "steps": 24,
+  "cfg_scale": 6,
+  "sampler_name": "DPM++ 2M",
+  "seed": 123456,
+  "override_settings": {
+    "sd_model_checkpoint": "illustrationXL_v20.safetensors"
+  },
+  "override_settings_restore_afterwards": true
+}
+```
+
+### Compatibility
+
+Checkpoint, LoRA, and ControlNet architectures must match:
+
+```text
+SD 1.5 checkpoint
+└── SD 1.5 LoRAs
+    └── SD 1.5 ControlNet
+
+SDXL checkpoint
+└── SDXL LoRAs
+    └── SDXL ControlNet
+```
+
+The same principle applies to Anima, FLUX, Qwen Image, and other architectures.
+Microwave Girls should reject incompatible combinations before submitting a
+GPU job.
+
+### Checkpoint concurrency
+
+Checkpoint selection is effectively global worker state. Concurrent requests
+that try to select different checkpoints can interfere with one another.
+Generation jobs should therefore be grouped by checkpoint where practical:
+
+```text
+Load Editorial SDXL
+├── generate shots 1–20
+└── generate repairs 3 and 8
+
+Switch to Anime SDXL
+└── generate shots 21–30
+```
+
+LoRA changes are comparatively lightweight and can normally vary per request.
+
+### Multiple characters
+
+Multiple character LoRAs can be enabled in one prompt, but their attributes may
+bleed across subjects. Forge Couple separates regional prompt conditioning, yet
+its documentation cautions that different LoRAs in different regions still
+depend on how well the concepts work together.
+
+Recommended escalation:
+
+1. use separate character LoRAs with Forge Couple regions;
+2. use unique trigger words and visually distinct descriptions;
+3. reduce competing LoRA strengths;
+4. use OpenPose to keep characters spatially distinct;
+5. generate the scene and inpaint each important character separately;
+6. train a joint multi-character LoRA with distinct tokens when the same cast
+   repeatedly appears together.
+
+Every generation attempt should store the checkpoint name and hash, LoRA names
+and hashes, weights, prompt, seed, sampler, steps, extension versions, and
+output. Model files and their licenses must be reviewed separately; the Forge
+license does not grant rights to third-party checkpoints or training data.
+
+## Microwave Girls generation workflow
+
+The intended product flow is:
+
+```text
+Creative brief
+    ↓
+Grok structured shot plan
+    ↓
+Artist edits plan and confirms estimated spend
+    ↓
+Durable Forge/Runpod generation queue
+    ↓
+Review, approve, reject, regenerate, or inpaint
+    ↓
+Import approved outputs into the Media Catalog
+    ↓
+Existing editing, scheduling, and publishing flow
+```
+
+Grok should return a provider-neutral structured plan rather than a single
+free-form diffusion prompt. The server should compile that plan into Forge
+parameters.
+
+Suggested hierarchy:
+
+1. **Project:** creative brief, global style, characters, backgrounds, and
+   default checkpoint.
+2. **Shot:** composition, pose, camera, prompt additions, and desired variation
+   count.
+3. **Attempt:** immutable checkpoint, LoRA, ControlNet, seed, prompt, cost,
+   latency, provider job ID, output, and review status.
+
+Regeneration creates a new attempt linked to the original rather than
+overwriting evidence:
+
+```text
+shot-03
+├── attempt-1 — rejected: wrong pose
+├── attempt-2 — rejected: identity drift
+└── attempt-3 — approved
+```
+
+The UI should distinguish:
+
+- new seed variation;
+- edited prompt;
+- corrected OpenPose input;
+- stronger or different identity reference;
+- lower-denoising img2img;
+- selected-region inpainting;
+- more variations based on an approved attempt.
+
+For batches of 10–20 images, and especially a future limit of 100, generation
+must use a persistent asynchronous queue. A browser request must not own the
+job lifecycle. Required properties include idempotency, concurrency control,
+cancellation, progress polling or events, spend limits, infrastructure retry
+rules, and provider job recovery.
+
+The Grok planner must select only checkpoint and LoRA registry IDs supplied by
+the server. It must not invent model filenames, weights, or download sources.
+The local compiler resolves safe model IDs to Forge filenames and trigger
+syntax.
+
+Suggested registry fields include:
+
+- stable internal ID and display label;
+- checkpoint or LoRA type;
+- architecture;
+- Forge filename and cryptographic hash;
+- category such as character, style, costume, or background;
+- trigger words and recommended weight range;
+- compatible checkpoint IDs;
+- preview images;
+- source, license, and commercial-use status;
+- enabled or disabled status.
+
 ## Recommended product UI
 
 A focused application could use this structure:
@@ -397,6 +629,141 @@ Suggested mapping:
 Sampler, scheduler, CFG, denoising, extension weights, and model-loading details
 can live inside an optional Advanced panel.
 
+## Adult-content and provider restrictions
+
+### Forge is technically capable but does not supply models
+
+Forge Neo does not include a hosted checkpoint or LoRA catalog. It uses whatever
+compatible files the operator installs. An adult-capable checkpoint or LoRA
+can therefore work technically through the ordinary API. Forge generally does
+not provide a central prompt/output moderation service for a self-hosted
+installation.
+
+Technical capability does not establish permission. The operator must
+separately satisfy:
+
+- infrastructure-provider terms;
+- checkpoint and LoRA licenses;
+- training-data and likeness rights;
+- applicable law;
+- storage-provider policies;
+- destination social-network policies.
+
+### Runpod restriction
+
+Runpod's Terms of Service, last updated March 24, 2026, identify pornography
+and graphic adult content, images, and adult products as unauthorized content.
+The same terms reserve account suspension or termination as possible
+consequences.
+
+This creates a material deployment blocker:
+
+| Intended content | Runpod assessment |
+| --- | --- |
+| Swimsuit, glamour, or suggestive posing | Wording is unclear; obtain written confirmation |
+| Artistic nudity | Wording is unclear; obtain written confirmation |
+| Explicit fictional adult sexual content | Terms appear to prohibit it |
+| Pornographic output | Terms explicitly prohibit it |
+| Sexual content involving a minor or ambiguous age | Absolutely prohibited |
+| Sexualized identifiable real person | Do not support; severe consent, policy, and legal risk |
+
+A private Pod and absence of a technical refusal do not change the contractual
+restriction. If explicit generation is central, obtain a precise written
+answer from Runpod before implementation or choose infrastructure whose terms
+expressly permit the intended lawful workload.
+
+### Grok and OpenRouter
+
+Grok prompt planning is a separate provider boundary. xAI's current Acceptable
+Use Policy prohibits, among other things:
+
+- sexualizing or exploiting children;
+- nudifying real people;
+- altering a real person's likeness into an intimate or sexual context;
+- depicting a person's likeness pornographically;
+- illegal content and attempts to bypass safeguards.
+
+OpenRouter or the selected provider may return moderation errors, including
+HTTP `403`. Provider refusal should be treated as a normal, non-retriable
+result. The application must not rewrite prompts for the purpose of bypassing
+provider safeguards.
+
+### Product restrictions
+
+For a sexualized generation workflow, Microwave Girls should require:
+
+1. fictional characters only;
+2. explicit adult confirmation for every character;
+3. rejection of unknown, ambiguous, or youth-coded age;
+4. no sexualized real-person references or identity LoRAs;
+5. private storage for unreviewed and rejected output;
+6. human approval before import into the publishable Media Catalog;
+7. no automatic publishing;
+8. model license and source records;
+9. immutable prompt/model/seed/audit metadata;
+10. destination-specific policy checks before publishing.
+
+Example trusted character record:
+
+```json
+{
+  "id": "mira",
+  "fictional": true,
+  "adultConfirmed": true,
+  "agePresentation": "adult",
+  "sexualGenerationAllowed": true,
+  "realPersonReference": false,
+  "loraId": "character-mira-v2"
+}
+```
+
+The server, not Grok, must validate this contract before accepting a generation
+job.
+
+## Runpod monitoring and enforcement surfaces
+
+Runpod does not publicly document a classifier that inspects every prompt and
+generated image. Its Terms say that it does not actively monitor hosted
+content, while also reserving the right to:
+
+- electronically monitor its network;
+- access, store, process, and use customer content;
+- investigate complaints;
+- institute filters or other abuse-prevention mechanisms;
+- disclose content or records for legal or governmental requests;
+- restrict or terminate service after suspected violations.
+
+Documented and plausible compliance surfaces include:
+
+1. **Public endpoints and complaints.** A publicly exposed Forge UI, API,
+   gallery, output URL, or published site can be reported.
+2. **Serverless logs.** Runpod automatically collects worker stdout, stderr,
+   lifecycle messages, and request history. Its documentation states that
+   centralized endpoint logs are retained for 90 days. Prompts, filenames,
+   model names, or output URLs can be exposed if the application logs them.
+3. **Network and abuse monitoring.** The terms reserve electronic network
+   monitoring and filters, but do not disclose their implementation.
+4. **Stored content.** Generated images, thumbnails, metadata, and model files
+   may be present on Pod disks or network volumes.
+5. **Support and infrastructure investigation.** Screenshots, crash reports,
+   support tickets, or operational access may disclose the workload.
+6. **External reports and legal notices.** Reports from users, rights holders,
+   depicted individuals, publishers, or authorities may lead back to the
+   generating service.
+7. **Operational metadata.** Endpoint names, container metadata, traffic
+   patterns, and application logs may reveal a workload even when individual
+   image bytes are not proactively classified. This is an inference, not a
+   documented Runpod detection method.
+
+Runpod's Privacy Policy additionally describes processing user-generated
+content and metadata and using information to prevent, identify, investigate,
+and deter harmful, unauthorized, unethical, or illegal activity.
+
+It is not possible to establish the provider's exact detection implementation
+from public documentation. Disabling logs or keeping a Pod private is good data
+hygiene but is not a compliance mechanism and must not be treated as a way to
+evade provider enforcement.
+
 ## Security and operational constraints
 
 - Do not expose Forge publicly without authentication.
@@ -417,7 +784,7 @@ can live inside an optional Advanced panel.
 
 ### Immediate prototype
 
-Use a persistent RTX 4090 Runpod Pod with:
+For non-explicit content, use a persistent RTX 4090 Runpod Pod with:
 
 - Forge Neo;
 - an SDXL checkpoint suited to the intended visual style;
@@ -428,11 +795,17 @@ Use a persistent RTX 4090 Runpod Pod with:
 Start with Forge Neo's native UI. Measure generation time with the exact
 production payload before optimizing infrastructure.
 
+For sexually explicit content, do not proceed with Runpod on the assumption
+that private compute is permitted. Resolve the provider-policy blocker first.
+
 ### Production UI
 
 Build a small character-composition frontend with a thin authenticated backend
 that translates user-facing controls into Forge API requests. Keep the Forge
 native UI available only to administrators for model and workflow tuning.
+
+Use a provider-neutral generation adapter so the hosting backend can change
+without changing the project, shot, attempt, review, or publishing model.
 
 ### When to choose ComfyUI instead
 
@@ -451,11 +824,18 @@ Primary and project documentation reviewed:
 - [Forge Neo README](https://github.com/Haoming02/sd-webui-forge-classic/blob/neo/README.md)
 - [Automatic1111 API guide](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API)
 - [Automatic1111 command-line arguments](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings)
+- [Automatic1111 extra-network and LoRA documentation](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/features)
 - [Runpod Serverless product and pricing](https://www.runpod.io/product/serverless)
 - [Runpod port exposure documentation](https://docs.runpod.io/pods/configuration/expose-ports)
 - [Runpod integration overview](https://docs.runpod.io/integrations/overview)
+- [Runpod Terms of Service](https://www.runpod.io/legal/terms-of-service)
+- [Runpod Privacy Policy](https://www.runpod.io/legal/privacy-policy)
+- [Runpod Serverless logging documentation](https://docs.runpod.io/serverless/development/logs)
 - [Forge Couple](https://github.com/Haoming02/sd-forge-couple)
 - [ControlNet WebUI extension](https://github.com/Mikubill/sd-webui-controlnet)
+- [xAI Acceptable Use Policy](https://x.ai/legal/acceptable-use-policy)
+- [xAI non-consensual intimate content policy](https://x.ai/legal/help-center/non-consensual-intimate-content)
+- [OpenRouter moderation errors](https://openrouter.ai/docs/api/reference/errors-and-debugging)
 - [SwarmUI](https://github.com/mcmonkeyprojects/SwarmUI)
 - [SwarmUI ControlNet documentation](https://github.com/mcmonkeyprojects/SwarmUI/blob/master/docs/Features/ControlNet.md)
 - [InvokeAI Canvas Projects](https://invoke.ai/features/canvas/canvas-projects/)
