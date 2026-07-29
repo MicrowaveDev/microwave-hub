@@ -261,7 +261,7 @@
     {
       "name": "microwave-girls",
       "path": "microwave-girls",
-      "baseBranch": "main",
+      "baseBranch": "dev",
       "pushPolicy": "direct_to_base",
       "compareBase": "main",
       "pointerUpdatePolicy": "manual_after_merge",
