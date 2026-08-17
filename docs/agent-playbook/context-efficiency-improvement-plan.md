@@ -15,7 +15,7 @@ Reduce avoidable context loading, discovery loops, retries, and supervision in f
 
 This plan turns the July 2026 context-waste analysis into implementation work. It prioritizes repeated, QA-supported causes and keeps speculative changes behind measured experiments.
 
-Program status: deterministic implementation is complete and validated. Full program closure remains pending until the operational measurements in Phase 7 and the two compatible weekly comparisons in Phase 8 are recorded. This distinction prevents shipped safeguards from being confused with unproven savings claims.
+Program status: deterministic implementation is complete and validated. The two required compatible weekly comparisons are now recorded, but their completion/final-link guardrails are weaker than baseline, so the full program-closure criterion does not pass. This distinction prevents shipped safeguards from being confused with unproven savings claims.
 
 ## Evidence Baseline
 
@@ -980,6 +980,12 @@ Remaining actions:
 - Historical Wave 0-4 wall-time and token telemetry was not captured and cannot be reconstructed reliably. This is retained as an evidence limitation; all prospective packets, strategy experiments, and weekly runs now emit bounded telemetry instead of backfilling invented measurements.
 - A fresh verifier started from generated packet `ad1fef62ad1034d4f707d3d4f4d6299ae23380c1d6facc7bd5013e37cdf50a0b`, ran the integrated helper gate, changed no implementation files, and returned a validated 59-line, 598-token completed handoff. The ignored raw packet and handoff remain locally available by their recorded hashes without being replayed into this plan.
 - Codex automation `context-efficiency-weekly-gate` runs the bounded weekly command each Monday at 17:00 local time. Early runs make no edits; once both windows exist, it records the comparison receipts, reruns hub verification, and updates this plan without merging any PR.
+
+### 2026-08-17 weekly observation gate
+
+- The two required bounded comparison receipts are [`baseline-vs-post-change-week-1.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-1.json) and [`baseline-vs-post-change-week-2.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-2.json). Both report compatible inputs with no compatibility reasons; the production gate remains informational, with no reported gate reasons.
+- Avoidable-output signals improved, including lower command-output and large-tool-output bytes in both reports, but the completion/final-link guardrails did not hold: completed-task rate fell from 74.65% to 69.75% (week 1) and 66.94% (week 2), while final-linked-task rate fell from 73.73% to 69.75% and 66.86%.
+- Result: the two observations satisfy the evidence-count and compatibility requirements, but they do not satisfy the Definition of Done requirement for lower avoidable calls/output without weaker completion or validation. Full program closure is therefore not passed; the deterministic safeguards remain in place and conditional instruction suppression remains disabled.
 
 ## Residual Risks
 

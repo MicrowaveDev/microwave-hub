@@ -95,7 +95,7 @@ function manifestMatches(directory, window, sessionsRoot) {
   return manifest.since === window.since
     && manifest.until === window.until
     && Array.isArray(manifest.roots)
-    && manifest.roots.map(path.resolve).includes(path.resolve(sessionsRoot));
+    && manifest.roots.map((rootPath) => path.resolve(rootPath)).includes(path.resolve(sessionsRoot));
 }
 
 export function statusReceipt(config, schedule, outputRoot) {
