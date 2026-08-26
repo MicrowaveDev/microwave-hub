@@ -987,6 +987,11 @@ Remaining actions:
 - Avoidable-output signals improved, including lower command-output and large-tool-output bytes in both reports, but the completion/final-link guardrails did not hold: completed-task rate fell from 74.65% to 69.75% (week 1) and 66.94% (week 2), while final-linked-task rate fell from 73.73% to 69.75% and 66.86%.
 - Result: the two observations satisfy the evidence-count and compatibility requirements, but they do not satisfy the Definition of Done requirement for lower avoidable calls/output without weaker completion or validation. Full program closure is therefore not passed; the deterministic safeguards remain in place and conditional instruction suppression remains disabled.
 
+### 2026-08-26 weekly gate confirmation
+
+- Re-ran the production gate against the existing bounded receipts: [`baseline-vs-post-change-week-1.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-1.json) and [`baseline-vs-post-change-week-2.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-2.json). Both remain schema/detector-compatible and informational, with no reported compatibility or gate reasons.
+- Guardrail outcome is unchanged: both post-change windows remain below the baseline completed-task and final-linked-task rates. The program-closure criterion therefore remains unmet; retain the deterministic safeguards and keep conditional instruction suppression disabled.
+
 ## Residual Risks
 
 - Adding many narrow helpers can create discovery and maintenance cost; prefer bounded modes on existing commands.
