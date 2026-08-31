@@ -992,6 +992,11 @@ Remaining actions:
 - Re-ran the production gate against the existing bounded receipts: [`baseline-vs-post-change-week-1.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-1.json) and [`baseline-vs-post-change-week-2.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-2.json). Both remain schema/detector-compatible and informational, with no reported compatibility or gate reasons.
 - Guardrail outcome is unchanged: both post-change windows remain below the baseline completed-task and final-linked-task rates. The program-closure criterion therefore remains unmet; retain the deterministic safeguards and keep conditional instruction suppression disabled.
 
+### 2026-08-31 weekly gate confirmation
+
+- Re-ran the production gate against the bounded receipts: [`baseline-vs-post-change-week-1.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-1.json) and [`baseline-vs-post-change-week-2.json`](/Users/microwavedev/workspace/microwave-hub/temp/context-efficiency-weekly/context-efficiency-2026-07/baseline-vs-post-change-week-2.json). Both remain schema/detector-compatible and informational, with no reported compatibility or gate reasons.
+- Guardrail outcome is unchanged: both post-change windows remain below the baseline completed-task and final-linked-task rates. The program-closure criterion therefore remains unmet; retain the deterministic safeguards and keep conditional instruction suppression disabled.
+
 ## Residual Risks
 
 - Adding many narrow helpers can create discovery and maintenance cost; prefer bounded modes on existing commands.
