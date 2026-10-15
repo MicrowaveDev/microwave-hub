@@ -266,7 +266,7 @@
       "compareBase": "main",
       "pointerUpdatePolicy": "manual_after_merge",
       "packageManager": "yarn",
-      "installCommand": "yarn install",
+      "installCommand": "yarn install:all",
       "quickVerifyCommand": null,
       "fullVerifyCommand": null,
       "localInstructions": null,
