@@ -1,6 +1,6 @@
 # Серверная публикация в Bluesky, Discord и Telegram
 
-Статус: архитектура уточнена аудитом существующего node; реализация не начата. Дата: 2026-11-10.
+Статус: реализация и локальная проверка завершены; delivery фиксируется ниже, production rollout не выполнялся. Дата: 2026-11-10.
 
 Область: прежде всего `geesome-node`, затем `microwave-girls`; `geesome-client`
 участвует в проверке изоляции и управляемом переключении маршрутов.
@@ -59,7 +59,7 @@
 
 | Репозиторий / место | Что переиспользовать или изменить |
 | --- | --- |
-| Node `app/modules/localClient/{models,destinations,index,outbox,producer,api}.ts` | Каталог, compose, атомарный claim, result/cancel, source ACL, frozen payload и digests |
+| Node `app/modules/socNetPublishing/{models,destinations,index,outbox,producer,api}.ts` | Каталог, compose, атомарный claim, result/cancel, source ACL, frozen payload и digests |
 | Node `app/modules/socNetAccount/{models,index,api}.ts` | Owner-scoped записи аккаунтов и safe response projection; секретные поля уже исключаются из ответов |
 | Node `app/backgroundWorker.ts`; `bluesky/{index,cron}.ts` | Готовые interval worker, nonoverlap и stop lifecycle; новый worker подключать по этому образцу |
 | Node `app/index.ts` encryptTextWithAppPass/decryptTextWithAppPass | Серверное шифрование, используемое pin/tgContentBot; отдельный master key для публикации не вводить |
@@ -280,8 +280,8 @@ worker/adapters → Girls → полная интеграция → отдель
 | Поток | Вход и разрешённая область записи | Выход / завершение | Зависимости и проверка |
 | --- | --- | --- | --- |
 | A. Контракт | Этот план, node local publishing docs, client contract, Girls bridge docs | Точные API формы, v5 vectors, encrypted JSON field через app-pass, auth/scopes, upgrade/rollback | Первый; проверить текущий merge первого этапа и production schema baseline |
-| B. Node foundation | Node localClient/socNetAccount/secret helper/migrations и focused tests/docs | Server registry/setup с identity, private credentials, frozen server binding, client exclusion | После A; API ACL/secret redaction/SQL migration tests |
-| C. Worker | Node localClient worker/lifecycle и tests | Pause, bounded serial ticks, shared atomic claim/result, unknown-outcome handling | После B; restart/concurrency/timeout/disabled/source change tests |
+| B. Node foundation | Node socNetPublishing/socNetAccount/secret helper/migrations и focused tests/docs | Server registry/setup с identity, private credentials, frozen server binding, client exclusion | После A; API ACL/secret redaction/SQL migration tests |
+| C. Worker | Node socNetPublishing worker/lifecycle и tests | Pause, bounded serial ticks, shared atomic claim/result, unknown-outcome handling | После B; restart/concurrency/timeout/disabled/source change tests |
 | D. Adapters | Node provider helpers и protocol fixtures | Три bytes-based adapters с confirmed IDs и паритетом client | После A; три адаптера могут идти параллельно в разных файлах; финальная интеграция после B/C |
 | E. Girls | Bridge/catalog/receipts/dialog/queue/docs и их tests | Mixed v4/v5 combined request, прежний selector, mode-correct feedback/recovery | После A; mocks можно параллельно B–D, real integration после B–D |
 | F. Интеграция | Тесты и docs всех затронутых repos, общий план | Actual node/Postgres/Kubo + Girls + mock providers, client isolation, desktop/narrow evidence | Последний; реальные provider sends и production secrets запрещены |
@@ -294,23 +294,23 @@ commit/push/PR по правилам repos. Hub pointers — только пос
 
 ## Проверка и критерии завершения
 
-- [ ] Setup и повтор после потерянного ответа не создают duplicate accounts/destinations; секреты write-only и отсутствуют в logs/fixtures/errors.
-- [ ] Client-encrypted/import-only account не включается для server worker автоматически; generic update не обходит managed identity/secret checks.
-- [ ] Secret-key loss/wrong key и смена внешней identity не вызывают отправку другим аккаунтом; token rotation того же ID работает.
-- [ ] Client A/B и legacy claim не видят server jobs; server worker не видит client/legacy jobs. Другой owner не читает/меняет назначения или jobs.
-- [ ] Конкурирующие node workers захватывают job один раз; pause и restart не дублируют публикацию.
-- [ ] Payload/target frozen, source остаётся private; moved/public/deleted source и disabled destination проверяются до отправки.
-- [ ] Bytes берутся из owned storage, arbitrary URLs/redirects не загружаются; JPEG/MIME/size/text limits соответствуют policy.
-- [ ] Bluesky DID/facets/labels/images; Discord bot/channel/guild/NSFW/mentions; Telegram bot/chat/spoiler/plain caption проверены mocked tests.
-- [ ] Потерянный publish response и crash после send оставляют review/processing, второй send не вызывается; потерянный DB result повторяется без публикации.
-- [ ] V5 mismatched binding отклонён до source/job эффектов; v1–v4 frozen recovery, partial combined batch и downgrade не меняют намерение.
-- [ ] Girls комбинирует client Twitter и server остальные сети, сохраняя один selector; missing/ambiguous targets блокируют весь новый batch до effects.
-- [ ] Сроки считаются по destination; сохранённые jobs не меняются при переключении mappings.
-- [ ] SQL upgrade на released schema сохраняет queued/processing/history; rollback блокируется при несовместимых server jobs/credentials.
-- [ ] Node targeted tests и подходящие Docker gates, apiDoc generation, security route inventory и migration integrity проходят; известные посторонние отказы сообщены отдельно.
-- [ ] Girls focused backend/frontend, обязательные Generation gates и Docker social desktop/narrow проходят; screenshot paths/manifest/viewport/content визуально сверены.
-- [ ] Интеграционный сценарий использует настоящий node и storage с mock провайдерами, без реальной публикации. Client isolation проверена действующим client или его реальным worker с тестовым publisher.
-- [ ] Документация содержит настройку трёх сетей, pause/unknown handling, миграцию Era of Wave, rollback и точные результаты проверок.
+- [x] Setup и повтор после потерянного ответа не создают duplicate accounts/destinations; секреты write-only и отсутствуют в logs/fixtures/errors.
+- [x] Client-encrypted/import-only account не включается для server worker автоматически; generic update не обходит managed identity/secret checks.
+- [x] Secret-key loss/wrong key и смена внешней identity не вызывают отправку другим аккаунтом; token rotation того же ID работает.
+- [x] Client A/B и legacy claim не видят server jobs; server worker не видит client/legacy jobs. Другой owner не читает/меняет назначения или jobs.
+- [x] Конкурирующие node workers захватывают job один раз; pause и restart не дублируют публикацию.
+- [x] Payload/target frozen, source остаётся private; moved/public/deleted source и disabled destination проверяются до отправки.
+- [x] Bytes берутся из owned storage, arbitrary URLs/redirects не загружаются; JPEG/MIME/size/text limits соответствуют policy.
+- [x] Bluesky DID/facets/labels/images; Discord bot/channel/guild/NSFW/mentions; Telegram bot/chat/spoiler/plain caption проверены mocked tests.
+- [x] Потерянный publish response и crash после send оставляют review/processing, второй send не вызывается; потерянный DB result повторяется без публикации.
+- [x] V5 mismatched binding отклонён до source/job эффектов; v1–v4 frozen recovery, partial combined batch и downgrade не меняют намерение.
+- [x] Girls комбинирует client Twitter и server остальные сети, сохраняя один selector; missing/ambiguous targets блокируют весь новый batch до effects.
+- [x] Сроки считаются по destination; сохранённые jobs не меняются при переключении mappings.
+- [x] SQL upgrade на released schema сохраняет queued/processing/history; rollback блокируется при несовместимых server jobs/credentials.
+- [x] Node targeted tests и подходящие Docker gates, apiDoc generation, security route inventory и migration integrity проходят; известные посторонние отказы сообщены отдельно.
+- [x] Girls focused backend/frontend, обязательные Generation gates и Docker social desktop/narrow проходят; screenshot paths/manifest/viewport/content визуально сверены.
+- [x] Интеграционный сценарий использует настоящий node и storage с mock провайдерами, без реальной публикации. Client isolation проверена действующим client или его реальным worker с тестовым publisher.
+- [x] Документация содержит настройку трёх сетей, pause/unknown handling, миграцию Era of Wave, rollback и точные результаты проверок.
 
 ## Развёртывание и откат
 
@@ -373,10 +373,10 @@ commit/push/PR по правилам repos. Hub pointers — только пос
   и autoActions для выполнения публикаций не требуется. Их самостоятельные
   очереди/повторы не должны управлять повторной отправкой PublicationJob.
 
-Рекомендуемая раскладка новых файлов — внутри существующего localClient:
+Рекомендуемая раскладка новых файлов — внутри существующего socNetPublishing:
 
 ```text
-localClient/
+socNetPublishing/
   index.ts                 # существующий compose/claim/result + server entrypoints
   cron.ts                  # startIntervalWorker, конфигурация и module stop
   serverPublisher.ts       # bounded processDueJobs и выбор адаптера
@@ -399,3 +399,38 @@ localClient/
   Продуктовый код, credentials, очереди и production не менялись.
 - При выполнении добавлять сюда принятые решения, issues/PR, test evidence,
   обнаруженные ограничения и оставшиеся задачи. Не оставлять их только в чате.
+
+### Запуск реализации и переименование
+
+- Пользователь выбрал `socNetPublishing` и отдельно запросил обновить API и выполнить план до завершения. Внутренний модуль переименовывается; canonical API — `/user/social-publications`, прежний `/user/local-publications` остаётся alias для старых клиентов и frozen retries. Старый config module name `localClient` нормализуется без двойного запуска.
+- Первый этап уже merged: node #1571 и client #28. Новая реализация начинается от текущих integration branches; публичные API changes сопровождаются apiDoc/security inventory и namespace negotiation producer/executor.
+- Распределение работ: node foundation/rename/worker, три независимых provider adapters, Girls mixed receipts/UI/evidence; основной агент ведёт client namespace compatibility, интеграционные проверки и handoff. Новые реальные публикации/production updates не выполняются.
+
+### Результат реализации
+
+- Node: `4e0197ae2318d448bb79e633c70bf29d7655732f`, [PR #1573](https://github.com/galtproject/geesome-node/pull/1573), issue #1572. Внутренний модуль `socNetPublishing`, canonical `/user/social-publications`, старые URL/config/app.ms aliases. Один server worker на существующем lifecycle; Bluesky helpers переиспользованы, Discord/Telegram bot adapters добавлены без новых dependencies.
+- Credentials: `socNetAccount.serverCredentialsEncrypted TEXT` через app-pass, write-only dedicated setup; generic updates защищены transaction row lock. Setup и server result требуют явного `publishing:manage` либо owner password session; producer `publishing:local` не получает management автоматически.
+- Owner setup: `POST /user/social-publications/server-destinations` с requestKey/network/label/sourceGroupId/account/target/enabled. Default enabled=false; повтор с тем же ключом и enabled=true включает тот же ID после проверки identity. Для повторного setup передаётся полный приватный ввод, secrets не возвращаются.
+- Server v5 binding/digest, immutable target, private account reference и safe public accountIdentity реализованы; v1–v4 сохранены. Короткий atomic claim разделяет server/client/legacy. Ограниченный scan cursor не даёт отключённым/недоступным аккаунтам блокировать здоровые назначения. Неизвестный результат не переотправляется; known result retry затрагивает только DB acknowledgement.
+- Worker включается только явно: `SOC_NET_PUBLISHING_WORKER=1`. В стандартном порядке модулей publishing инициализируется раньше socNetAccount: config dependency проверяется без преждевременного app.ms check, immediate tick отсутствует, до появления account model claim возвращает null. Этот boot сценарий проверен.
+- Client: `be4fed0`, [PR #30](https://github.com/galtproject/geesome-client/pull/30), issue #29. Read-only namespace negotiation, canonical по умолчанию, legacy fallback только после GET404. Исходный namespace сохранён для compose/result retries. Server history помечена без локальных publish/result controls; queued cancellation доступна.
+- Girls: mixed v4/v5 receipts и canonical/legacy negotiation реализованы в задаче #1031; commit записывается при итоговой отправке. Прежние пункты selector сохранены без новых checkbox controls; Twitter может идти через client, остальные три сети через server. Private-source scoping, missing/ambiguous guard, per-destination интервалы и frozen recovery сохранены.
+
+### Проверки и evidence
+
+- Node: 78 targeted tests, включая released-schema upgrade; 25 настоящих Node/PostgreSQL/Kubo HTTP cases (23 legacy и два server) — PASS. Проверены JPEG bytes, frozen SFW route/spoiler, worker enabled при штатном bootstrap order, unknown outcome и management-only resolution. Дополнительный final config/redaction/upgrade subset — 8 PASS.
+- Node apiDoc, security route inventory, database scalability inventory — PASS. Schema audit: 297 pass, 2 ранее существовавших отсутствующих file-catalog indexes в model-sync fixture, 1 skip; все новые колонки и server unique index проходят. Полный suite не запускался. Repo-wide tsc имеет прежние посторонние ошибки; новые publishing/account source не добавляют ошибок. Ограничения раскрыты в PR.
+- Client: syntax и 181 unit/HTTP/worker tests — PASS. Desktop/narrow destination workflow (18 screenshots) и existing Patreon workflow (18 screenshots) — PASS; новые server history screens просмотрены, описания и видимые controls соответствуют результатам. Artifacts: ignored `geesome-client/test/output/{destinations-ui,patreon-ui}`.
+- Girls: 73 bridge/CLI/caption tests, 4 mock-contract tests, 35 social/Queue UI tests, 898 Generation Studio tests и admin/public frontend builds — PASS. Новые namespace regressions: HTTP200 null не вызывает fallback, winning concurrent receipt сохраняет исходный namespace.
+- Girls Docker final snapshot: queue 2 cases / 30 screenshots, social 2 cases / 12 screenshots — PASS. Все 42 captures визуально проверены агентом, desktop/narrow и typed evidence/secret canary contracts проходят. Programmatic wording уточнён с client identity до executor identity для смешанного режима; runtime не изменился.
+- Required Generation API gate: 38 browser cases и 9 CLI/API/PostgreSQL cases — PASS. Artifacts: ignored `microwave-girls/e2e-artifacts/server-publishing-{queue,social,api}`. Final queue run dac94566-4b8f-448a-95f0-825a4430c351; social run74328751-1672-4250-b5ae-6b90658924b0.
+- Реальные node/Girls v5 digest helpers сравнены напрямую для всех трёх сетей с Unicode, ordered originals и sorted target: PASS. Внешние providers замоканы; реальных публикаций, импорта секретов и production обновления не было.
+
+### Пользовательское включение после merge
+
+1. Merge/update node с migration и совместимыми API; app-pass сохранить. Worker остаётся выключен.
+2. Через management API проверить и создать реальные Era of Wave server destinations с enabled=false. Примеры и точные contracts: `geesome-node/app/modules/socNetPublishing/docs/overview.md`.
+3. Остановить/сверить старые client jobs трёх сетей, отключить их local mappings, включить проверенные server destinations теми же setup keys. Twitter/Rule34/Patreon остаются local.
+4. Обновить client/Girls; проверить однозначность каталога и mixed selector. Включить worker явно после проверки intended pending jobs. Live smoke — отдельная авторизация с конкретным content/destination/count.
+
+PR merges остаются пользовательскими. Node pointer не переводится на незамёрженный feature commit; Girls pointer обновляется только на её опубликованный dev commit. Сторонние рабочие и staged изменения сохраняются.
