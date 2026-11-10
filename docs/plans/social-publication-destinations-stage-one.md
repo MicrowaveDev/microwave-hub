@@ -1,6 +1,6 @@
 # Явные назначения социальной публикации: минимальный первый этап
 
-Статус: план, реализация не начата. Дата: 2026-11-10.
+Статус: первый этап реализован, проверен и отправлен; node/client PR ожидают пользовательского merge. Production rollout не выполнялся. Дата: 2026-11-10.
 
 Область: `geesome-node` → `geesome-client` → `microwave-girls`.
 Документ находится в hub, поскольку фиксирует общий контракт трёх репозиториев.
@@ -27,7 +27,7 @@
 - Новая задача однозначно определяет аккаунт и место исполнения.
 - Реализуется только минимальный первый этап: каталог, привязка клиента и назначение в новых задачах.
 - В Girls используется **селектор групп соцсетей**, без чекбоксов выбора назначений.
-- Состав групп и способ их настройки определяются позднее.
+- Для первого этапа пользователь подтвердил сохранение нынешних вариантов селектора: отдельные сети и Twitter + Bluesky + Discord + Telegram. Дальнейшие группы и способ их настройки определяются позднее.
 
 Предлагаемые технические решения этого плана:
 
@@ -58,6 +58,7 @@
 | `network`, `label` | Соцсеть и отображаемое название |
 | `executionMode` | `client` или зарезервированный `server` |
 | `clientId`, `localAccountId` | Локальный исполнитель и его аккаунт |
+| `sourceGroupId` | Необязательная привязка к private group-источнику; чужие группы не участвуют в разрешении selector |
 | `socNetAccountId` | Приватная ссылка серверного режима; пока не используется |
 | `target` | Конечный канал/chat/campaign и другие параметры назначения |
 | `enabled` | Разрешение новых задач и исполнения |
@@ -102,9 +103,9 @@ Girls показывает один selector групп соцсетей. Пол
 
 - Не создавать таблицу групп соцсетей, CRUD, редактор, пресеты или произвольные значения состава без решения пользователя.
 - Не считать текущий статический комбинированный пункт окончательной моделью групп.
-- Разделить загрузку каталога назначений и функцию разрешения выбранной группы; её окончательный контракт определить после согласования групп.
+- Разделить загрузку каталога назначений и разрешение выбранной группы. Для согласованных текущих вариантов требуется одно enabled client destination на сеть; неоднозначность блокирует новый запрос.
 - Для backend/integration тестов использовать явно заданные тестовые группы; это не продуктовая настройка.
-- Каталог и client binding можно реализовать до решения о группах. Продуктовый rollout нового selector заблокирован до согласования состава и правил выбора группы; не обходить это временными чекбоксами или скрытым выбором аккаунта.
+- Текущие варианты selector согласованы пользователем при запуске реализации. Их можно включить после проверки node/client; новые группы без отдельного решения не добавлять.
 - Перед эффектами нового запроса проверять весь набор назначений. Сохранить существующее поведение частичного успеха нескольких compose-вызовов и recovery по исходным ключам, не вводя распределённую транзакцию.
 
 ## Порядок и рабочие потоки
@@ -135,27 +136,26 @@ Girls показывает один selector групп соцсетей. Пол
 
 ## Проверка и критерии завершения
 
-- [ ] Повторная регистрация, перезапуск и потерянный ответ не создают новые назначения.
-- [ ] Секреты отсутствуют в registration/list responses, fixtures и логах.
-- [ ] Другой owner не видит/не использует назначения; client A не захватывает jobs client B, включая совпадающие localAccountId.
-- [ ] Старый client/legacy claim не забирает новые destination jobs.
-- [ ] Два worker не захватывают одну задачу; прежние state transitions сохраняются.
-- [ ] Изменение настроек/группы после enqueue не меняет снимок задачи и retry. Disabled блокирует новый claim, но исходный result принимается.
-- [ ] Удалённый аккаунт или отсутствие клиента не приводит к подстановке аккаунта/сервера и повторной отправке.
-- [ ] vNext receipts фиксируют destination IDs; legacy receipts и неизвестные исходы сохраняют прежние recovery правила.
-- [ ] Интервалы независимы для двух назначений одной соцсети.
-- [ ] Node DB/API tests проверяют upgrade path, owner/client ACL и concurrency; изменённые API сопровождаются apiDoc и security route inventory.
-- [ ] Client проходит `npm run check` и `npm test`.
-- [ ] Girls проходит релевантные backend/frontend и обязательные локальные gates по его инструкциям; Docker social flow покрывает selector на desktop/narrow, screenshots визуально проверены.
-- [ ] Продуктовая UI-приёмка использует согласованные группы в selector, без чекбоксов. До согласования этого пункта интеграция не считается завершённой.
-- [ ] Реальные соцсети не вызываются для проверки. Серверная отправка в первом этапе недоступна.
+- [x] Повторная регистрация, перезапуск и потерянный ответ не создают новые назначения.
+- [x] Секреты отсутствуют в registration/list responses, fixtures и логах.
+- [x] Другой owner не видит/не использует назначения; client A не захватывает jobs client B, включая совпадающие localAccountId.
+- [x] Старый client/legacy claim не забирает новые destination jobs.
+- [x] Два worker не захватывают одну задачу; прежние state transitions сохраняются.
+- [x] Изменение настроек/группы после enqueue не меняет снимок задачи и retry. Disabled блокирует новый claim, но исходный result принимается.
+- [x] Удалённый аккаунт или отсутствие клиента не приводит к подстановке аккаунта/сервера и повторной отправке.
+- [x] vNext receipts фиксируют destination IDs; legacy receipts и неизвестные исходы сохраняют прежние recovery правила.
+- [x] Интервалы независимы для двух назначений одной соцсети.
+- [x] Node DB/API tests проверяют upgrade path, owner/client ACL и concurrency; изменённые API сопровождаются apiDoc и security route inventory.
+- [x] Client проходит `npm run check` и `npm test`.
+- [x] Girls проходит релевантные backend/frontend и обязательные локальные gates по его инструкциям; Docker social flow покрывает selector на desktop/narrow, screenshots визуально проверены.
+- [x] Продуктовая UI-приёмка использует согласованные текущие группы в selector, без чекбоксов.
+- [x] Реальные соцсети не вызываются для проверки. Серверная отправка в первом этапе недоступна.
 
 ## Решения, которые остаются открытыми
 
-- Состав групп соцсетей, их названия, область настроек и правила выбора. Это отложено пользователем; не придумывать при реализации.
-- Привязка отдельного client API key к clientId: проверить существующую модель API keys и выбрать минимальное совместимое расширение до реализации auth.
-- Окончательные URL, формат безопасной проекции, target snapshot и версия receipt: зафиксировать в контракте A.
-- Production baseline и наличие уже применённых миграций определить перед изменением PublicationJob.
+- Будущие группы соцсетей и редактор их состава. Первый этап использует подтверждённые текущие варианты selector; новые группы не придумывать.
+- Привязка ключа, URL, проекции и v4 receipt зафиксированы в `geesome-client/docs/geesome-node-contract.md`; для нового назначения используются существующие API-key IDs, отдельной таблицы клиентов нет.
+- Production baseline проверен: released `publicationJobs` уже существует. Node migration `20261110000000-bind-publication-destinations.cjs` добавляет nullable поля с сохранением legacy rows и запрещает schema rollback при наличии destination jobs. Новая таблица назначений создаётся model sync.
 
 Эти вопросы не требуют executor registry, heartbeat или универсального routing engine.
 
@@ -164,3 +164,32 @@ Girls показывает один selector групп соцсетей. Пол
 При выполнении обновлять этот раздел: принятые решения, ссылки на issues/PR, обнаруженные ограничения, результаты проверок и оставшиеся задачи. Не оставлять значимые изменения контракта только в чате.
 
 - 2026-11-10: сохранён план первого этапа; код и схема БД не изменены. Учтён selector групп соцсетей, решение об их составе отложено. Серверный worker исключён из этапа.
+- 2026-11-10, выполнение: пользователь подтвердил сохранение нынешнего selector. На новом node его сети разрешаются только в однозначные включённые client destinations; отсутствие или несколько вариантов блокируют enqueue. Bridge API может принять явный ID на сеть. Редактор групп не добавляется.
+- Контракт: существующий отдельный API key определяет `clientId=key:<id>`; clientId нельзя выбрать в теле запроса. Дополнительная таблица/схема ключей не нужна. Registry registration/list: `/user/local-publications/destinations`; scoped claim: `/user/local-publications/destination-claim`. Legacy claim исключает destination jobs.
+- V4 digest: SHA256 от JSON `{version:4,destinationId,clientId,network,localAccountId,text,attachments:[{storageId,mimeType}],target}`; ключи target сортируются, порядок attachments сохраняется. Girls передаёт `producer.digest` в compose, node сверяет его до эффектов; job хранит frozen route. SFW aliases сохраняются в registry, но разрешаются и удаляются из конечного target до вычисления digest.
+- Integration review: добавлена nullable `sourceGroupId` в назначение. Client объявляет группу своего маршрута; node проверяет владение/закрытость и соответствие compose; Girls не считает назначения других групп неоднозначными. Это сохраняет существующий выбор групп-источников без разбора технического localKey.
+- Lifecycle review: owner может явно отключить назначение потерянного/отозванного ключа через `/user/local-publications/destinations/:destinationId/disable`. Перепривязки и автоматического восстановления доступа нет. При замене до 100 маршрутов client отключает удалённые и регистрирует новые порциями до 100 с исходными ключами.
+- Girls tracker: https://github.com/MicrowaveDev/microwave-girls/issues/1029. Первые проверки: social CLI/bridge 64 теста, social UI 29 тестов, Generation Studio 889 тестов — PASS. Итоговые интеграционные проверки и delivery pending.
+
+### Итог реализации и delivery
+
+- Node: commit `ea6e43f8639a94dc78d059ef174d39f1ae7c98f3`, [PR #1571](https://github.com/galtproject/geesome-node/pull/1571), issue #1570. Каталог, sourceGroupId, исходный key binding, scoped claim/result, отключение и owner retirement, frozen route/v4 digest, legacy exclusion, migration, apiDoc/security inventory. PR не слит.
+- Client: commit `75e458b34405cdd8f205abfa1b0ac91b99c79182`, [PR #28](https://github.com/galtproject/geesome-client/pull/28), issue #27. Идемпотентная пакетная регистрация, scoped worker, сохранение frozen target и исходного compose при retry, защита смены node/key и известных профилей, совместимость с legacy. PR не слит.
+- Girls: commit `589848aaac775c904b659e9d4f81674e023620f5` отправлен в `origin/dev` по локальным инструкциям, issue #1029. Текущие варианты selector сохранены, подпись — Social network group. Каталог разрешается перед новой постановкой, v4 receipts фиксируют назначение и target, интервалы независимы по destination. Старые receipts не переинтерпретируются.
+- Последовательность пользовательского rollout: merge node PR и обновление node → merge/update client, отдельный ключ и регистрация маршрутов нужной private group → обновление Girls. Старые клиенты при обновлении остановить; неоднозначные исходы не повторять. Серверная отправка, heartbeat и автоматический fallback не реализованы по границам этапа.
+
+### Итоговые проверки
+
+- Node: 36 queue/API/migration tests, 23 full-app HTTP/PostgreSQL/Kubo integration cases, два финальных HTTP cases после source-group guard — PASS. Изолированный upgrade audit released-job schema: 4 pass / 0 fail. apiDoc и security route inventory — PASS.
+- Node ограничения: полный suite не запускался. Общий model-sync audit имеет три посторонних отказа (два отсутствующих file-catalog индекса в model-sync fixture и намеренно изменённый availability counter); repo-wide tsc содержит ранее существовавшие ошибки. Эти ограничения раскрыты в node PR; они не выдаются за чистый общий upgrade audit.
+- Client: syntax checks и 175 unit/HTTP/worker tests — PASS. Четыре destination browser сценария desktop/narrow (16 screenshots) и существующий Patreon browser workflow (18 screenshots) — PASS; агент визуально проверил новые captures. Evidence: ignored `geesome-client/test/output/{destinations-ui,patreon-ui}`.
+- Girls: 65 bridge/CLI/caption tests, три mock-contract tests, 29 social frontend tests, 889 Generation Studio tests, admin/public frontend builds — PASS.
+- Girls Docker: social queue + social publishing — четыре browser cases desktop/narrow, 42 named fresh screenshots, typed evidence и secret-canary checks — PASS. Изображения просмотрены, новые missing/ambiguous состояния сохраняют выбор, selector и читаемую ошибку. Evidence: ignored `microwave-girls/e2e-artifacts/publication-destinations-{queue,social}`.
+- Обязательный Girls Generation API gate: 38 browser cases и девять CLI/API/PostgreSQL cases — PASS. Evidence: ignored `microwave-girls/e2e-artifacts/publication-destinations-api`.
+- Отдельное сравнение реальных helper implementations node/Girls подтвердило одинаковый v4 digest и SFW target для Twitter/Discord/Telegram. Внешних социальных публикаций, платных операций и production updates не выполнялось.
+
+### Сохранённые ограничения
+
+- Cookies/токены не доказывают внешнюю идентичность по локальным метаданным. Известные изменения providerUserId/DID и username-only зарегистрированных профилей блокируются; для другого профиля требуется новый local account. Обычное обновление токена и переименование при прежнем stable provider ID сохраняются.
+- Client browser сохраняет незавершённый compose в текущей странице. После её закрытия сначала проверить node queue; автоматическое восстановление формы/новый durable local outbox не добавлялись. Неизвестные отправки не переотправляются.
+- Girls working tree содержит сохранённые посторонние изменения comic workflow. Hub helper сообщает dirty_worktree; pointer обновляется только на проверенный опубликованный HEAD `589848aa` ветки dev, без включения этих изменений. Node pointer не обновляется до пользовательского merge в dev; client является отдельным вложенным repo, не submodule hub.
