@@ -1,6 +1,6 @@
 # Серверная публикация в Bluesky, Discord и Telegram
 
-Статус: согласование и реализация не начаты. Дата: 2026-11-10.
+Статус: архитектура уточнена аудитом существующего node; реализация не начата. Дата: 2026-11-10.
 
 Область: прежде всего `geesome-node`, затем `microwave-girls`; `geesome-client`
 участвует в проверке изоляции и управляемом переключении маршрутов.
@@ -61,6 +61,8 @@
 | --- | --- |
 | Node `app/modules/localClient/{models,destinations,index,outbox,producer,api}.ts` | Каталог, compose, атомарный claim, result/cancel, source ACL, frozen payload и digests |
 | Node `app/modules/socNetAccount/{models,index,api}.ts` | Owner-scoped записи аккаунтов и safe response projection; секретные поля уже исключаются из ответов |
+| Node `app/backgroundWorker.ts`; `bluesky/{index,cron}.ts` | Готовые interval worker, nonoverlap и stop lifecycle; новый worker подключать по этому образцу |
+| Node `app/index.ts` encryptTextWithAppPass/decryptTextWithAppPass | Серверное шифрование, используемое pin/tgContentBot; отдельный master key для публикации не вводить |
 | Node `app/modules/bluesky/index.ts` | Протокольные helpers по месту; существующий crossPostPost не использовать как worker adapter: он читает текущий native post и требует публичный источник |
 | Client `src/providers/official-networks.js`, `bluesky-facets.js` | Проверенные формы запросов, ограничения, NSFW/spoiler, безопасная классификация ошибок и tests как reference |
 | Girls `app/services/localPublicationBridge.ts` | Выбор назначений, source-group scoping, v4 receipts, digest/prepared-media verification, интервалы и recovery |
@@ -97,17 +99,20 @@ worker → API соцсети → существующий результат/и
 5. Переиспользовать общий внутренний код переходов состояний и source checks.
    Серверный claim/result не нуждаются в новом публичном endpoint, позволяющем
    producer изображать серверного исполнителя.
-6. Начать с одного ограниченного последовательного worker цикла раз в минуту,
+6. Использовать `startIntervalWorker` из `app/backgroundWorker.ts`, обычный module
+   `cron.ts` и `setCronWorker/stop`, как в bluesky/pin. Helper уже исключает
+   overlapping ticks и ждёт текущий run при stop; свой lifecycle не писать.
+   Начать с одного ограниченного последовательного worker цикла раз в минуту,
    без параллельных provider sends внутри процесса. DB lock/skipLocked защищает
    от конкурирующего второго node процесса. Интервалы — срок доступности job,
    а не обещание отправки в точную секунду.
 
 ## Подключение серверных аккаунтов
 
-Минимальный setup — owner-authenticated node API и небольшой operator CLI,
-который вызывает этот API и читает секрет из stdin/закрытого файла. Отдельную
-страницу управления аккаунтами в geesome-ui в этот этап не добавлять.
-Точный набор endpoint/CLI флагов зафиксировать в контракте до реализации.
+Минимальный setup — owner-authenticated node API по существующему module pattern
+и документированные запросы с закрытым JSON-файлом/stdin. Отдельные operator CLI
+и страницу управления geesome-ui не добавлять как обязательные deliverables.
+Точный набор endpoint и scopes зафиксировать в контракте до реализации.
 
 | Сеть | Вводится только на node | Read-only проверка подключения | Стабильная identity |
 | --- | --- | --- | --- |
@@ -121,19 +126,24 @@ DID/numeric IDs при setup, сохраняя отображаемое имя �
 
 Credential storage:
 
-- Переиспользовать owner-scoped `socNetAccount`, создавая явные server-publishing
-  записи. Import/session accounts не превращать в publishing accounts автоматически.
-- Рекомендуемый минимальный формат — versioned server-managed encrypted envelope
-  в существующем TEXT поле `sessionKey`, с явным discriminator назначения секрета.
-  Использовать существующий подходящий server secret helper, если он есть;
-  иначе небольшой стандартный authenticated-encryption helper. Не выдумывать
-  собственный криптопротокол, не пытаться уместить envelope в VARCHAR(200).
-- Ключ серверного шифрования поступает из operator environment/secret mount,
-  отдельно от БД и Git. Нет ключа или неверный envelope — worker не отправляет.
-  Не переопределять молча старую семантику `isEncrypted`.
+- Переиспользовать owner-scoped `socNetAccount`: существующий аккаунт явно
+  включается для server publishing после проверки identity. Не создавать
+  дублирующую запись того же owner/network/DID: существующий upsert ищет её по
+  provider identity. Import/session accounts автоматически не включаются.
+- Добавить одно nullable поле `serverCredentialsEncrypted TEXT` для JSON с
+  appPassword/botToken и шифровать через существующие
+  `app.encryptTextWithAppPass` / `app.decryptTextWithAppPass`, как pin/tgContentBot.
+  Новый secret store, master key и собственный crypto helper не нужны.
+- Не использовать `sessionKey` для нового формата: там уже Telegram MTProto
+  session и Twitter OAuth secret. Не менять прежнюю семантику `isEncrypted`.
+- Существующий helper использует CryptoJS passphrase AES и не является AEAD.
+  Не обещать аутентификацию ciphertext; глобальное усиление шифрования приложения
+  — отдельная задача. Отсутствие/неверность app-pass или невалидная расшифровка
+  блокирует отправку.
 - Перед кодом проверить, что generic socNetAccount update не может изменить
-  identity/secret server-managed записи в обход dedicated setup. Защитить
-  существующие managed rows и запретить подделку marker через generic update.
+  identity/secret server-enabled записи в обход dedicated setup. Запретить запись
+  нового encrypted поля через generic update, исключить его из всех ответов и
+  защитить identity аккаунта, связанного с server destination.
 - API/CLI возвращают только безопасную identity, label, состояние готовности и
   назначение. Токены, app password, sessions и приватные DB references не выдаются
   Girls/client. Telegram bot token в URL также не должен попадать в request/error logs.
@@ -214,6 +224,14 @@ credentials в публичный digest не входит; она неизме�
 допускает больше. Не увеличивать payload limits одновременно с переносом отправки.
 
 Переиспользовать node SDK/helpers там, где они уже удовлетворяют этим правилам.
+Для Bluesky использовать уже экспортированные `createBlueskySession`,
+`uploadBlueskyBlob`, `createBlueskyRecord`, image embed helpers из node
+`bluesky/helpers.ts`. Нужен небольшой snapshot wrapper, а не вызов
+`crossPostPost(job.postId)`. Добавить sensitive labels, bounded responses и
+классификацию unknown publish outcomes: существующий cross-post этого целиком
+не решает. Результат queue хранится в PublicationJob, без второй независимой
+crossPosts metadata идемпотентности.
+
 Client-код служит протокольным reference и источником тест-векторов; не импортировать
 соседний checkout по относительному пути в production, не публиковать новую shared
 библиотеку только ради трёх адаптеров. Небольшие переносимые функции можно скопировать
@@ -261,7 +279,7 @@ worker/adapters → Girls → полная интеграция → отдель
 
 | Поток | Вход и разрешённая область записи | Выход / завершение | Зависимости и проверка |
 | --- | --- | --- | --- |
-| A. Контракт | Этот план, node local publishing docs, client contract, Girls bridge docs | Точные endpoint/CLI формы, v5 vectors, secret envelope, auth/scopes, upgrade/rollback | Первый; проверить текущий merge первого этапа и production schema baseline |
+| A. Контракт | Этот план, node local publishing docs, client contract, Girls bridge docs | Точные API формы, v5 vectors, encrypted JSON field через app-pass, auth/scopes, upgrade/rollback | Первый; проверить текущий merge первого этапа и production schema baseline |
 | B. Node foundation | Node localClient/socNetAccount/secret helper/migrations и focused tests/docs | Server registry/setup с identity, private credentials, frozen server binding, client exclusion | После A; API ACL/secret redaction/SQL migration tests |
 | C. Worker | Node localClient worker/lifecycle и tests | Pause, bounded serial ticks, shared atomic claim/result, unknown-outcome handling | После B; restart/concurrency/timeout/disabled/source change tests |
 | D. Adapters | Node provider helpers и protocol fixtures | Три bytes-based adapters с confirmed IDs и паритетом client | После A; три адаптера могут идти параллельно в разных файлах; финальная интеграция после B/C |
@@ -303,7 +321,7 @@ commit/push/PR по правилам repos. Hub pointers — только пос
 - Сначала node с v5 capability и готовыми disabled server destinations; затем
   Girls с mixed-mode receipts. Обновление client необходимо лишь при выявленном
   нарушении совместимости; новый server runtime в client не добавляется.
-- Backup БД и master secret защищаются отдельно. Смена ключа шифрования не
+- Backup БД и существующего app-pass защищаются отдельно. Смена app-pass не
   выполняется молча при deploy; восстановление должно сохранять доступ к старым
   секретам и frozen account bindings.
 - До downgrade остановить worker и запретить создание v5 jobs. Не запускать
@@ -317,10 +335,11 @@ commit/push/PR по правилам repos. Hub pointers — только пос
 
 - Фактические Era of Wave handle/DID, bots, каналы и SFW endpoints: собрать при
   подключении; не подменять догадками или данными синтетических fixtures.
-- При A проверить существующий runtime secret helper и lifecycle hooks node;
-  зафиксировать точный encrypted envelope/key configuration и минимальные поля
-  миграции, сохранив прежнюю семантику imports/isEncrypted.
-- При A зафиксировать единственную v5 canonical форму, setup API/CLI, management
+- Runtime secret helper и lifecycle подтверждены: app-pass helpers и
+  `app/backgroundWorker.ts`. При A зафиксировать JSON server credentials,
+  восстановление существующего app-pass и migration нового nullable TEXT поля,
+  сохранив прежнюю семантику imports/isEncrypted.
+- При A зафиксировать единственную v5 canonical форму, setup API, management
   scopes и manual result authorization. Producer key не должен менять secrets
   или создавать server-result с обычными enqueue правами.
 - Live smoke content/destinations/count и production rollout требуют отдельной
@@ -328,6 +347,51 @@ commit/push/PR по правилам repos. Hub pointers — только пос
   документация и переданные PR; пользователь сохраняет право merge.
 
 ## Заметки реализации
+
+### Аудит существующей архитектуры, 2026-11-10
+
+Сабагент проверил provider posting/import paths; основной агент независимо
+проверил scheduler lifecycle, account storage и шифрование. Выводы заменяют
+предварительные варианты envelope/new-key/обязательного CLI в первой версии плана.
+
+- Исходящая публикация уже есть в `bluesky/index.ts:502` (также update/delete),
+  login/verify — там же. Но high-level cross-post читает текущий native post,
+  требует публичную группу (`:1154`) и сохраняет отдельные crossPosts properties.
+  Для queue переиспользуются helpers (`createBlueskySession:434`,
+  `createBlueskyRecord:484`, `uploadBlueskyBlob:593`, builder `:317`), а не native-post orchestration.
+- `socNetImport.publishPost` создаёт пост **в GeeSome**, а не в соцсети.
+  `telegramClient` — MTProto import/login, `twitterClient` — read-only/import;
+  `tgContentBot` отвечает на входящие storage-bot interactions. Готового Discord
+  module и unattended Telegram Bot API queue publisher не найдено.
+- `app/backgroundWorker.ts:15` уже решает nonoverlap/unref/stop. Готовый module
+  wiring: `bluesky/index.ts:182–205` и `pin/index.ts:91–96`.
+- `app/index.ts:726–731` предоставляет app-pass encryption; пример использования:
+  `pin/index.ts:767–780`, `tgContentBot/api.ts:30–36`. `helpers.ts:454` показывает
+  фактический CryptoJS механизм; новое отдельное управление master key не нужно.
+- `socNetAccount` остаётся хранилищем, `PublicationDestination` — назначением,
+  `PublicationJob` — единственной очередью и результатом. Изменений asyncOperation
+  и autoActions для выполнения публикаций не требуется. Их самостоятельные
+  очереди/повторы не должны управлять повторной отправкой PublicationJob.
+
+Рекомендуемая раскладка новых файлов — внутри существующего localClient:
+
+```text
+localClient/
+  index.ts                 # существующий compose/claim/result + server entrypoints
+  cron.ts                  # startIntervalWorker, конфигурация и module stop
+  serverPublisher.ts       # bounded processDueJobs и выбор адаптера
+  providers/
+    bluesky.ts             # snapshot wrapper над существующими node helpers
+    discord.ts             # небольшой bot-token publisher
+    telegram.ts            # небольшой Bot API publisher
+```
+
+Контракт фиксированной карты из трёх адаптеров:
+`publish(account, frozenPayload, loadMedia) → {remoteId, remoteUrl}` и типизированная
+ошибка с признаком `ambiguous`. Setup/verify выполняется отдельно. Provider helpers
+владеют транспортом, serverPublisher — исполнением уже принятого job, queue module
+— claim/state/result. Plugin registry, новый большой `socNetPublish` module,
+своя scheduler abstraction и импорт соседнего client checkout не нужны.
 
 - 2026-11-10: план сохранён по запросу пользователя. Проверены текущие модели,
   v4 digest, socNetAccount safe projection и client adapters; подтверждены
