@@ -1,6 +1,6 @@
 # Серверная публикация в Bluesky, Discord и Telegram
 
-Статус: реализация и локальная проверка завершены; delivery фиксируется ниже, production rollout не выполнялся. Дата: 2026-11-10.
+Статус: реализация и локальная проверка завершены, все изменения отправлены; node/client PR ожидают пользовательского merge. Production rollout не выполнялся. Дата: 2026-11-10.
 
 Область: прежде всего `geesome-node`, затем `microwave-girls`; `geesome-client`
 участвует в проверке изоляции и управляемом переключении маршрутов.
@@ -414,7 +414,7 @@ socNetPublishing/
 - Server v5 binding/digest, immutable target, private account reference и safe public accountIdentity реализованы; v1–v4 сохранены. Короткий atomic claim разделяет server/client/legacy. Ограниченный scan cursor не даёт отключённым/недоступным аккаунтам блокировать здоровые назначения. Неизвестный результат не переотправляется; known result retry затрагивает только DB acknowledgement.
 - Worker включается только явно: `SOC_NET_PUBLISHING_WORKER=1`. В стандартном порядке модулей publishing инициализируется раньше socNetAccount: config dependency проверяется без преждевременного app.ms check, immediate tick отсутствует, до появления account model claim возвращает null. Этот boot сценарий проверен.
 - Client: `be4fed0`, [PR #30](https://github.com/galtproject/geesome-client/pull/30), issue #29. Read-only namespace negotiation, canonical по умолчанию, legacy fallback только после GET404. Исходный namespace сохранён для compose/result retries. Server history помечена без локальных publish/result controls; queued cancellation доступна.
-- Girls: mixed v4/v5 receipts и canonical/legacy negotiation реализованы в задаче #1031; commit записывается при итоговой отправке. Прежние пункты selector сохранены без новых checkbox controls; Twitter может идти через client, остальные три сети через server. Private-source scoping, missing/ambiguous guard, per-destination интервалы и frozen recovery сохранены.
+- Girls: `b7e7efd88d37ac28727264efe9d91fb98e0d558d` отправлен в origin/dev, issue #1031. Mixed v4/v5 receipts и canonical/legacy negotiation реализованы. Прежние пункты selector сохранены без новых checkbox controls; Twitter может идти через client, остальные три сети через server. Private-source scoping, missing/ambiguous guard, per-destination интервалы и frozen recovery сохранены.
 
 ### Проверки и evidence
 
@@ -434,3 +434,9 @@ socNetPublishing/
 4. Обновить client/Girls; проверить однозначность каталога и mixed selector. Включить worker явно после проверки intended pending jobs. Live smoke — отдельная авторизация с конкретным content/destination/count.
 
 PR merges остаются пользовательскими. Node pointer не переводится на незамёрженный feature commit; Girls pointer обновляется только на её опубликованный dev commit. Сторонние рабочие и staged изменения сохраняются.
+
+### Итог Git handoff
+
+- Node PR #1573 и Client PR #30 открыты, merge не выполнялся. Girls remote dev = `b7e7efd88d37ac28727264efe9d91fb98e0d558d`. Hub pointer Girls обновлён только на этот опубликованный commit.
+- Во время Girls handoff другой владелец завершил свой staged batch commit `e4e694c898292250a70139852bde8454ccded4bf`; task commit построен поверх него. Изолированный index и CAS сохранили исходный stage; собственный commit содержит только 11 task paths/shared-validator hunk. Оставшиеся 10 чужих comic edits не тронуты.
+- Hub metadata/doc changes фиксируются на main. Node feature pointer и standalone client repo в hub не включаются до соответствующего пользовательского merge/отдельного решения о submodule. Реальные Era of Wave server credentials ещё не настраивались: это operator rollout после merge.
