@@ -126,3 +126,35 @@ Delivered nine task-only files in Girls dev commit
 Foreign RunPod/comic/frontend/verifier edits and index state preserved. No live
 configuration, credentials, publications or production deployments touched for
 this UI follow-up. Hub main pointer updated to the exact pushed commit.
+
+## Editable caption parity and Discord cards (2026-11-11)
+
+Girls #1066 is delivered in dev commit
+`e9860d18024a5914663ebc35b5330924243504c8`. Fresh dialog requests explicitly freeze
+all displayed destination templates, including defaults. Title-based defaults
+preserve literal caption punctuation, expose Discord/Telegram support-link text
+as editable placeholders, and bypass the legacy random formatter. Existing
+custom preferences and unresolved no-template/sparse/network-template request
+shapes remain unchanged. Preferences are browser/owner-scoped, not DB rows.
+The labeled framed Preview sits to the right of each editor on desktop and below
+on narrow screens. Existing publications were not rewritten or resent.
+
+Verification: 98 shared/bridge/CLI tests, 38 frontend tests, 902 Generation tests;
+Docker desktop/narrow social workflow, real API CLI smoke and 44 fresh evidence
+contracts passed in run `00790f2e-8033-4a1d-b9d3-b09f5359493d`.
+Artifacts: microwave-girls/e2e-artifacts/caption-1066-delivery. Key desktop/narrow
+screens were inspected; source/spec hashes match the recorded Docker images.
+The final Playwright image was rebuilt for corrected test setup/evidence metadata;
+unchanged app/migrate/mock images were reused through the repository harness
+with only redundant builds skipped. Prior failed traces remain in their distinct
+artifact folders. Foreign comic edits and staged state were preserved.
+
+The separate Discord layout regression is fixed in Node #1593 / PR
+https://github.com/galtproject/geesome-node/pull/1594, commit
+`86ba4865` on `codex/discord-publication-embeds` (awaiting user merge into dev).
+New server Discord sends use a rich embed: caption first line as title, remaining
+text as description, selected upload via attachment://; plain content is omitted
+to prevent a second automatic Patreon preview. Long captions are preserved,
+mentions remain disabled, and NSFW/account/destination/one-send checks remain.
+19 focused adapter tests pass. No live Discord message or production deployment
+was performed. Node feature pointer is deliberately not staged in the hub.
