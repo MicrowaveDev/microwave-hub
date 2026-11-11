@@ -87,3 +87,42 @@ Remaining user deployment: update Microwave Girls to the pushed dev commit so it
 running UI/API recognizes Reddit. SFW publication still requires explicit content
 classification (the SFW checkbox); group names do not infer content type. Client
 PR remains for normal source integration. No production updater was run by agent.
+
+## Shared selector follow-up (#1058)
+User requested replacing the native destination dropdown with an existing project
+control. Reuse ConstructorCombobox rather than creating another picker. Optional
+group/disabled metadata preserves current consumers. Dialog keeps exact choice
+keys, group sections, member search, unavailable explanations, busy guards and
+frozen attempts. Keyboard navigation skips disabled rows; first Escape dismisses
+the menu, second can close the dialog. Provider configuration is outside this UI
+change. Preserve unrelated RunPod/Generation/comic work, including foreign verifier
+edits; commit only the selector, its tests, browser helper/specs and group guide.
+
+Focused tests: 59 pass. Full frontend run from frontend cwd: 1195 pass, one existing
+ConstructorSequence Clothes variant disabled assertion fails. Reproduced the same
+failure using a temporary Vite loader returning the original HEAD combobox source;
+no source files were swapped and no unrelated code was changed. Browser runs and visual review complete. Final queue run
+`1479520d-fbab-4e35-9119-cd4022656b22`: two desktop/narrow tests plus CLI assertion,
+40 screenshots. General dialog run `c325c3ce-459a-4488-bfe9-5d909492e64c`: two tests,
+12 screenshots. Shared constructor consumer run
+`57bf5a71-e07e-4b89-93d1-c626ecc4ede5`: two tests, two screenshots. The shared
+combobox source is identical for all three final consumer runs; later changes only
+improve social ordering/mobile widths, keep publication controls in view, and
+remove duplicate identical CSS. Exact final queue/general images and the scoped
+constructor image metadata are recorded in ignored verified-images.json files.
+Artifacts: microwave-girls/e2e-artifacts/custom-selector-{queue-ready,social-ready,constructor}.
+
+Screenshots confirm groups first, readable project-styled menu, full-width mobile
+picker and visible publication button. Arrow/Enter search and frozen-attempt retry
+are exercised through controls. All 54 evidence contracts and secret-canary checks
+pass. Builds overlay only the task selector files on the verified e75af3d4 API image,
+rebuilding frontend assets; unrelated concurrent changes remain outside those images.
+A /tmp copy of the repository harness skips only redundant builds. Initial Docker
+space exhaustion was resolved by removing 14 unused tags belonging exclusively to
+our previous destination-group test images, without pruning user containers/data.
+
+Delivered nine task-only files in Girls dev commit
+`14fa6fd9e935fbd72249fe0bc7289cb59a7d2b68` (Closes #1058), pushed to origin/dev.
+Foreign RunPod/comic/frontend/verifier edits and index state preserved. No live
+configuration, credentials, publications or production deployments touched for
+this UI follow-up. Hub main pointer updated to the exact pushed commit.
